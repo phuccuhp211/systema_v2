@@ -4,7 +4,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "889484";
-    $database = "systema";
+    $database = "systema_v2";
     try {
         $ketnoi = new PDO("mysql:host={$servername};port=4940;dbname={$database};charset=utf8mb4", "{$username}", "{$password}");
         $ketnoi->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -16,9 +16,10 @@
 
     define('bdt', '');
     define('urlmd', 'http://localhost'.bdt);
-    define('urlc', urlmd.'/controllers/');
-    define('urlm', urlmd.'/models/');
-    define('urlv', urlmd.'/views/');
+    define('urlc', urlmd.'/app/controllers/');
+    define('urlm', urlmd.'/app/models/');
+    define('urlv', urlmd.'/app/views/');
+    define('plrc', urlmd.'/public/');
 
     $routes = [
         bdt.'/admin/' => 'admin_controller@index',
@@ -90,7 +91,7 @@
             $controllerName = $parts[0];
             $actionName = $parts[1];
 
-            require_once 'controllers/'.$controllerName.'.php';
+            require_once 'app/controllers/'.$controllerName.'.php';
             $controller = new $controllerName();
 
             if (isset($matches[1])) {

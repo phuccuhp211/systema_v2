@@ -3,8 +3,8 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title>Tranh Chủ</title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/index.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/index.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/index.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/index.js"></script>
 </head>
 <body>
 	<?php include 'include/header.php' ?>
@@ -20,21 +20,21 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="<?php echo urlv.'data'; ?>/banner1-l.jpg" alt="Image 1" class="w-100">
+                        <img src="<?php echo plrc.'data'; ?>/banner1-l.jpg" alt="Image 1" class="w-100">
                         <div class="carousel-caption">
                             <h3>Slide 1</h3>
                             <p>This is the first slide.</p>
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="<?php echo urlv.'data'; ?>/banner2-l.jpg" alt="Image 2" class="w-100">
+                        <img src="<?php echo plrc.'data'; ?>/banner2-l.jpg" alt="Image 2" class="w-100">
                         <div class="carousel-caption">
                             <h3>Slide 2</h3>
                             <p>This is the second slide.</p>
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="<?php echo urlv.'data'; ?>/banner3-l.jpg" alt="Image 3" class="w-100">
+                        <img src="<?php echo plrc.'data'; ?>/banner3-l.jpg" alt="Image 3" class="w-100">
                         <div class="carousel-caption">
                             <h3>Slide 3</h3>
                             <p>This is the third slide.</p>
@@ -58,7 +58,7 @@
             <div class="row">
                 <div class=" col-lg-6 poster_item">
                     <div class="khung-poster">
-                        <img src="<?php echo urlv.'data' ?>/pc2-1.jpg" class="anh-poster" alt="">
+                        <img src="<?php echo plrc.'data' ?>/pc2-1.jpg" class="anh-poster" alt="">
                         <div class="chu-poster trai-poster">
                             <p class="p-poster">Mã : Z59-I9109K-TTRTX</p>
                             <ul class="ul-poster">
@@ -75,7 +75,7 @@
                 </div>
                 <div class=" col-lg-6 poster_item">
                     <div class="khung-poster">
-                        <img src="<?php echo urlv.'data' ?>/pc5.jpg" class="anh-poster" alt="">
+                        <img src="<?php echo plrc.'data' ?>/pc5.jpg" class="anh-poster" alt="">
                         <div class="chu-poster phai-poster">
                             <p class="p-poster">Mã : X57-R756X-3070</p>
                             <ul class="ul-poster">

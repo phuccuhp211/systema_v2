@@ -3,8 +3,8 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title>Tất Cả Sản Phẩm</title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/sanpham.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/sanpham.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/sanpham.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/sanpham.js"></script>
 </head>
 <body>
 	<?php include 'include/header.php' ?>

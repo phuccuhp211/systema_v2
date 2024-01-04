@@ -1,5 +1,5 @@
 <?php 
-require_once 'models/user_model.php';
+require_once 'app/models/user_model.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -122,14 +122,14 @@ class user_controller {
 		$hotsp = $this->umodel->sphot();
 		$this->umodel->upview_index();
 		$header = $this->header();
-		require_once './views/index.php';
+		require_once 'app/views/index.php';
 	}
 
 	public function config() {
 		$header = $this->header();
 		if (isset($header['nguoidung'])) {
 			$list_hd = $this->umodel->gethd($header['nguoidung'][0]['user']);
-			require_once './views/config.php';
+			require_once 'app/views/config.php';
 		} 
 		else {
 			header("Location: ".urlmd."/");
@@ -167,7 +167,7 @@ class user_controller {
 	public function quenmatkhau() {
 		$header = $this->header();
 		$umodel= new user_model();
-		require_once './views/quenmatkhau.php';
+		require_once 'app/views/quenmatkhau.php';
 	}
 
 	public function qmkvl() {
@@ -303,13 +303,13 @@ class user_controller {
 	public function delcart() {
 		$key = $_POST['delspcart'];
 		unset($_SESSION['giohang'][$key]);
-		require_once './views/giohang.php';
+		require_once 'app/views/giohang.php';
 	}
 
 	public function delallcart() {
 		$_SESSION['giohang'] = [];
 		$_SESSION['totalp'] = 0;
-		require_once './views/giohang.php';
+		require_once 'app/views/giohang.php';
 	}
 
 	public function muangay($id) {
@@ -500,7 +500,7 @@ class user_controller {
 		}
 		else {
 			$header = $this->header();
-			require_once './views/ktbh.php';
+			require_once 'app/views/ktbh.php';
 		}
 	}
 
@@ -569,7 +569,7 @@ class user_controller {
 			else $lpt = $this->phantrang('sanpham/'.$loai_data,$data,$phantrang[0]['pt']);
 
 			if (isset($_POST['xacthuc1'])) echo showsp2($fullsp);
-			else require_once './views/sanpham.php';
+			else require_once 'app/views/sanpham.php';
 		}
 		else {
 			$type = $_POST['type'];
@@ -648,7 +648,7 @@ class user_controller {
 
 			
 
-		require_once './views/chitietsanpham.php';
+		require_once 'app/views/chitietsanpham.php';
 	}
 
 	public function comments() {
@@ -662,17 +662,17 @@ class user_controller {
 
 	public function giohang() {
 		$header = $this->header();
-		require_once './views/giohang.php';
+		require_once 'app/views/giohang.php';
 	}
 
 	public function thanhtoan() {
 		$header = $this->header();
-		require_once './views/thanhtoan.php';
+		require_once 'app/views/thanhtoan.php';
 	}
 
 	public function hoantat() {
 		$header = $this->header();
-		require_once './views/hoantat.php';
+		require_once 'app/views/hoantat.php';
 	}
 
 	public function hoadon() {

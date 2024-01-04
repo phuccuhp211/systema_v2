@@ -3,7 +3,7 @@
             <div class="container" style="display: unset;">
                 <div class="row">
                     <div class="col-3">
-                        <a href="<?php echo urlmd ?>/" class="navbar-brand menu-logo-chinh"><img src="<?php echo urlv ?>/data/LOGO2.png" alt=""></a>
+                        <a href="<?php echo urlmd ?>/" class="navbar-brand menu-logo-chinh"><img src="<?php echo plrc ?>/data/LOGO2.png" alt=""></a>
                         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#menu-top">
                             <span class="navbar-toggler-icon"></span>
                         </button>

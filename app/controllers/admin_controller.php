@@ -1,5 +1,5 @@
 <?php 
-require_once 'models/admin_model.php';
+require_once 'app/models/admin_model.php';
 
 class admin_controller {
 	private $amodel;
@@ -14,7 +14,7 @@ class admin_controller {
 		    exit();
 		}
 		else {
-		    require_once './views/admin_log.php';
+		    require_once 'app/views/admin_log.php';
 		}
 	}
 	public function adlogin() {
@@ -102,7 +102,7 @@ class admin_controller {
 				$_SESSION['quanly'] = true;
 				unset($_SESSION['qldm'], $_SESSION['qlus'], $_SESSION['hddh'], $_SESSION['qlbl'], $_SESSION['qlsp'], $_SESSION['magg']);
 	    	}
-	    	require_once './views/manager.php';
+	    	require_once 'app/views/manager.php';
     	}
 	}
 	public function adbl() {

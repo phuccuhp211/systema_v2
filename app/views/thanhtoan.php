@@ -3,8 +3,8 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title>Thanh Toán</title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/thanhtoan.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/thanhtoan.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/thanhtoan.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/thanhtoan.js"></script>
 </head>
 <body>
 	<?php include 'include/header.php' ?>

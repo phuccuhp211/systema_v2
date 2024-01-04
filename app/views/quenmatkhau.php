@@ -3,8 +3,8 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title>Quên Mật Khẩu</title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/quenmk.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/quenmk.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/quenmk.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/quenmk.js"></script>
 </head>
 <body>
 	<?php include 'include/header.php' ?>

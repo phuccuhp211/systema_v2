@@ -3,8 +3,8 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title><?php echo $chitiet[0]['name'] ?></title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/chitietsanpham.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/chitietsanpham.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/chitietsanpham.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/chitietsanpham.js"></script>
 </head>
 <body> 
 	<?php include 'include/header.php' ?>

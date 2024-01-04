@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+plrc<!DOCTYPE html>
 <html lang="en">
 <head>
 	<?php include 'include/lib.php' ?>
 	<title>Giỏ Hàng</title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/giohang.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/giohang.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/giohang.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/giohang.js"></script>
 </head>
 <body>
 	<?php include 'include/header.php' ?>

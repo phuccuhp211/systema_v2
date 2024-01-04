@@ -3,8 +3,8 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title> </title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/ktbh.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/ktbh.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/ktbh.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/ktbh.js"></script>
 </head>
 <body>
 	<?php include 'include/header.php' ?>

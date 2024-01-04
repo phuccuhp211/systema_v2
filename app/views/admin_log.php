@@ -3,9 +3,9 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title>ĐĂNG NHẬP QUẢN TRỊ</title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/admin.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/admin.js"></script>
-	<script style="text/javascript" src="<?php echo urlv ?>lib/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/admin.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/admin.js"></script>
+	<script style="text/javascript" src="<?php echo plrc ?>lib/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body style="padding: 0 !important;">
 	<div class="bg-admin-log">

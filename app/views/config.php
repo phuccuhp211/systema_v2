@@ -3,8 +3,8 @@
 <head>
 	<?php include 'include/lib.php' ?>
 	<title>Quản Lý Tài Khoản</title>
-	<link rel="stylesheet" href="<?php echo urlv ?>css/config.css">
-	<script style="text/javascript" src="<?php echo urlv ?>jquery/config.js"></script>
+	<link rel="stylesheet" href="<?php echo plrc ?>css/config.css">
+	<script style="text/javascript" src="<?php echo plrc ?>jquery/config.js"></script>
 </head>
 <body>
 	<?php include 'include/header.php' ?>
@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-12 text-center">
                         <?php if ($header['nguoidung'][0]['avt'] != "") { ?><img class="user-avt" src="<?php echo $header['nguoidung'][0]['avt'] ?>" alt=""><?php } else { ?>
-                        <img class="user-avt" src="<?php echo urlv.'data/avatar.png' ?>" alt=""> <?php } ?>
+                        <img class="user-avt" src="<?php echo plrc.'data/avatar.png' ?>" alt=""> <?php } ?>
                     </div>
                 </div>
                 <div class="row">
