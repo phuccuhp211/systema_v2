@@ -22,43 +22,31 @@ class admin_model extends basemodel {
 
 	public function ajax($id=null, $data=null, $filter=null, $type=null) {
 		if ($type == "prod") {
-			if (isset($data)) {
-				$sql = "UPDATE product SET hidden = '$data' WHERE id = $id";
-				$this->iuddata($sql);
-			}
-			else if (isset($id)) {
-				$sql = "SELECT * FROM product WHERE id = $id";
-				$ketqua = $this->getdata($sql);
-				return $ketqua;
-			}
+			if (isset($data)) $this->iuddata("UPDATE product SET hidden = '$data' WHERE id = $id");
+
+			else if (isset($id)) return $this->getdata("SELECT * FROM product WHERE id = $id");
+
 			else if (isset($filter)) {
 				if ($filter == 1) $sql = "SELECT * FROM product ORDER BY id DESC";
 				else if ($filter == 2) $sql = "SELECT * FROM product ORDER BY saled DESC";
 				else if ($filter == 3) $sql = "SELECT * FROM product ORDER BY viewed DESC";
 				else if ($filter == 4) $sql = "SELECT * FROM product WHERE price_sale > 0 ORDER BY id DESC";
 				else if ($filter == 5) $sql = "SELECT * FROM product WHERE hidden = 1 ORDER BY id DESC";
-				$ketqua = $this->getdata($sql);
-				return $ketqua;
+				return $this->getdata($sql);
 			}
 		}
 		else if ($type == "user") {
-			if (isset($data)) {
-				$sql = "UPDATE user SET ban = $data WHERE id = $id";
-				$this->iuddata($sql);
-			}
-			else if (isset($id)) {
-				$sql = "SELECT * FROM user WHERE id = $id";
-				$ketqua = $this->getdata($sql);
-				return $ketqua;
-			}
+			if (isset($data)) $this->iuddata("UPDATE user SET ban = $data WHERE id = $id");
+			
+			else if (isset($id)) return $this->getdata("SELECT * FROM user WHERE id = $id");
+
 			else if (isset($filter)) {
 				if ($filter == 1) $sql = "SELECT * FROM user ORDER BY id DESC";
 				else if ($filter == 2) $sql = "SELECT * FROM user WHERE ban = 2 ORDER BY id DESC";
 				else if ($filter == 3) $sql = "SELECT * FROM user WHERE ban = 1 ORDER BY id DESC";
 				else if ($filter == 4) $sql = "SELECT * FROM user WHERE role = 1 ORDER BY id DESC";
 				else if ($filter == 5) $sql = "SELECT * FROM user WHERE role = 0 ORDER BY id DESC";
-				$ketqua = $this->getdata($sql);
-				return $ketqua;
+				return $this->getdata($sql);
 			}
 		}
 		else if ($type == "invo") {
@@ -66,24 +54,15 @@ class admin_model extends basemodel {
 				$date = date("Y-m-d",time());
 				$sql = "SELECT * FROM hoadon WHERE id = $id";
 				$ketqua = $this->getdata($sql);
-				if($ketqua[0]['submited'] == "0000-00-00") {
-					$sql = "UPDATE hoadon SET trangthai = '$data', submited = '$date' WHERE id = $id";
-					$this->iuddata($sql);
-				}
+				if($ketqua[0]['submited'] == "0000-00-00") $this->iuddata("UPDATE hoadon SET trangthai = '$data', submited = '$date' WHERE id = $id");
+
 				else {
-					$sql = "UPDATE hoadon SET trangthai = '$data' WHERE id = $id";
-					$this->iuddata($sql);
-					if ($data == "Hoàn Thành") { 
-						$sql = "UPDATE accessed SET tt = tt + ".$ketqua[0]['thanhtien'];
-						$this->iuddata($sql);
-					}
+					$this->iuddata("UPDATE hoadon SET trangthai = '$data' WHERE id = $id");
+					if ($data == "Hoàn Thành") $this->iuddata("UPDATE accessed SET tt = tt + ".$ketqua[0]['thanhtien']);
 				}
 			}
-			else if (isset($id)) {
-				$sql = "SELECT * FROM hoadon WHERE id = $id";
-				$ketqua = $this->getdata($sql);
-				return $ketqua;
-			}
+			else if (isset($id)) return $this->getdata("SELECT * FROM hoadon WHERE id = $id");
+
 			else if (isset($filter)) {
 				if ($filter == 1) $sql = "SELECT * FROM hoadon ORDER BY id DESC";
 				else if ($filter == 2) $sql = "SELECT * FROM hoadon WHERE trangthai = 'Chưa Xong' OR trangthai = 'Chờ Xác Nhận' ORDER BY id DESC";
@@ -91,8 +70,7 @@ class admin_model extends basemodel {
 				else if ($filter == 4) $sql = "SELECT * FROM hoadon WHERE trangthai = 'Đang Giao' ORDER BY id DESC";
 				else if ($filter == 5) $sql = "SELECT * FROM hoadon WHERE trangthai = 'Hoàn Thành' ORDER BY id DESC";
 				else if ($filter == 6) $sql = "SELECT * FROM hoadon WHERE trangthai = 'Đã Hủy' ORDER BY id DESC";
-				$ketqua = $this->getdata($sql);
-				return $ketqua;
+				return $this->getdata($sql);
 			}
 		}
 	}
@@ -102,22 +80,11 @@ class admin_model extends basemodel {
 	public function member() { return $this->getdata("SELECT COUNT(us.user) as ddk, cdk FROM user us, (SELECT COUNT(name) as cdk FROM (SELECT name FROM hoadon WHERE name NOT IN (SELECT user FROM user) GROUP BY name) as tb) as tb WHERE us.role = 1"); }
 	public function access() { return $this->getdata("SELECT * FROM accessed"); }
 	/*-----------------------------------------*/
-	public function tksp() {
-		$sql = "
-			SELECT dm.name, COUNT(pd.id) as soluong
-			FROM catalog dm LEFT JOIN product pd ON dm.id = pd.id_cata
-			GROUP BY dm.name";
-		$ketqua = $this->getdata($sql);
-		return $ketqua;
-	}
-	public function checksp($name) {
-		$sql = "SELECT * FROM product WHERE name = \"$name\"";
-		$ketqua = $this->getdata($sql);
-		return $ketqua;
-	}
+	public function checksp($name) { return $this->getdata("SELECT * FROM product WHERE name = \"$name\""); }
+	public function delpro($id) { $this->iuddata("DELETE FROM product WHERE id = $id"); }
+	public function tksp() { return $this->getdata("SELECT dm.name, COUNT(pd.id) as soluong FROM catalog dm LEFT JOIN product pd ON dm.id = pd.id_cata GROUP BY dm.name"); }
 	public function addpro($name,$duongdan,$price,$sale,$salef,$salet,$catalog,$brand,$info,$infoct) {
-		$sql = "INSERT INTO product VALUES('','$name','$duongdan','$info','$infoct','','$catalog','$brand','$price','$sale','$salef','$salet','','','')";
-		$this->iuddata($sql);
+		$this->iuddata("INSERT INTO product VALUES('','$name','$duongdan','$info','$infoct','','$catalog','$brand','$price','$sale','$salef','$salet','','','')");
 	}
 	public function fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$catalog,$brand,$info,$infoct) {
 		$sql = "UPDATE product SET 
@@ -134,102 +101,32 @@ class admin_model extends basemodel {
 			WHERE id = $id";
 		$this->iuddata($sql);
 	}
-	public function delpro($id) {
-		$sql = "DELETE FROM product WHERE id = $id";
-		$this->iuddata($sql);
-	}
 	/*-----------------------------------------*/
-	public function checkdm($name) {
-		$sql = "SELECT * FROM catalog WHERE name = \"$name\"";
-		$ketqua = $this->getdata($sql);
-		return $ketqua;
-	}
-	public function addcat($name, $phanloai, $duongdan = "") {
-		$sql = "INSERT INTO catalog VALUES('','$name','$phanloai','$duongdan')";
-		$this->iuddata($sql);
-	}
-	public function fixcat($id,$name, $phanloai, $duongdan) {
-		$sql = "UPDATE catalog SET 
-			name = '$name',
-			loai = '$phanloai', 
-			img = '$duongdan'
-			WHERE id = $id";
-		$this->iuddata($sql);
-	}
-	public function delcat($id) {
-		$sql = "DELETE FROM catalog WHERE id = $id";
-		$this->iuddata($sql);
-	}
+	public function checkdm($name) { return $this->getdata("SELECT * FROM catalog WHERE name = \"$name\""); }
+	public function addcat( $name, $phanloai, $duongdan = "") { $this->iuddata("INSERT INTO catalog VALUES('','$name','$phanloai','$duongdan')");}
+	public function fixcat($id,$name, $phanloai, $duongdan) { $this->iuddata("UPDATE catalog SET name = '$name', loai = '$phanloai', img = '$duongdan' WHERE id = $id");}
+	public function delcat($id) { $this->iuddata("DELETE FROM catalog WHERE id = $id"); }
 	/*-----------------------------------------*/
-	public function checkpl($name) {
-		$sql = "SELECT * FROM phanloai WHERE name = \"$name\"";
-		$ketqua = $this->getdata($sql);
-		return $ketqua;
-	}
-	public function addpl($name) {
-		$sql = "INSERT INTO phanloai VALUES('','$name')";
-		$this->iuddata($sql);
-	}
-	public function fixpl($id,$name) {
-		$sql = "UPDATE phanloai SET 
-			name = '$name'
-			WHERE id = $id";
-		$this->iuddata($sql);
-	}
-	public function delpl($id) {
-		$sql = "DELETE FROM phanloai WHERE id = $id";
-		$this->iuddata($sql);
-	}
+	public function checkpl($name) { return $this->getdata("SELECT * FROM phanloai WHERE name = \"$name\"");}
+	public function addpl($name) { $this->iuddata("INSERT INTO phanloai VALUES('','$name')"); }
+	public function fixpl($id,$name) { $this->iuddata("UPDATE phanloai SET name = '$name' WHERE id = $id");}
+	public function delpl($id) { $this->iuddata("DELETE FROM phanloai WHERE id = $id");}
 	/*-----------------------------------------*/
-	public function checkus($name) {
-		$sql = "SELECT * FROM user WHERE user = \"$name\"";
-		$ketqua = $this->getdata($sql);
-		return $ketqua;
-	}
-	public function addus($name,$pass,$ho,$ten,$phone,$email,$diachi,$role) {
-		$sql = "INSERT INTO user VALUES('','$name','$pass','$ho','$ten','$phone','$email','$diachi','$role','','')";
-		$this->iuddata($sql);
+	public function checkus($name) { return $this->getdata("SELECT * FROM user WHERE user = \"$name\"");}
+	public function addus($name,$pass,$ho,$ten,$phone,$email,$diachi,$role) { 
+		$this->iuddata("INSERT INTO user VALUES('','$name','$pass','$ho','$ten','$phone','$email','$diachi','$role','','')");
 	}
 	public function fixus($id,$name,$pass,$ho,$ten,$phone,$email,$diachi,$role) {
-		$sql = "UPDATE user SET 
-			user = '$name', 
-				pass = '$pass',
-			ho = '$ho',
-				ten = '$ten',
-			sdt = '$phone',
-				email = '$email',
-			diachi = '$diachi',
-				role = '$role'
-			WHERE id = $id";
-		$this->iuddata($sql);
+		$this->iuddata($sql = "UPDATE user SET user = '$name', pass = '$pass', ho = '$ho', ten = '$ten', sdt = '$phone', email = '$email', diachi = '$diachi', role = '$role'WHERE id = $id");
 	}
-	public function delus($id) {
-		$sql = "DELETE FROM user WHERE id = $id";
-		$this->iuddata($sql);
-	}
+	public function delus($id) { $this->iuddata("DELETE FROM user WHERE id = $id");}
 	/*-----------------------------------------*/
-	public function checkmgg($name) {
-		$sql = "SELECT * FROM voucher WHERE name = '$name'";
-		$ketqua = $this->getdata($sql);
-		return $ketqua;
+	public function checkmgg($name) { return $this->getdata("SELECT * FROM voucher WHERE name = '$name'");}
+	public function addmgg($name,$max,$remaining,$fd,$ft,$percent) {$this->iuddata("INSERT INTO voucher VALUES('','$name','$max','$remaining','$fd','$ft','$percent')");}
+	public function fixmgg($id,$name,$fd,$td,$percent) { 
+		$this->iuddata("UPDATE voucher SET name = '$name', f_date = '$fd', t_date = '$td', percent = '$percent' WHERE id = $id");
 	}
-	public function addmgg($name,$max,$remaining,$fd,$ft,$percent) {
-		$sql = "INSERT INTO voucher VALUES('','$name','$max','$remaining','$fd','$ft','$percent')";
-		$this->iuddata($sql);
-	}
-	public function fixmgg($id,$name,$fd,$td,$percent) {
-		$sql = "UPDATE voucher SET 
-			name = '$name',
-			f_date = '$fd',
-			t_date = '$td',
-			percent = '$percent'
-			WHERE id = $id";
-		$this->iuddata($sql);
-	}
-	public function delmgg($id) {
-		$sql = "DELETE FROM voucher WHERE id = $id";
-		$this->iuddata($sql);
-	}
+	public function delmgg($id) { $this->iuddata("DELETE FROM voucher WHERE id = $id"); }
 	/*-----------------------------------------*/
 	public function dsbl() {
 		$sql = "
@@ -238,15 +135,8 @@ class admin_model extends basemodel {
 			FROM product pd INNER JOIN comments cmt ON pd.id = cmt.id_pd
 			GROUP BY id_pd, id_user) 
 		AS TB GROUP BY name";
-		$ketqua = $this->getdata($sql);
-		return $ketqua;
-	}
-	public function delbl($id) {
-		$sql = "DELETE FROM comments WHERE id_cmt = $id";
-		$this->iuddata($sql);
-	}
-	public function infobl($idsp) {
-		$sql = "SELECT * FROM comments WHERE id_pd = $idsp";
 		return $this->getdata($sql);
 	}
+	public function delbl($id) { $this->iuddata("DELETE FROM comments WHERE id_cmt = $id"); }
+	public function infobl($idsp) { return $this->getdata("SELECT * FROM comments WHERE id_pd = $idsp"); }
 } ?>

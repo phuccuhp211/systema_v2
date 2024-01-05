@@ -1,4 +1,4 @@
-plrc<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<?php include 'include/lib.php' ?>
