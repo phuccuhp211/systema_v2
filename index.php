@@ -1,19 +1,6 @@
 <?php
     session_start();
 
-    $servername = "localhost";
-    $username = "root";
-    $password = "889484";
-    $database = "systema_v2";
-    try {
-        $ketnoi = new PDO("mysql:host={$servername};port=4940;dbname={$database};charset=utf8mb4", "{$username}", "{$password}");
-        $ketnoi->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } 
-    catch (PDOException $e) {
-        echo "Lỗi kết nối: " . $e->getMessage();
-        exit;
-    }
-
     define('bdt', '');
     define('urlmd', 'http://localhost'.bdt);
     define('urlc', urlmd.'/app/controllers/');

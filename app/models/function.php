@@ -1,20 +1,4 @@
 <?php 
-	function getdata($sql) {
-		global $ketnoi;
-		$data_args = array_slice(func_get_args(), 1);
-		$data = $ketnoi->prepare($sql);
-		$data->execute($data_args);
-		$row = $data->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
-	}
-
-	function iuddata($sql) {
-		global $ketnoi;
-		$data_args = array_slice(func_get_args(), 1);
-		$data = $ketnoi->prepare($sql);
-		$data->execute($data_args);
-	}
-
 	function showsp($mangsp) {
 		$chuoisp = "";
 	    foreach ($mangsp as $value => $item) {
