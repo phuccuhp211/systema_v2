@@ -51,7 +51,7 @@
                         <?php echo $bl ?>
                     </div>
                     <div class="row" id="list-sanpham">
-                        <?php if (isset($fullsp)) { echo showsp2($fullsp); } ?>
+                        <?php if (isset($fullsp)) { echo $this->showsp2($fullsp); } ?>
                     </div>
                     <div class="row">
                         <div style="display:flex; justify-content: center;" id="list-pt">

@@ -125,7 +125,7 @@
             <h2 class="tieude">SẢN PHẨM LIÊN QUAN</h2>
             <div class="row" id="list-sanpham">
                 <?php if (isset($splq)) {
-                echo showsp($splq); } ?>
+                echo $this->showsp($splq); } ?>
             </div>              
         </div>
     </div>

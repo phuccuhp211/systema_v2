@@ -1,15 +1,16 @@
 <?php 
+require_once 'basecontroller.php';
 require_once 'app/models/user_model.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require 'src/Exception.php';
-require 'src/PHPMailer.php';
-require 'src/SMTP.php';
+require './src/Exception.php';
+require './src/PHPMailer.php';
+require './src/SMTP.php';
 
-class user_controller {
+class user_controller extends BaseController {
 	private $umodel;
 
     function __construct() {
@@ -568,7 +569,7 @@ class user_controller {
 			if (isset($bientam)) $lpt = $this->phantrang('sanpham/'.$loai_data,$bientam,$phantrang[0]['pt']);
 			else $lpt = $this->phantrang('sanpham/'.$loai_data,$data,$phantrang[0]['pt']);
 
-			if (isset($_POST['xacthuc1'])) echo showsp2($fullsp);
+			if (isset($_POST['xacthuc1'])) echo $this->showsp2($fullsp);
 			else require_once 'app/views/sanpham.php';
 		}
 		else {
@@ -584,7 +585,7 @@ class user_controller {
 			else $fullsp = $this->umodel->getsp($type,$data,$page,$loai);
 
 			$lpt = $this->phantrang($type,$data,$phantrang[0]['pt'],$loai);
-			$response = array('sanpham' => showsp2($fullsp), 'phantrang' => $lpt);
+			$response = array('sanpham' => $this->showsp2($fullsp), 'phantrang' => $lpt);
 			echo json_encode($response);
 		}
 	}

@@ -97,19 +97,19 @@
         <h2 class="tieude">Hàng Mới Về</h2>
         <div class="row">
             <?php if (isset($newsp)) {
-                echo showsp($newsp); } ?>
+                echo $this->showsp($newsp); } ?>
         </div> 
         <hr>             
         <h2 class="tieude">Sản Phẩm HOT</h2>
         <div class="row">
             <?php if (isset($hotsp)) {
-                echo showsp($hotsp); } ?>
+                echo $this->showsp($hotsp); } ?>
         </div>
         <hr>           
         <h2 class="tieude">Tất Cả Sản Phẩm</h2>
         <div class="row">
             <?php if (isset($fullsp)) {
-                echo showsp($fullsp); } ?>
+                echo $this->showsp($fullsp); } ?>
         </div>           
     </div>
 

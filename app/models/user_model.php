@@ -1,6 +1,5 @@
 <?php 
 require_once 'basemodel.php';
-require_once 'function.php';
 
 class user_model extends basemodel {
 	public function upview_index() {$this->iuddata("UPDATE accessed SET trangchu = trangchu + 1");}
