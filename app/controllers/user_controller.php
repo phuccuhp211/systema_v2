@@ -118,12 +118,14 @@ class user_controller extends BaseController {
 	}
 
 	public function index() {
-		$fullsp = $this->umodel->fullsp1();
-		$newsp = $this->umodel->spnew();
-		$hotsp = $this->umodel->sphot();
 		$this->umodel->upview_index();
-		$header = $this->header();
-		require_once 'app/views/index.php';
+		$data = [
+            'fullsp' => $this->umodel->fullsp1(),
+            'newsp' => $this->umodel->spnew(),
+            'hotsp' => $this->umodel->sphot(),
+            'header' => $this->header(),
+        ];
+		$this->loadview('index',$data);
 	}
 
 	public function config() {

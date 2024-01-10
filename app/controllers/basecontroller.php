@@ -1,5 +1,12 @@
 <?php 
 	class basecontroller {
+
+		public function loadview($file,$data){
+			$views = 'app/views/'.$file.'.php';
+			if (file_exists($views)) { extract($data); require_once $views; }
+			else echo 'Đường dẫn không hợp lệ';
+		}
+
 	    public function showsp($mangsp) {
 			$chuoisp = "";
 		    foreach ($mangsp as $value => $item) {
