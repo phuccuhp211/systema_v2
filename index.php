@@ -82,7 +82,6 @@
             $parts = explode('@', $action);
             $controllerName = 'App\Controllers\\'.$parts[0];
             $actionName = $parts[1];
-
             $controller = new $controllerName();
 
             if (isset($matches[1])) {
