@@ -1,6 +1,8 @@
 <?php 
-require_once 'basecontroller.php';
-require_once 'app/models/user_model.php';
+namespace App\Controllers;
+
+use App\Controllers\BaseController as Base;
+use App\Models\user_model as UserM;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -10,11 +12,11 @@ require './src/Exception.php';
 require './src/PHPMailer.php';
 require './src/SMTP.php';
 
-class user_controller extends BaseController {
+class user_controller extends Base{
 	private $umodel;
 
     function __construct() {
-        $this->umodel = new user_model();
+        $this->umodel = new UserM();
     }
 
 	function header() {

@@ -1,4 +1,9 @@
 <?php
+    require 'vendor/autoload.php';
+
+    use App\Controllers\admin_controller;
+    use App\Controllers\user_controller;
+    
     session_start();
 
     define('bdt', '');
@@ -75,10 +80,9 @@
     foreach ($routes as $route => $action) {
         if (preg_match('/^' . str_replace('/', '\/', $route) . '$/', $currentPath, $matches)) {
             $parts = explode('@', $action);
-            $controllerName = $parts[0];
+            $controllerName = 'App\Controllers\\'.$parts[0];
             $actionName = $parts[1];
 
-            require_once 'app/controllers/'.$controllerName.'.php';
             $controller = new $controllerName();
 
             if (isset($matches[1])) {

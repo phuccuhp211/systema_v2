@@ -1,4 +1,9 @@
 <?php 
+	namespace App\Models;
+
+	use PDO;
+	use PDOException;
+
 	require_once '././dbconfig.php';
 
 	class basemodel {

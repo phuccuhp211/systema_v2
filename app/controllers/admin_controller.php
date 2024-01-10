@@ -1,11 +1,14 @@
 <?php 
-require_once 'app/models/admin_model.php';
+namespace App\Controllers;
 
-class admin_controller {
+use App\Controllers\basecontroller as Base;
+use App\Models\admin_model as AdminM;
+
+class admin_controller extends Base {
 	private $amodel;
 
     function __construct() {
-        $this->amodel = new admin_model();
+        $this->amodel = new AdminM();
     }
 
 	public function index() {

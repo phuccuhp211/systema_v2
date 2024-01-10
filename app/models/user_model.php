@@ -1,7 +1,9 @@
 <?php 
-require_once 'basemodel.php';
+namespace App\Models;
 
-class user_model extends basemodel {
+use App\Models\basemodel as BaseM;
+
+class user_model extends BaseM {
 	public function upview_index() {$this->iuddata("UPDATE accessed SET trangchu = trangchu + 1");}
 	public function upview_nonin() {$this->iuddata("UPDATE accessed SET trangcon = trangcon + 1");}
 	public function fullsp1() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT 8");}

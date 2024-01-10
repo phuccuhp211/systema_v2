@@ -1,4 +1,6 @@
-<?php 
+<?php
+	namespace App\Controllers;
+
 	class basecontroller {
 
 		public function loadview($file,$data){

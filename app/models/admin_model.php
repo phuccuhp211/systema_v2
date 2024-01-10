@@ -1,7 +1,9 @@
 <?php 
-require_once 'basemodel.php';
+namespace App\Models;
 
-class admin_model extends basemodel {
+use App\Models\basemodel as BaseM;
+
+class admin_model extends BaseM {
 	public function adlogin() { return $this->getdata('SELECT * FROM user WHERE role = 0'); }
 
     public function fullsp() { return $this->getdata('SELECT * FROM product ORDER BY id DESC'); }
