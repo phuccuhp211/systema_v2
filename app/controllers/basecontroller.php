@@ -3,9 +3,12 @@
 
 	class basecontroller {
 
-		public function loadview($file,$data){
+		public function loadview($file,?array $data){
 			$views = 'app/views/'.$file.'.php';
-			if (file_exists($views)) { extract($data); require_once $views; }
+			if (file_exists($views)) {
+				if(!empty($data)) { extract($data); require_once $views; } 
+				else require_once $views;
+			}
 			else echo 'Đường dẫn không hợp lệ';
 		}
 

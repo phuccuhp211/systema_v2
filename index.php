@@ -18,7 +18,7 @@
         bdt.'/adlogin/' => 'admin_controller@adlogin',
         bdt.'/dangxuat/' => 'admin_controller@dangxuat',
         bdt.'/manager/' => 'admin_controller@manager',
-        bdt.'/manager/([a-zA-Z0-9._-]+)/' => 'admin_controller@manager',
+        bdt.'/manager/([a-zA-Z]+)/' => 'admin_controller@manager',
         bdt.'/adbl/' => 'admin_controller@adbl',
         bdt.'/addpro/' => 'admin_controller@addpro',
         bdt.'/fixpro/([0-9]+)/' => 'admin_controller@fixpro',
@@ -61,43 +61,51 @@
         bdt.'/delallcart/' => 'user_controller@delallcart',
         bdt.'/comments/' => 'user_controller@comments',
         bdt.'/sanpham/chitiet=([0-9]+)/' => 'user_controller@chitietsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)/page=([0-9]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)=([a-zA-Z0-9._-]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)=([a-zA-Z0-9._-]+)/page=([0-9]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)=([0-9]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)=([0-9]+)/page=([0-9]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)=([0-9]+)/' => 'user_controller@getsp',
-        bdt.'/sanpham/([a-zA-Z0-9._-]+)=([0-9]+)/page=([0-9]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)/page=([0-9]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)=([a-zA-Z]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)=([a-zA-Z]+)/page=([0-9]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)=([0-9_]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)=([0-9_]+)/page=([0-9]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)=([0-9_]+)/' => 'user_controller@getsp',
+        bdt.'/sanpham/([a-zA-Z]+)=([0-9_]+)/page=([0-9]+)/' => 'user_controller@getsp',
         bdt.'/ktbh/' => 'user_controller@ktbh',
         bdt.'/applymgg/' => 'user_controller@applymgg',
         bdt.'/rating/' => 'user_controller@rating'
     ];
 
     $currentPath = $_SERVER['REQUEST_URI'];
+    $trueURL = false;
 
     foreach ($routes as $route => $action) {
         if (preg_match('/^' . str_replace('/', '\/', $route) . '$/', $currentPath, $matches)) {
-            $parts = explode('@', $action);
-            $controllerName = 'App\Controllers\\'.$parts[0];
-            $actionName = $parts[1];
-            $controller = new $controllerName();
-
-            if (isset($matches[1])) {
-                $parameter = $matches[1];
-                if (isset($matches[2])) {
-                    $parameter2 = $matches[2];
-                    if (isset($matches[3])) {
-                        $parameter3 = $matches[3];
-                        $controller->$actionName($parameter,$parameter2,$parameter3);
-                    }
-                    else $controller->$actionName($parameter,$parameter2);  
-                }
-                else $controller->$actionName($parameter);
-            } 
-            else $controller->$actionName();
-            break;
+            $trueURL = true; break;
         }
+    }
+
+    if ($trueURL) {
+        $parts = explode('@', $action);
+        $controllerName = 'App\Controllers\\'.$parts[0];
+        $actionName = $parts[1];
+        $controller = new $controllerName();
+
+        if (isset($matches[1])) {
+            $parameter = $matches[1];
+            if (isset($matches[2])) {
+                $parameter2 = $matches[2];
+                if (isset($matches[3])) {
+                    $parameter3 = $matches[3];
+                    $controller->$actionName($parameter,$parameter2,$parameter3);
+                }
+                else $controller->$actionName($parameter,$parameter2);  
+            }
+            else $controller->$actionName($parameter);
+        } 
+        else $controller->$actionName();
+    }
+    else {
+        $uc = new user_controller;
+        $uc->errorl();
     }
 ?>

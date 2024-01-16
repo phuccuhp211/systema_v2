@@ -14,9 +14,11 @@ require './src/SMTP.php';
 
 class user_controller extends Base{
 	private $umodel;
+	private $header;
 
     function __construct() {
         $this->umodel = new UserM();
+        $this->header = $this->header();
     }
 
 	function header() {
@@ -119,22 +121,35 @@ class user_controller extends Base{
 		}
 	}
 
-	public function index() {
-		$this->umodel->upview_index();
+	public function errorl() {
 		$data = [
             'fullsp' => $this->umodel->fullsp1(),
             'newsp' => $this->umodel->spnew(),
             'hotsp' => $this->umodel->sphot(),
-            'header' => $this->header(),
+            'header' => $this->header,
+        ];
+		$this->loadview('error',$data);
+	}
+
+	public function index() {
+		$this->umodel->upview_index();
+		$data = [
+			'header' => $this->header,
+            'fullsp' => $this->umodel->fullsp1(),
+            'newsp' => $this->umodel->spnew(),
+            'hotsp' => $this->umodel->sphot(),
         ];
 		$this->loadview('index',$data);
 	}
 
 	public function config() {
-		$header = $this->header();
-		if (isset($header['nguoidung'])) {
-			$list_hd = $this->umodel->gethd($header['nguoidung'][0]['user']);
-			require_once 'app/views/config.php';
+		if (isset($this->header['nguoidung'])) {
+			$list_hd = $this->umodel->gethd($this->header['nguoidung'][0]['user']);
+			$data = [
+				'header' => $this->header,
+				'list_hd' => $list_hd,
+			];
+			$this->loadview('config', $data);
 		} 
 		else {
 			header("Location: ".urlmd."/");
@@ -169,11 +184,7 @@ class user_controller extends Base{
 		exit();
 	}
 
-	public function quenmatkhau() {
-		$header = $this->header();
-		$umodel= new user_model();
-		require_once 'app/views/quenmatkhau.php';
-	}
+	public function quenmatkhau() { $this->loadview('quenmatkhau', ['header' => $this->header]); }
 
 	public function qmkvl() {
 		$header = $this->header();
@@ -308,13 +319,13 @@ class user_controller extends Base{
 	public function delcart() {
 		$key = $_POST['delspcart'];
 		unset($_SESSION['giohang'][$key]);
-		require_once 'app/views/giohang.php';
+		$this->loadview('giohang', ['header' => $this->header]);
 	}
 
 	public function delallcart() {
 		$_SESSION['giohang'] = [];
 		$_SESSION['totalp'] = 0;
-		require_once 'app/views/giohang.php';
+		$this->loadview('giohang', ['header' => $this->header]);
 	}
 
 	public function muangay($id) {
@@ -503,10 +514,7 @@ class user_controller extends Base{
 			};
 				
 		}
-		else {
-			$header = $this->header();
-			require_once 'app/views/ktbh.php';
-		}
+		else $this->loadview('ktbh', ['header' => $this->header]);
 	}
 
 	public function rating() {
@@ -536,7 +544,6 @@ class user_controller extends Base{
 
 	public function getsp($loai_data=null,$data=null,$page=1) {
 		$this->umodel->upview_nonin();
-		$header = $this->header();
 		$base_url = urlmd;
 		
 		if($loai_data == "tatca") {
@@ -574,7 +581,7 @@ class user_controller extends Base{
 			else $lpt = $this->phantrang('sanpham/'.$loai_data,$data,$phantrang[0]['pt']);
 
 			if (isset($_POST['xacthuc1'])) echo $this->showsp2($fullsp);
-			else require_once 'app/views/sanpham.php';
+			else $this->loadview('sanpham', ['header' => $this->header, 'fullsp' => $fullsp, 'lpt' => $lpt, 'bl' => $bl]);
 		}
 		else {
 			$type = $_POST['type'];
@@ -595,17 +602,19 @@ class user_controller extends Base{
 	}
 
 	public function chitietsp($id) {
-		$header = $this->header();
-
 		$chitiet = $this->umodel->chitietsp($id);
-		$splq = $this->umodel->splq($chitiet[0]['id_cata']);
-		$thuonghieu = $this->umodel->thuonghieu($chitiet[0]['id_brand']);
-		$dscmt = $this->umodel->dscmt($id);
+		$data = [
+			'header' => $this->header,
+			'chitiet' => $chitiet,
+			'splq' => $this->umodel->splq($chitiet[0]['id_cata']),
+			'thuonghieu' => $this->umodel->thuonghieu($chitiet[0]['id_brand']),
+			'dscmt' => $this->umodel->dscmt($id),
+		];
 
 		$rating = $this->umodel->getrate(null,$id);
 
 		if (isset($_SESSION['udone'])) {
-			$usrt = $this->umodel->getrate($header['nguoidung'][0]['id'], $id);
+			$usrt = $this->umodel->getrate($this->header['nguoidung'][0]['id'], $id);
 			$chuoi_btn = "";
 			if(isset($usrt[0])) {
 	            $offset = $usrt[0]['stars'];
@@ -623,7 +632,7 @@ class user_controller extends Base{
 	                $chuoi_btn.= "<div class=\"btn-stars\" data-rate=\"$i\" data-idsp=\"$id\">$i Sao</div>";
 	            }
 			}
-			$button_rt = "<div class=\"box-btn-stars\">$chuoi_btn</div>";
+			$data['button_rt'] = "<div class=\"box-btn-stars\">$chuoi_btn</div>";
 		}
 		if (isset($rating[0])) {
 			$ss = $rating[0]['stars']/$rating[0]['turn'];
@@ -644,16 +653,19 @@ class user_controller extends Base{
 		            <h5>$chuoi_stars</h5>        
                 </div>
             ";
+            $data['sps'] = $sps;
 		}
-		else $sps = "
+		else {
+			$sps = "
             	<div class=\"sum-stars\">
 		            <h5 style=\"color: #ee4d2d;\">Sản phẩm chưa được đánh giá</h5>        
                 </div>
             ";
+            $data['sps'] = $sps;
+        }
 
 			
-
-		require_once 'app/views/chitietsanpham.php';
+		$this->loadview('chitietsanpham',$data);
 	}
 
 	public function comments() {
@@ -665,20 +677,11 @@ class user_controller extends Base{
 		$this->umodel->addcmt($noidung,$id_sp,$id_user,$date);
 	}
 
-	public function giohang() {
-		$header = $this->header();
-		require_once 'app/views/giohang.php';
-	}
+	public function giohang() { $this->loadview('giohang', ['header' => $this->header]); }
 
-	public function thanhtoan() {
-		$header = $this->header();
-		require_once 'app/views/thanhtoan.php';
-	}
+	public function thanhtoan() { $this->loadview('thanhtoan', ['header' => $this->header]); }
 
-	public function hoantat() {
-		$header = $this->header();
-		require_once 'app/views/hoantat.php';
-	}
+	public function hoantat() { $this->loadview('hoantat', ['header' => $this->header]); }
 
 	public function hoadon() {
 		$tenkh = $_POST['tenkh'];

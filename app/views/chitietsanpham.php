@@ -69,9 +69,7 @@
                 </div>
                 <?php if (!isset($_SESSION['udone'])) { ?>
                     <div class="col-8 text-center">
-                        
-                            <button class="ycdn-cmt">Vui lòng đăng nhập để Bình luận & Đánh giá</button>
-                        
+                        <button class="ycdn-cmt">Vui lòng đăng nhập để Bình luận & Đánh giá</button>
                     </div>
                 <?php } else { ?>
                     <div class="col-8">
