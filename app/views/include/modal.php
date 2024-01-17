@@ -95,7 +95,7 @@
         <div class="bg-dmk hide-bg-dmk">
             <div class="dmk">
                 <h2 class="text-center">Đổi Mật Khẩu</h2>
-                <form action="<?php echo urlmd; ?>/doimatkhau/" method="POST" enctype="multipart/form-data">
+                <form action="<?php echo urlmd; ?>/config/" method="POST" enctype="multipart/form-data">
                     <input type="text" value="<?php echo $header['nguoidung'][0]['id'] ?>" hidden name="id">
                     <div class="field-add">
                         <label>Mật khẩu mới :</label>

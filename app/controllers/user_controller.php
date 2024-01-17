@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController as Base;
 use App\Models\user_model as UserM;
+use DateTime;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -144,12 +145,40 @@ class user_controller extends Base{
 
 	public function config() {
 		if (isset($this->header['nguoidung'])) {
-			$list_hd = $this->umodel->gethd($this->header['nguoidung'][0]['user']);
-			$data = [
-				'header' => $this->header,
-				'list_hd' => $list_hd,
-			];
-			$this->loadview('config', $data);
+			if (isset($_POST['id']) && !isset($_POST['pass1']) && !isset($_POST['pass2'])) {
+				$id = $_POST['id'];
+				$ho = $_POST['ho'];
+				$ten = $_POST['ten'];
+				$sdt = $_POST['sdt'];
+				$email = $_POST['email'];
+				$diachi = $_POST['diachi'];
+				$this->umodel->updatetk($id,$ho,$ten,$sdt,$email,$diachi);
+				$_SESSION['update_popup'] = "Cập nhật thành công !!!";
+			}
+			else if (isset($_POST['pass1']) || isset($_POST['pass2'])) {
+				$id = $_POST['id'];
+				$pass1 = $_POST['pass1'];
+				$pass2 = $_POST['pass2'];
+
+				if ($pass1 == "" || $pass2 == "") $_SESSION['dmk-popup'] = "Vui lòng điền mật khẩu mới";
+				else if ($pass1 != $pass2) $_SESSION['dmk-popup'] = "Mật khẩu không trùng khớp";
+
+				if(!isset($_SESSION['dmk-popup'])) {
+					$this->umodel->doimatkhau($id,md5($pass2));
+					$_SESSION['update_popup'] = "Cập nhật thành công";
+				}
+
+				header("Location: ".urlmd."/config/");
+				exit();
+			}
+			else {
+				$list_hd = $this->umodel->gethd($this->header['nguoidung'][0]['user']);
+				$data = [
+					'header' => $this->header,
+					'list_hd' => $list_hd,
+				];
+				$this->loadview('config', $data);
+			}
 		} 
 		else {
 			header("Location: ".urlmd."/");
@@ -157,106 +186,77 @@ class user_controller extends Base{
 		} 
 	}
 
-	public function updatetk($id) {
-		$ho = $_POST['ho'];
-		$ten = $_POST['ten'];
-		$sdt = $_POST['sdt'];
-		$email = $_POST['email'];
-		$diachi = $_POST['diachi'];
-		$this->umodel->updatetk($id,$ho,$ten,$sdt,$email,$diachi);
-		$_SESSION['update_popup'] = "Cập nhật thành công !!!";		
-	}
-
-	public function doimatkhau() {
-		$id = $_POST['id'];
-		$pass1 = $_POST['pass1'];
-		$pass2 = $_POST['pass2'];
-
-		if ($pass1 == "" || $pass2 == "") $_SESSION['dmk-popup'] = "Vui lòng điền mật khẩu mới";
-		else if ($pass1 != $pass2) $_SESSION['dmk-popup'] = "Mật khẩu không trùng khớp";
-
-		if(!isset($_SESSION['dmk-popup'])) {
-			$this->umodel->doimatkhau($id,md5($pass2));
-			$_SESSION['update_popup'] = "Cập nhật thành công";
-		}
-
-		header("Location: ".urlmd."/config/");
-		exit();
-	}
-
-	public function quenmatkhau() { $this->loadview('quenmatkhau', ['header' => $this->header]); }
-
-	public function qmkvl() {
-		$header = $this->header();
-		$tendn = $_POST['tendn'];
-
-		$_SESSION['send_mail'] = true;
-
-		if ($tendn == "" || $tendn == "rong") $_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Điền tên tài khoản</h3>";
-		else {
-			$getuser = $this->umodel->checkuser();
-			foreach ($getuser as $value => $item) {
-				if ($tendn != $item['user']) {
-					$_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Tài khoản không tồn tại</h3>";
-				}
-				else {
-					if ($item['email'] == "") {
-						$_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Chưa kích hoạt Email</h3>";
-						break;
+	public function quenmatkhau() { 
+		if (isset($_POST['tendn'])) {
+			$tendn = $_POST['tendn'];
+			$_SESSION['send_mail'] = true;
+			if ($tendn == "" || $tendn == "rong") $_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Điền tên tài khoản</h3>";
+			else {
+				$getuser = $this->umodel->checkuser();
+				foreach ($getuser as $value => $item) {
+					if ($tendn != $item['user']) {
+						$_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Tài khoản không tồn tại</h3>";
 					}
 					else {
-						$_SESSION['qmkvl'] = "<h3 class=\"popup popup-xanh\">Đã gửi Mail, vui lòng kiểm tra</h3>";
-						$_SESSION['rand_pass'] = rand(100000,999999);
-						$duongdan = urlmd;
-						$id = $item['id'];
-						$noidung = "
-						    <table style=\"width: 600; border-collapse: collapse; margin: 0 auto;\">
-						    	<tr style=\"color: white; background: #927ec4;\">
-						    		<td colspan=\"4\" style=\"border: 1px solid black; padding: 15px; font-size: 20px;\">Email xác nhận đổi mật khẩu.</td>
-						    	</tr>
-						        <tr>
-						            <td colspan=\"3\" style=\"border: 1px solid black; text-align: center; padding: 10px 0; font-size: 18px;\">Mật khẩu mới :</th>
-						            <td colspan=\"1\" style=\"border: 1px solid black; text-align: center; padding: 10px 0; font-size: 18px;\">".$_SESSION['rand_pass']."</th>
-						        </tr>
-						        <tr>
-						        	<td colspan=\"4\" style=\"border: 1px solid black; padding: 10px 0; font-size: 18px;\">Nhấp vào đường link phía dưới để cập nhật Mật Khẩu</td>
-						        </tr>
-						        <tr>
-						        	<td colspan=\"4\" style=\"border: 1px solid black; padding: 10px 0; font-size: 18px;\">
-						        		<a href=\"".$duongdan."/admk/".$id."/\">".$duongdan."/admk/".$id."/</a>
-						        	</td>
-						        </tr>;
-							</table>";
-
-						$mail = new PHPMailer(true);
-						$mail->SMTPDebug = SMTP::DEBUG_OFF;                    
-					    $mail->isSMTP();                                          
-					    $mail->Host       = 'smtp.gmail.com';                     
-					    $mail->SMTPAuth   = true;                                   
-					    $mail->Username   = 'phuccuhp211@gmail.com';                
-					    $mail->Password   = 'gmwghhndjyfdmbzm';        
-					    $mail->SMTPSecure = 'ssl';                       
-					    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            
-					    $mail->Port       = 465;
-					    $mail->setFrom('phuccuhp211@gmail.com', 'SYSTEMA');   
-					    $mail->addAddress($item['email']);
-					    $mail->isHTML(true);                                  
-					    $mail->Subject = "Thu Xac Nhan Lay Lai Mat Khau";
-					    $mail->Body    = $noidung;
-
-					    try {
-						    $mail->send();
-						} catch (Exception $e) {
-						    $_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Không thể kết nối tới máy chủ</h3>";
+						if ($item['email'] == "") {
+							$_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Chưa kích hoạt Email</h3>";
+							break;
 						}
+						else {
+							$_SESSION['qmkvl'] = "<h3 class=\"popup popup-xanh\">Đã gửi Mail, vui lòng kiểm tra</h3>";
+							$_SESSION['rand_pass'] = rand(100000,999999);
+							$duongdan = urlmd;
+							$id = $item['id'];
+							$noidung = "
+							    <table style=\"width: 600; border-collapse: collapse; margin: 0 auto;\">
+							    	<tr style=\"color: white; background: #927ec4;\">
+							    		<td colspan=\"4\" style=\"border: 1px solid black; padding: 15px; font-size: 20px;\">Email xác nhận đổi mật khẩu.</td>
+							    	</tr>
+							        <tr>
+							            <td colspan=\"3\" style=\"border: 1px solid black; text-align: center; padding: 10px 0; font-size: 18px;\">Mật khẩu mới :</th>
+							            <td colspan=\"1\" style=\"border: 1px solid black; text-align: center; padding: 10px 0; font-size: 18px;\">".$_SESSION['rand_pass']."</th>
+							        </tr>
+							        <tr>
+							        	<td colspan=\"4\" style=\"border: 1px solid black; padding: 10px 0; font-size: 18px;\">Nhấp vào đường link phía dưới để cập nhật Mật Khẩu</td>
+							        </tr>
+							        <tr>
+							        	<td colspan=\"4\" style=\"border: 1px solid black; padding: 10px 0; font-size: 18px;\">
+							        		<a href=\"".$duongdan."/admk/".$id."/\">".$duongdan."/admk/".$id."/</a>
+							        	</td>
+							        </tr>;
+								</table>";
 
-						break;
-					}	
+							$mail = new PHPMailer(true);
+							$mail->SMTPDebug = SMTP::DEBUG_OFF;                    
+						    $mail->isSMTP();                                          
+						    $mail->Host       = 'smtp.gmail.com';                     
+						    $mail->SMTPAuth   = true;                                   
+						    $mail->Username   = 'phuccuhp211@gmail.com';                
+						    $mail->Password   = 'gmwghhndjyfdmbzm';        
+						    $mail->SMTPSecure = 'ssl';                       
+						    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            
+						    $mail->Port       = 465;
+						    $mail->setFrom('phuccuhp211@gmail.com', 'SYSTEMA');   
+						    $mail->addAddress($item['email']);
+						    $mail->isHTML(true);                                  
+						    $mail->Subject = "Thu Xac Nhan Lay Lai Mat Khau";
+						    $mail->Body    = $noidung;
+
+						    try {
+							    $mail->send();
+							} catch (Exception $e) {
+							    $_SESSION['qmkvl'] = "<h3 class=\"popup popup-do\">Không thể kết nối tới máy chủ</h3>";
+							}
+
+							break;
+						}	
+					}
 				}
 			}
+			header("Location: ".urlmd."/quenmk/");exit();
+			exit();
 		}
-		header("Location: ".urlmd."/quenmk/");exit();
-		exit();
+		else $this->loadview('quenmatkhau', ['header' => $this->header]);
 	}
 
 	public function admk($id) {
@@ -848,9 +848,7 @@ class user_controller extends Base{
 
 	public function regis() {
 		$userpass = $this->umodel->checkuser();
-		if(isset($_SESSION['udone'])) {
-			$nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
-		}
+		
 		$uname = $_POST['user'];
 		$upass1 = $_POST['pass1'];
 		$upass2 = $_POST['pass2'];

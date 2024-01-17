@@ -423,15 +423,15 @@ $(function() {
 		    else $('.cf-update').removeClass('disabled');
 		}
 
-		var duongdan_fix1 = duongdan+url_sub+"/updatetk/";
-		var duongdan_fix2 = duongdan+url_sub+"/config/";
+		var duongdan_fix = duongdan+url_sub+"/config/";
 
 		$('.cf-update').on('click',function() {
 
 			$.ajax({
 				type: "POST",
-				url: duongdan_fix1+id+"/",
+				url: duongdan_fix,
 				data: {
+					id: id,
 					ho: ho_new,
 					ten: ten_new,
 					sdt: sdt_new,
@@ -440,7 +440,7 @@ $(function() {
 				},
 				success: function(response) {
 					console.log('thanh cong');
-					window.location.href = duongdan_fix2;
+					window.location.href = duongdan_fix;
 				},
 				error: function() {
 					console.log("Có lỗi xảy ra khi update.");
