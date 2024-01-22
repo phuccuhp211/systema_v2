@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php include 'include/lib.php' ?>
-	<title>Tranh Chủ</title>
-	<link rel="stylesheet" href="<?php echo plrc ?>css/index.css">
-	<script style="text/javascript" src="<?php echo plrc ?>jquery/index.js"></script>
+    <?php include 'include/lib.php' ?>
+    <title>Tranh Chủ</title>
+    <link rel="stylesheet" href="<?php echo plrc ?>css/index.css">
+    <script style="text/javascript" src="<?php echo plrc ?>jquery/index.js"></script>
 </head>
 <body>
-	<?php include 'include/header.php' ?>
+    <?php include 'include/header.php' ?>
     <?php include 'include/modal.php' ?>
 
     <div class="banner">
         <div class="container">
             <div id="carousel-id" class="carousel slide" data-bs-ride="carousel">
                 <ol class="carousel-indicators">
-                    <li data-bs-target="#carousel-id" data-bs-slide-to="0" class="active"></li>
-                    <li data-bs-target="#carousel-id" data-bs-slide-to="1"></li>
-                    <li data-bs-target="#carousel-id" data-bs-slide-to="2"></li>
+                    <?php for ($i = 0; $i < count($banner); $i++) { 
+                        echo "<li data-bs-target=\"#carousel-id\" data-bs-slide-to=\"$i\" ".(($i == 0) ? "class=\"active\"" : "")."></li>";
+                    } ?>
                 </ol>
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="<?php echo plrc.'data'; ?>/banner1-l.jpg" alt="Image 1" class="w-100">
-                        <div class="carousel-caption">
-                            <h3>Slide 1</h3>
-                            <p>This is the first slide.</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="<?php echo plrc.'data'; ?>/banner2-l.jpg" alt="Image 2" class="w-100">
-                        <div class="carousel-caption">
-                            <h3>Slide 2</h3>
-                            <p>This is the second slide.</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="<?php echo plrc.'data'; ?>/banner3-l.jpg" alt="Image 3" class="w-100">
-                        <div class="carousel-caption">
-                            <h3>Slide 3</h3>
-                            <p>This is the third slide.</p>
-                        </div>
-                    </div>  
+                    <?php for ($i = 0; $i < count($banner); $i++) { 
+                        echo "
+                            <div class=\"carousel-item " . (($i == 0) ? "active" : "") . "\">
+                                <img src=\"{$banner[$i]['img']}\" alt=\"Image $i\" class=\"w-100\">
+                                <div class=\"carousel-caption\">
+                                    ".(($banner[$i]['title'] != "") ? "<h3>$banner[$i]['title']</h3>" : "")."
+                                    ".(($banner[$i]['text'] != "") ? "<p>$banner[$i]['text']</p>" : "")."
+                                </div>
+                            </div>
+                        ";
+                    } ?> 
                 </div>     
                 <a class="carousel-control-prev" href="#carousel-id" role="button" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

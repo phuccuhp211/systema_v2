@@ -2,11 +2,10 @@
 	namespace App\Controllers;
 
 	class basecontroller {
-
-		public function loadview($file,?array $data){
+		public function loadview($file,array $data = null){
 			$views = 'app/views/'.$file.'.php';
 			if (file_exists($views)) {
-				if(!empty($data)) { extract($data); require_once $views; } 
+				if(!is_null($data)) { extract($data); require_once $views; } 
 				else require_once $views;
 			}
 			else echo 'Đường dẫn không hợp lệ';
@@ -24,7 +23,7 @@
 		    	}
 		    	else { $sale = number_format($item['price']);}
 		    	$chuoisp.= "
-		    	<div class=\"col-xs-6 col-sm-6 col-md-6 col-lg-3 col-12 text-center\">
+		    	<div class=\"col-20pt text-center\">
 	                <div class=\"khungsp\">
 	                    <div class=\"khungxam nav-item\">
 	                        <a href=\"".urlmd."/sanpham/chitiet=".$item['id']."/\" class=\"nav-link\">
@@ -55,7 +54,7 @@
 		    	}
 		    	else { $sale = number_format($item['price']);}
 		    	$chuoisp.= "
-		    	<div class=\"col-xs-6 col-sm-6 col-md-6 col-lg-4 col-12 text-center\">
+		    	<div class=\"col-3 text-center\">
 	                <div class=\"khungsp\">
 	                    <div class=\"khungxam nav-item\">
 	                        <a href=\"".urlmd."/sanpham/chitiet=".$item['id']."/\" class=\"nav-link\">

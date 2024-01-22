@@ -10,7 +10,7 @@ $(function() {
         selector: '#ttct-sp',
         plugins: 'image link',
         toolbar: 'undo redo | bold italic | image link',
-        height: '250px',
+        height: '350px',
         image_caption: true
     });
 
@@ -74,6 +74,9 @@ $(function() {
 		var old_info = $(this).parent().siblings("#in4sp").text();
 		var old_price_str = $(this).parent().siblings("#giasp").text();
 		var old_sale_str = $(this).parent().siblings("#salesp").text();
+		var old_type = $(this).parent().siblings("#id_caplth").data('pl');
+		var old_cata = $(this).parent().siblings("#id_caplth").data('ca');
+		var old_brand = $(this).parent().siblings("#id_caplth").data('th');
 		var old_img = ae_td.find("img").attr("src");
 
 		var old_price = parseInt(old_price_str.replace(/\./g, '').replace('.', ''));
@@ -85,6 +88,9 @@ $(function() {
 		$('#fix_sale_sp').val(old_sale);
 		$('#fix_info_sp').val(old_info);
 
+		$(`#fix_pl_sp option[value=${old_type}]`).prop("selected", true);
+		$(`#fix_catalog_sp option[value=${old_cata}]`).prop("selected", true);
+		$(`#fix_brand_sp option[value=${old_brand}]`).prop("selected", true);
 
 		$('#form_fix_pro').attr("action", duongdan_fix);
 		console.log(old_price);
@@ -139,6 +145,8 @@ $(function() {
 		var duongdan_fix = duongdan+url_sub+"/fixus/"+id_us_fix+"/";
 
 		var old_name = $(this).parent().siblings("#tenus").text();
+		var old_ho = $(this).parent().siblings("#htus").data('ho');
+		var old_ten = $(this).parent().siblings("#htus").data('ten');
 		var old_sdt = $(this).parent().siblings("#sdtus").text();
 		var old_email = $(this).parent().siblings("#emailus").text();
 		var old_role = $(this).parent().siblings("#roleus").text();
@@ -146,6 +154,8 @@ $(function() {
 		$('#name_fix_us').val(old_name);
 		$('#phone_fix_us').val(old_sdt);
 		$('#email_fix_us').val(old_email);
+		$('#ho_fix_us').val(old_ho);
+		$('#ten_fix_us').val(old_ten);
 
 		if(old_role == 0) {
 			$("#role_fix_us option[value='0']").prop("selected", true);

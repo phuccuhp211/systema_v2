@@ -4,14 +4,15 @@ namespace App\Models;
 use App\Models\basemodel as BaseM;
 
 class user_model extends BaseM {
+	public function gbanner() {return $this->getdata("SELECT * FROM banner");}
 	public function upview_index() {$this->iuddata("UPDATE accessed SET trangchu = trangchu + 1");}
 	public function upview_nonin() {$this->iuddata("UPDATE accessed SET trangcon = trangcon + 1");}
-	public function fullsp1() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT 8");}
-	public function spnew() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY id DESC LIMIT 4");}
-	public function sphot() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY viewed DESC LIMIT 4");}
+	public function fullsp1() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT 10");}
+	public function spnew() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY id DESC LIMIT 5");}
+	public function sphot() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY viewed DESC LIMIT 5");}
 	public function gethd($name) {return $this->getdata("SELECT * FROM hoadon WHERE name = '$name' ORDER BY id DESC");}
 	public function kthd($mahd) {return $this->getdata("SELECT * FROM hoadon WHERE SHD = $mahd");}
-	public function splq($idcata) {return $this->getdata("SELECT * FROM product WHERE id_cata = $idcata AND hidden = 0 LIMIT 4");}
+	public function splq($idcata) {return $this->getdata("SELECT * FROM product WHERE id_cata = $idcata AND hidden = 0 LIMIT 5");}
 	public function thuonghieu($brand) {return $this->getdata("SELECT name FROM brand WHERE id_brand = $brand");}
 	public function addcmt($noidung, $spid, $uid, $ngay) {$this->iuddata("INSERT INTO comments VALUES ('','$noidung','$spid','$uid','$ngay')");}
 	public function checkuser() {return $this->getdata("SELECT * FROM user WHERE role = 1");}
@@ -22,8 +23,8 @@ class user_model extends BaseM {
 	public function doimatkhau($id,$pass){$this->iuddata("UPDATE user SET pass = '$pass'WHERE id = $id");}
 
 	public function fullsp($page) {
-		$vitri = ($page*9)-9;
-		return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT $vitri,9 ");
+		$vitri = ($page*12)-12;
+		return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT $vitri,12 ");
 	}
 	public function fullpl($id=null) {
 		if (isset($id)) return $this->getdata("SELECT * FROM phanloai WHERE id = $id");
@@ -54,8 +55,9 @@ class user_model extends BaseM {
 		else return $this->getdata("SELECT * FROM rating WHERE idsp = $idsp");
 	}
 	public function getsp($type=null,$data=null,$page,$sapxep) {
-		$vitri = ($page*9)-9;
+		$vitri = ($page*12)-12;
 		$order= "";
+		$slsp = "LIMIT $vitri,12";
 
 		if(isset($sapxep)) {
 			if ($sapxep == 1) $order = "ORDER BY id ASC";
@@ -65,26 +67,24 @@ class user_model extends BaseM {
 		}
 		else $order = "";
 			
-
-		if ($type == "sanpham/tatca") $sql = "SELECT * FROM product WHERE hidden = 0 $order LIMIT $vitri,9";
-		else if ($type == "sanpham/danhmuc") $sql = "SELECT * FROM product WHERE hidden = 0 AND  id_cata = $data $order LIMIT $vitri,9";
-		else if ($type == "sanpham/timkiem") $sql = "SELECT * FROM product WHERE hidden = 0 AND  name like \"%$data%\" $order LIMIT $vitri,9";
-		else if ($type == "sanpham/phanloai")$sql = "SELECT * FROM product WHERE hidden = 0 AND id IN (
-														SELECT sp.id FROM phanloai pl INNER JOIN catalog cat INNER JOIN product sp
-														ON pl.id = cat.loai AND sp.id_cata = cat.id
-														WHERE pl.id = $data
-													) $order LIMIT $vitri,9";
+		if ($type == "sanpham/tatca") $sql = "SELECT * FROM product WHERE hidden = 0 $order $slsp";
+		else if ($type == "sanpham/danhmuc") $sql = "SELECT * FROM product WHERE hidden = 0 AND  id_cata = $data $order $slsp";
+		else if ($type == "sanpham/timkiem") $sql = "SELECT * FROM product WHERE hidden = 0 AND  name like \"%$data%\" $order $slsp";
+		else if ($type == "sanpham/phanloai") {
+			if ($data != 6) $sql = "SELECT * FROM product WHERE id_type = $data $order $slsp";
+			else $sql = "SELECT * FROM product WHERE price_sale != 0 $order $slsp";
+		}
 
 		return $this->getdata($sql);
 	}
 	public function phantrang($iddm=null,$chuoitk=null,$idpl=null) {
-		if (isset($iddm)) $sql = "SELECT CEILING(COUNT(*)/9) as pt FROM product WHERE id_cata = $iddm";
-		else if (isset($chuoitk)) $sql = "SELECT CEILING(COUNT(*)/9) as pt FROM product WHERE name like  '%$chuoitk%'";
-		else if (isset($idpl)) $sql = "SELECT CEILING(COUNT(*)/9) as pt
+		if (isset($iddm)) $sql = "SELECT CEILING(COUNT(*)/12) as pt FROM product WHERE id_cata = $iddm";
+		else if (isset($chuoitk)) $sql = "SELECT CEILING(COUNT(*)/12) as pt FROM product WHERE name like  '%$chuoitk%'";
+		else if (isset($idpl)) $sql = "SELECT CEILING(COUNT(*)/12) as pt
 								FROM phanloai pl INNER JOIN catalog cat INNER JOIN product sp
 								ON pl.id = cat.loai AND sp.id_cata = cat.id
 								WHERE pl.id = $idpl";
-		else {$sql = "SELECT CEILING(COUNT(*)/9) as pt FROM product";}
+		else {$sql = "SELECT CEILING(COUNT(*)/12) as pt FROM product";}
 
 		return $this->getdata($sql);
 	}

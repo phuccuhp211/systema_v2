@@ -85,15 +85,16 @@ class admin_model extends BaseM {
 	public function checksp($name) { return $this->getdata("SELECT * FROM product WHERE name = \"$name\""); }
 	public function delpro($id) { $this->iuddata("DELETE FROM product WHERE id = $id"); }
 	public function tksp() { return $this->getdata("SELECT dm.name, COUNT(pd.id) as soluong FROM catalog dm LEFT JOIN product pd ON dm.id = pd.id_cata GROUP BY dm.name"); }
-	public function addpro($name,$duongdan,$price,$sale,$salef,$salet,$catalog,$brand,$info,$infoct) {
-		$this->iuddata("INSERT INTO product VALUES('','$name','$duongdan','$info','$infoct','','$catalog','$brand','$price','$sale','$salef','$salet','','','')");
+	public function addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$infoct) {
+		$this->iuddata("INSERT INTO product VALUES('','$name','$duongdan','$info','$infoct','$pdtype','$catalog','$brand','$price','$sale','$salef','$salet','','','')");
 	}
-	public function fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$catalog,$brand,$info,$infoct) {
+	public function fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$infoct) {
 		$sql = "UPDATE product SET 
 			name = '$name', 
 			img = '$duongdan', 
 			detail = '$info', 
 			mdetail = '$infoct', 
+			id_type = '$pdtype', 
 			id_cata = '$catalog', 
 			id_brand = '$brand', 
 			price = '$price', 

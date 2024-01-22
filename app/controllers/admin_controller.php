@@ -16,9 +16,7 @@ class admin_controller extends Base {
 		    header('location: '.urlmd.'/manager/'); 
 		    exit();
 		}
-		else {
-		    require_once 'app/views/admin_log.php';
-		}
+		else $this->loadview('admin_log');
 	}
 	public function adlogin() {
 		$userpass = $this->amodel->adlogin();
@@ -61,51 +59,47 @@ class admin_controller extends Base {
     	else {
     		unset($_SESSION['errlog']);
 	    	if ($request != "") {
-	    		unset($_SESSION['quanly']);
 	    		if ($request == "qldm") {
-	    			$danhmuc = $this->amodel->fulldm();
-	    			$phanloai = $this->amodel->pldm();
-	    			$_SESSION['qldm'] = true;
-	    			unset($_SESSION['qlus'], $_SESSION['qlsp'], $_SESSION['hddh'], $_SESSION['qlbl'], $_SESSION['magg']);
+	    			$data = [ 'danhmuc' => $this->amodel->fulldm(), 'phanloai' => $this->amodel->pldm() ];
+	    			$_SESSION['mng'] = "qldm";
 	    		}
 	    		else if ($request == "qlus") {
-	    			$user = $this->amodel->fullus();
-	    			$_SESSION['qlus'] = true;
-	    			unset($_SESSION['qldm'], $_SESSION['qlsp'], $_SESSION['hddh'], $_SESSION['qlbl'], $_SESSION['magg']);
+	    			$data = [ 'user' => $this->amodel->fullus() ];
+	    			$_SESSION['mng'] = "qlus";
 	    		}
 	    		else if ($request == "qlsp") {
-	    			$sanpham = $this->amodel->fullsp();
-	    			$danhmuc = $this->amodel->fulldm();
-	    			$tksp = $this->amodel->tksp();
-	    			$brand = $this->amodel->fullth();
-					$_SESSION['qlsp'] = true;
-					unset($_SESSION['qldm'], $_SESSION['qlus'], $_SESSION['hddh'], $_SESSION['qlbl'], $_SESSION['magg']);
+	    			$data = [
+	    				'sanpham' => $this->amodel->fullsp(),
+		    			'danhmuc' => $this->amodel->fulldm(),
+		    			'phanloai' => $this->amodel->pldm(),
+		    			'tksp' => $this->amodel->tksp(),
+		    			'brand' => $this->amodel->fullth(),
+	    			];
+					$_SESSION['mng'] = "qlsp";
 	    		}
 	    		else if ($request == "hddh") {
-	    			$hoadon = $this->amodel->shd();
-					$_SESSION['hddh'] = true;
-					unset($_SESSION['qldm'], $_SESSION['qlus'], $_SESSION['qlsp'], $_SESSION['qlbl'], $_SESSION['magg']);
+	    			$data = [ 'hoadon' => $this->amodel->shd() ];
+					$_SESSION['mng'] = "hddh";
 	    		}
 	    		else if ($request == "qlbl") {
-	    			$binhluan = $this->amodel->dsbl();
-	    			$_SESSION['qlbl'] = true;
-	    			unset($_SESSION['qldm'], $_SESSION['qlus'], $_SESSION['qlsp'], $_SESSION['hddh'], $_SESSION['magg']);
+	    			$data = [ 'binhluan' => $this->amodel->dsbl() ];
+	    			$_SESSION['mng'] = "qlbl";
 	    		}
 	    		else if ($request == "magg") {
-	    			$mgg = $this->amodel->mgg();
-	    			$_SESSION['magg'] = true;
-	    			unset($_SESSION['qldm'], $_SESSION['qlus'], $_SESSION['qlsp'], $_SESSION['hddh'], $_SESSION['qlbl']);
+	    			$data = [ 'mgg' => $this->amodel->mgg() ];
+	    			$_SESSION['mng'] = "magg";
 	    		}
 	    	}
 	    	else {
-	    		$thunhap = $this->amodel->thunhap();
-	    		$donhang = $this->amodel->donhang();
-	    		$member = $this->amodel->member();
-	    		$access = $this->amodel->access();
-				$_SESSION['quanly'] = true;
-				unset($_SESSION['qldm'], $_SESSION['qlus'], $_SESSION['hddh'], $_SESSION['qlbl'], $_SESSION['qlsp'], $_SESSION['magg']);
+	    		$data = [
+    				'thunhap' => $this->amodel->thunhap(),
+		    		'donhang' => $this->amodel->donhang(),
+		    		'member' => $this->amodel->member(),
+		    		'access' => $this->amodel->access(),
+    			];
+				$_SESSION['mng'] = "quanly";
 	    	}
-	    	require_once 'app/views/manager.php';
+	    	$this->loadview('manager',$data);
     	}
 	}
 	public function adbl() {
@@ -269,6 +263,7 @@ class admin_controller extends Base {
 		$sale = $_POST['sale'];
 		$salef = $_POST['salef'];
 		$salet = $_POST['salet'];
+		$pdtype = $_POST['pdtype'];
 		$catalog = $_POST['catalog'];
 		$brand = $_POST['brand'];
 		$info = $_POST['info'];
@@ -295,7 +290,7 @@ class admin_controller extends Base {
 
 		if (!isset($_SESSION['error_log'])) {
 			move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-			$this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$catalog,$brand,$info,htmlspecialchars($infoct));
+			$this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
 		}
 		header('Location: ' .urlmd. '/manager/');
 	    exit();
@@ -307,6 +302,7 @@ class admin_controller extends Base {
 		$sale = $_POST['sale'];
 		$salef = $_POST['salef'];
 		$salet = $_POST['salet'];
+		$pdtype = $_POST['pdtype'];
 		$catalog = $_POST['catalog'];
 		$brand = $_POST['brand'];
 		$info = $_POST['info'];
@@ -332,7 +328,7 @@ class admin_controller extends Base {
 
 			if (!isset($_SESSION['error_log'])) {
 				move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-				$this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$catalog,$brand,$info,htmlspecialchars($infoct));
+				$this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
 			}
 			header('Location: ' .urlmd. '/manager/qlsp/');
 		    exit();

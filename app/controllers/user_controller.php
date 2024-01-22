@@ -139,6 +139,7 @@ class user_controller extends Base{
             'fullsp' => $this->umodel->fullsp1(),
             'newsp' => $this->umodel->spnew(),
             'hotsp' => $this->umodel->sphot(),
+            'banner' => $this->umodel->gbanner()
         ];
 		$this->loadview('index',$data);
 	}

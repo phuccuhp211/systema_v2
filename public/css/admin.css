@@ -89,49 +89,53 @@ table {
     margin: 15px 0;
 }
 
-.addsp, .dsbl, .error {
+.af-mng, .del-mng, .dsbl, .error {
     background: #2c3e50;
     color: white;
-    padding: 15px 30px 30px;
-    border-radius: 30px;
+    padding: 15px 20px;
+    border-radius: 15px;
 }
 
-.addsp {width: 660px;}
+.af-mng hr {
+    margin: 6px 0;
+}
+
+.af-mng {width: 900px;}
+.del-mng {width: 500px;}
 .dsbl {width: 850px;}
 
-.addsp input, .addsp textarea {
+.af-mng input, .af-mng textarea {
     border-radius: 8px;
     width: 100%;
 }
 
-.addsp textarea {
-    height: 200px;
+.af-mng textarea {
     padding: 10px 15px 0;
 }
 
-.addsp input {
-    height: 40px;
+.af-mng input {
+    height: 34px;
     padding: 0 15px;
     border: none;
 }
 
-.addsp input[type="file"] {
+.af-mng input[type="file"] {
     width:  auto !important;
     padding: 0;
 }
 
-.addsp input:focus-visible, .addsp select:focus-visible, .addsp textarea:focus-visible {
+.af-mng input:focus-visible, .af-mng select:focus-visible, .af-mng textarea:focus-visible {
     outline-color: #927ec4;
 }
 
-.addsp label {
+.af-mng label {
     width: 100%;
     font-size: 18px;
 }
 
-.addsp select {
+.af-mng select {
     padding: 0 15px;
-    height: 40px;
+    height: 34px;
     border-radius: 8px;
     width: 100%;
 }
@@ -144,10 +148,11 @@ table {
 .db-field-add .field-add {width: 48%;}
 
 .field-add {
-    margin: 0 0 15px;
+    margin: 0 0 10px;
 }
 
-.addsp button, .addsp a,
+.af-mng button, .af-mng a,
+.del-mng button, .del-mng a,
 .dsbl button, .dsbl a,
 .addpro-err button,
 .addcat-err button,

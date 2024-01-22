@@ -67,7 +67,7 @@
                                 <div class="thirt-menu">
                                     <li class="li-mnmn"><hr>
                                         <a href="<?php echo urlmd.'/sanpham/phanloai='.$item['id'].'/' ?>" class="a-mnc2">
-                                            <?php echo ucwords($item['name']) ?> 
+                                            <?php echo $item['name'] ?> 
                                         </a>
                                     </li>
                                     <?php foreach ($header['danhmuc'] as $value2 => $item2) { ?>
@@ -77,7 +77,7 @@
                                                     if ($item['id'] == $item3['loai']) { ?>
                                                         <li class="li-mnmn">
                                                             <a href="<?php echo urlmd.'/sanpham/danhmuc='.$item3['id'].'/' ?>" class="a-mnc3">
-                                                                <?php echo strtoupper($item3['name']); ?>
+                                                                <?php echo $item3['name'] ?>
                                                             </a><hr>
                                                         </li>
                                                     <?php }

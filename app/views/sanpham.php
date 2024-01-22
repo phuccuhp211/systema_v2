@@ -14,6 +14,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-3 menu-trai d-none d-lg-block d-md-block">
+                    <h2 class="h2-title">Danh Mục</h2>
                     <div class="menu-trai-tong">
                         <div class="menu-khungboc">
                             <?php foreach ($header['phanloai'] as $value => $item) { ?>
@@ -36,16 +37,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-9 col-lg-9 ldssp">
+                <div class="col-9 ldssp">
                     <div class="row">
                         <div class="col-9">
                             <?php 
-                                if (!isset($tendanhmuc) && !isset($chuoitk) && !isset($tenphanloai)) echo "<h2>Tất cả sản phẩm</h2>";
-                                if (isset($tendanhmuc)) echo "<h2>Danh mục : ".strtoupper($tendanhmuc[0]['name'])."</h2>";
-                                if (isset($tenphanloai)) echo "<h2>Phân Loại : ".ucwords($tenphanloai[0]['name'])."</h2>";
+                                if (!isset($tendanhmuc) && !isset($chuoitk) && !isset($tenphanloai)) echo "<h2 class=\"h2-title\">Tất cả sản phẩm</h2>";
+                                if (isset($tendanhmuc)) echo "<h2 class=\"h2-title\">Danh mục : ".strtoupper($tendanhmuc[0]['name'])."</h2>";
+                                if (isset($tenphanloai)) echo "<h2 class=\"h2-title\">Phân Loại : ".ucwords($tenphanloai[0]['name'])."</h2>";
                                 if (isset($chuoitk))
-                                    if ($chuoitk == "_") echo "<h2>Hiển thị kết quả cho : </h2>"; 
-                                    else echo "<h2>Hiển thị kết quả cho : ".$chuoitk."</h2>";
+                                    if ($chuoitk == "_") echo "<h2 class=\"h2-title\">Hiển thị kết quả cho : </h2>"; 
+                                    else echo "<h2 class=\"h2-title\">Hiển thị kết quả cho : ".$chuoitk."</h2>";
                             ?>
                         </div>
                         <?php echo $bl ?>

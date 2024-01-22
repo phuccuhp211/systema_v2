@@ -11,8 +11,6 @@
     color: black;
 }
 
-.phan-boloc {margin: 0 0 3%;}
-
 .menu-trai-tong hr {
     background: black;
     border: 2px solid;
@@ -44,8 +42,7 @@
 .menu-khungboc {padding: 0;margin: 0;}
 
 .menu-trai-tong {
-    border: 1px solid black;
-    border-radius: 10px;
+    border: 1px solid #6246a8;
     padding: 5%;
 }
 

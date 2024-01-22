@@ -29,7 +29,7 @@
 
 	<div class="container" style="margin: 30px auto;">
 		<div class="row" style="padding: 30px 15px 0; background: #2c3e50; border-radius: 15px;">
-			<?php if (isset($_SESSION['quanly'])) { ?>
+			<?php if ($_SESSION['mng'] == "quanly") { ?>
 				<div class="col-6">
 					<div class="ql-box">
 						<h3 class="text-center">Tổng thu nhập</h3>
@@ -89,21 +89,21 @@
 			<?php } else { ?>
 				<div class="box-table">
 					<div class="boloc">
-						<?php if (isset($_SESSION['qlsp'])) { ?>
+						<?php if ($_SESSION['mng'] == 'qlsp') { ?>
 							<button class="btn-boloc" data="sanpham" boloc="1">Tất Cả</button>
 							<button class="btn-boloc" data="sanpham" boloc="2">Sản Phẩm Bán Chạy</button>
 							<button class="btn-boloc" data="sanpham" boloc="3">Nhiều Lượt Xem</button>
 							<button class="btn-boloc" data="sanpham" boloc="4">Đang Sale</button>
 							<button class="btn-boloc" data="sanpham" boloc="5">Đã Ẩn</button>
 						<?php } ?>
-						<?php if (isset($_SESSION['qlus'])) { ?>
+						<?php if ($_SESSION['mng'] == 'qlus') { ?>
 							<button class="btn-boloc" data="taikhoan" boloc="1">Tất Cả</button>
 							<button class="btn-boloc" data="taikhoan" boloc="2">TK Bị khóa</button>
 							<button class="btn-boloc" data="taikhoan" boloc="3">TK Không khóa</button>
 							<button class="btn-boloc" data="taikhoan" boloc="4">TK User</button>
 							<button class="btn-boloc" data="taikhoan" boloc="5">TK Admin</button>
 						<?php } ?>
-						<?php if (isset($_SESSION['hddh'])) { ?>
+						<?php if ($_SESSION['mng'] == 'hddh') { ?>
 							<button class="btn-boloc" data="hoadon" boloc="1">Tất Cả</button>
 							<button class="btn-boloc" data="hoadon" boloc="2">Hóa đơn mới</button>
 							<button class="btn-boloc" data="hoadon" boloc="3">Đang Chuẩn Bị</button>
@@ -113,7 +113,7 @@
 						<?php } ?>
 					</div>
 					<table class="show-data">
-						<?php if (isset($_SESSION['qlsp'])) { ?>
+						<?php if ($_SESSION['mng'] == 'qlsp') { ?>
 							<tr>
 								<th style="width: 50px;">ID</th>
 								<th style="width: 150px; padding: 0;">IMG</th>
@@ -133,6 +133,7 @@
 									<td rowspan="2" id="tensp"><?php echo $item['name'] ?></td>
 									<td rowspan="2" id="in4sp" style="overflow-hidden"><?php echo $item['detail'] ?></td>
 									<td id="min4sp" hidden><?php echo $item['mdetail'] ?></td>
+									<td id="id_caplth" data-pl="<?php echo $item['id_type'] ?>" data-ca="<?php echo $item['id_cata'] ?>" data-th="<?php echo $item['id_brand'] ?>" hidden></td>
 									<td id="giasp" class="text-center"><?php echo number_format($item['price'],0,'','.') ?></td>
 									<td id="salesp" class="text-center"><?php echo number_format($item['price_sale'],0,'','.') ?></td>
 									<td rowspan="2" class="text-center">
@@ -149,7 +150,7 @@
 								</tr>
 							<?php } ?>
 						<?php } ?>
-						<?php if (isset($_SESSION['qldm'])) { ?>
+						<?php if ($_SESSION['mng'] == 'qldm') { ?>
 							<tr>
 								<th style="width: 50px;">ID</th>
 								<th style="width: 200px;">Tên</th>
@@ -173,7 +174,7 @@
 								</tr>
 							<?php } ?>
 						<?php } ?>
-						<?php if (isset($_SESSION['qlus'])) { ?>
+						<?php if ($_SESSION['mng'] == 'qlus') { ?>
 							<tr>
 								<th style="width: 40px;">ID</th>
 								<th style="width: 200px; padding: 0;">Tài Khoản</th>
@@ -190,7 +191,7 @@
 								<tr class="taikhoan">
 									<td class="text-center"><?php echo $item['id'] ?></td>
 									<td id="tenus"><?php echo $item['user'] ?></td>
-									<td><?php echo $item['ho']." ".$item['ten'] ?></td>
+									<td id="htus" data-ho="<?php echo $item['ho'] ?>" data-ten="<?php echo $item['ten'] ?>"><?php echo $item['ho']." ".$item['ten'] ?></td>
 									<td id="sdtus"><?php echo $item['sdt'] ?></td>
 									<td id="emailus" class="text-center"><?php echo $item['email'] ?></td>
 									<td id="roleus" class="text-center"><?php echo $item['role'] ?></td>
@@ -205,7 +206,7 @@
 								</tr>
 							<?php } ?>
 						<?php } ?>
-						<?php if (isset($_SESSION['hddh'])) { ?>
+						<?php if ($_SESSION['mng'] == 'hddh') { ?>
 							<tr>
 								<th style="width: 30px;">ID</th>
 								<th style="width: 120px;">Tên</th>
@@ -250,7 +251,7 @@
 								<?php } ?>
 							<?php } ?>
 						<?php } ?>
-						<?php if (isset($_SESSION['qlbl'])) { ?>
+						<?php if ($_SESSION['mng'] == 'qlbl') { ?>
 							<tr>
 								<th style="width: 70px;">ID SP</th>
 								<th style="width: auto;">Tên SP</th>
@@ -268,7 +269,7 @@
 								</tr>
 							<?php } ?>
 						<?php } ?>
-						<?php if (isset($_SESSION['magg'])) { ?>
+						<?php if ($_SESSION['mng'] == 'magg') { ?>
 							<tr>
 								<th style="width: 40px;">ID</th>
 								<th style="width: auto;">Tên Mã</th>
@@ -302,7 +303,7 @@
 						<?php } ?>
 					</table>
 					<table>
-						<?php if (isset($_SESSION['qldm'])) { ?>
+						<?php if ($_SESSION['mng'] == 'qldm') { ?>
 							<tr>
 								<th style="width: 50px;">ID</th>
 								<th style="width: auto;">Tên</th>
@@ -324,7 +325,7 @@
 						<?php } ?>
 					</table>
 				</div>
-				<?php if (isset($_SESSION['qlsp'])) { ?>
+				<?php if ($_SESSION['mng'] == 'qlsp') { ?>
 					<div class="thongke">
 						<?php foreach ($tksp as $value => $item) { ?>
 							<div hidden class="dsdm-ten" data-soluong="<?php echo $item['soluong'] ?>" ><?php echo $item['name'] ?></div>

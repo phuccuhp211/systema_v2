@@ -4,6 +4,11 @@ body {
     padding: 130px 0 0 !important;
 }
 
+.col-20pt {
+    flex: 0 0 auto;
+    width: 20%;
+}
+
 .ttgh {
     position: fixed;
     width: 100%;
@@ -216,15 +221,15 @@ ol.carousel-indicators li::marker {
 
 .a-pt {
     text-decoration: none;
-    border: 1px solid gray;
-    border-radius: 7px;
-    padding: 10px 15px;
+    border: 1px solid #6246a8;
     display: block;
-    width: fit-content;
     color: #745caf;
     font-size: 18px;
     font-weight: 700;
     margin: 0 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
 }
 .a-pt:hover {
     background: #745caf;
@@ -232,24 +237,21 @@ ol.carousel-indicators li::marker {
 }
 .nutsp {
     color: white;
-    border-radius: 10px;
     background: #745caf;
     font-weight: 700;
     font-size: 18px;
     line-height: 24px;
     padding: 7px;
+    width: 74%;
+    border-radius: 0;
 }
 
 button.nutsp {
     background: white;
-    width: 40px;
+    width: 24%;
     text-align: center;
     color: #745caf;
     border: 1px solid #745caf;
-}
-
-a.nutsp {
-    width: 175px;
 }
 
 a.nutsp:hover {
@@ -268,50 +270,47 @@ button.nutsp:hover {
 
 .khungxam{
     display: flex;
-    border-radius: 9px;
     height: 100px;
-    width: 185px;
-    margin: auto;
+    width: 100%;
     padding: 0 15%;
-    align-items: center;
     overflow: hidden;
+    justify-content: center;
 }
 
 .khungxam .nav-link {
+    height: 100%;
     padding: 0;
     margin: 0;
 }
 
 .khungsp {
     border: 1px solid #745caf;
-    border-radius: 4%;
-    height: max-content;
+    border-radius: 0;
     margin: 0 0 15px;
-    padding: 15px;
+    padding: 5px;
 }
 .khungsp:hover{box-shadow: 0px 0px 10px #745caf;border: 1px solid white;}
 .tt {
-    margin: 3% 0;
+    margin: 10px 0;
     cursor: pointer;
     font-weight: 700;
-    font-size: 16px;
     text-align: left;
     padding: 0 15px;
 }
-.giasp {color: red;font-size: 20px;text-align: center;display: flex;justify-content: space-around;}
+.giasp {color: red;font-size: 18px;text-align: center;display: flex;justify-content: space-around;}
 
 .giasp span {
     text-decoration: line-through;
     width: auto;
-    font-size: 14px;
+    font-size: 12px;
     color: gray;
 }
 .tensp {
     display: flex;
     align-items: center;
     background: #f1ecff;
-    border-radius: 10px;
     color: black;
+    font-size: 14px;
 }
 
 .dndk, .dndk2, .dndk-err, .dmk {
@@ -441,6 +440,7 @@ button.nutsp:hover {
     margin: 0;
     text-decoration: none;
     cursor: pointer;
+    text-transform: capitalize;
 }
 
 .menu-cap2 a:hover {
@@ -498,4 +498,9 @@ button.nutsp:hover {
 
 .voucher td {
     text-align: center;
+}
+
+.h2-title {
+    color: #6246a8;
+    margin: 0 0 20px;
 }
