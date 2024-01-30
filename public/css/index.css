@@ -34,12 +34,21 @@ body {
 
 .khung-poster {
     position: relative;
+    height: 300px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .chu-poster {
     color: white;
-    position: absolute;
-    margin: -10px;
+    background: #0000008c;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.chu-poster p {
+    margin: 0;
 }
 
 .poster .btn.btn-outline-light {
@@ -64,6 +73,7 @@ body {
 
 .anh-poster {
     width: 100%;
+    scale: 1;
 }
 
 .phai-poster1 {
@@ -197,4 +207,11 @@ body {
     font-style: italic;
     text-decoration: none;
     color: black;
+}
+
+
+.bg-poster {width: 12vw;height: 12vw;background: #bfb1e3ad;border-radius: 10px;display: flex;align-items: center;}
+
+.bg-poster:hover .anh-poster {
+    scale: 1.15;
 }

@@ -48,7 +48,14 @@
                     <div class="col-12 khungttct-sp">
                         <h2>THÔNG TIN CHI TIẾT</h2>
                         <div class="ttct-sp">
-                            <?php echo htmlspecialchars_decode($chitiet[0]['mdetail']) ?>
+                            <?php 
+                                if($chitiet[0]['id_type'] != 3) echo htmlspecialchars_decode($chitiet[0]['mdetail']);
+                                else {
+                                    $asd = $chitiet[0]['mdetail'];
+                                    $qwe = json_decode(stripslashes($chitiet[0]['mdetail']));
+                                    echo htmlspecialchars_decode($qwe[1]);
+                                }
+                            ?>
                             <button class="more-less">Xem thêm</button>                         
                         </div>      
                     </div>

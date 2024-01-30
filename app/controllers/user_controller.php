@@ -136,6 +136,7 @@ class user_controller extends Base{
 		$this->umodel->upview_index();
 		$data = [
 			'header' => $this->header,
+			'cbpc' => $this->umodel->cbpc(),
             'fullsp' => $this->umodel->fullsp1(),
             'newsp' => $this->umodel->spnew(),
             'hotsp' => $this->umodel->sphot(),

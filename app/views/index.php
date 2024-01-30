@@ -46,40 +46,24 @@
         <div class="container">
             <h1>Sản phẩm được quan tâm nhất </h1>
             <div class="row">
-                <div class=" col-lg-6 poster_item">
-                    <div class="khung-poster">
-                        <img src="<?php echo plrc.'data' ?>/pc2-1.jpg" class="anh-poster" alt="">
-                        <div class="chu-poster trai-poster">
-                            <p class="p-poster">Mã : Z59-I9109K-TTRTX</p>
-                            <ul class="ul-poster">
-                                <li class="li-poster">Main : Z590</li>
-                                <li class="li-poster">CPU : Core I9 10900K</li>
-                                <li class="li-poster">Tản Nhiệt : Nước Custom</li>
-                                <li class="li-poster">Ram : 32Gb 3600Mhz</li>
-                                <li class="li-poster">VGA : TITAN RTX (FE)</li>
-                                <li class="li-poster">PSU : 10Kw</li>
-                            </ul>
-                            <a href="sanpham.html" target="blank" class="btn btn-outline-light">Xem thêm &raquo;</a>
-                        </div>
-                    </div>                    
-                </div>
-                <div class=" col-lg-6 poster_item">
-                    <div class="khung-poster">
-                        <img src="<?php echo plrc.'data' ?>/pc5.jpg" class="anh-poster" alt="">
-                        <div class="chu-poster phai-poster">
-                            <p class="p-poster">Mã : X57-R756X-3070</p>
-                            <ul class="ul-poster">
-                                <li class="li-poster">Main : X570</li>
-                                <li class="li-poster">CPU : Ryzen 5 5600X</li>
-                                <li class="li-poster">Tản Nhiệt : stock</li>
-                                <li class="li-poster">Ram : 32Gb 3200Mhz</li>
-                                <li class="li-poster">VGA : RTX 3070</li>
-                                <li class="li-poster">PSU : 800W</li>
-                            </ul>
-                            <a href="sanpham.html" target="blank" class="btn btn-outline-light">Xem thêm &raquo;</a>
-                        </div>
-                    </div>                    
-                </div>
+                <?php foreach($cbpc as $value => $item) { ?>
+                    <div class=" col-lg-6 poster_item">
+                        <div class="khung-poster" style="background: url(<?php echo urlmd.'/public/data/rd'.rand(1,4).'.jpg'; ?>) bottom; background-size: cover ;">
+                            <div class="bg-poster">
+                                <img src="<?php echo $item['img'] ?>" class="anh-poster" alt="">
+                            </div>
+                            
+                            <div class="chu-poster">
+                                <?php 
+                                    $asd = $item['mdetail'];
+                                    $qwe = json_decode(stripslashes($asd));
+                                    echo htmlspecialchars_decode($qwe[0]);
+                                ?>
+                                <a href="<?php echo urlmd.'/sanpham/chitiet='.$item['id']."/" ?>" class="btn btn-outline-light">Xem thêm &raquo;</a>
+                            </div>
+                        </div>                    
+                    </div>
+                <?php }?>
             </div>               
         </div>
     </div>

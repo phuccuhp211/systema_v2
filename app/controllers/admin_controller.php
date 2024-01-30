@@ -276,23 +276,34 @@ class admin_controller extends Base {
 		if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
 		if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
 
-		$duongdan = urlmd . "/views/data/" . basename($_FILES["img"]["name"]);
-		$duongdan_2nd = "./views/data/" . basename($_FILES["img"]["name"]);
+		if ($pdtype == 3) {
+			if ($infoct == "") $_SESSION['errlog'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
+			else  {
+				preg_match('/(.*?)<p>end_info_pc<\/p>(.*?)/s', $infoct, $matches);
+				$cbpc = json_encode([
+					'doan1' => htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
+					'doan2' => htmlspecialchars($matches[1])
+				]);
+			}
+		}
+
+		$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
+		$duongdan_2nd = "././public/data/" . basename($_FILES["img"]["name"]);
 		$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
 
 		if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
 		if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
 
-		if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
-		&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+		if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg" &&  $dinhdang != "webp") {
 			$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
 		}
 
 		if (!isset($_SESSION['error_log'])) {
 			move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-			$this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+			if ($pdtype == !3) $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+			else $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
 		}
-		header('Location: ' .urlmd. '/manager/');
+		header('Location: ' .urlmd. '/manager/qlsp/');
 	    exit();
 	}
 	public function fixpro($id) {
@@ -313,30 +324,45 @@ class admin_controller extends Base {
 		if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
 		if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
 
+		if ($pdtype == 3) {
+				if ($infoct == "") $_SESSION['errlog'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
+				else  {
+					preg_match('/(.*?)<p>end_info_pc<\/p>(.*?)/s', $infoct, $matches);
+					$matches[0] = str_replace(["\n", "\r"], "",$matches[0]);
+					$matches[1] = str_replace(["\n", "\r"], "",$matches[1]);
+					$cbpc = json_encode([
+						htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
+						htmlspecialchars($matches[1])
+					]);
+				}
+			}
+
 		if (isset($_FILES['img']) && $_FILES['img']['name'] != '') {
-			$duongdan = urlmd . "/views/data/" . basename($_FILES["img"]["name"]);
-			$duongdan_2nd = "./views/data/" . basename($_FILES["img"]["name"]);
+			$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
+			$duongdan_2nd = "././public/data/" . basename($_FILES["img"]["name"]);
 			$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
 
 			if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
 			if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
 
-			if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
-			&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+			if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg" &&  $dinhdang != "webp") {
 				$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
 			}
 
 			if (!isset($_SESSION['error_log'])) {
 				move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-				$this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+				if ($pdtype == !3) $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+				else $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
 			}
 			header('Location: ' .urlmd. '/manager/qlsp/');
 		    exit();
 		}
+
 		else {
 			$img_cu = $_POST['old_img'];
 			if (!isset($_SESSION['error_log'])) {
-				$this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$catalog,$brand,$info,htmlspecialchars($infoct));
+				if ($pdtype == !3) $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+				else $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
 			}
 			header('Location: ' .urlmd. '/manager/qlsp/');
 		    exit();

@@ -55,7 +55,7 @@
                         <?php if (isset($fullsp)) { echo $this->showsp2($fullsp); } ?>
                     </div>
                     <div class="row">
-                        <div style="display:flex; justify-content: center;" id="list-pt">
+                        <div style="display:flex; justify-content: center; margin: 30px 0 0;" id="list-pt">
                             <?php echo $lpt; ?>
                         </div>
                     </div>

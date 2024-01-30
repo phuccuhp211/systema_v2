@@ -8,6 +8,7 @@ class user_model extends BaseM {
 	public function upview_index() {$this->iuddata("UPDATE accessed SET trangchu = trangchu + 1");}
 	public function upview_nonin() {$this->iuddata("UPDATE accessed SET trangcon = trangcon + 1");}
 	public function fullsp1() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT 10");}
+	public function cbpc() {return $this->getdata("SELECT * FROM product WHERE id_type = 3 ORDER BY rand() LIMIT 2");}
 	public function spnew() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY id DESC LIMIT 5");}
 	public function sphot() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY viewed DESC LIMIT 5");}
 	public function gethd($name) {return $this->getdata("SELECT * FROM hoadon WHERE name = '$name' ORDER BY id DESC");}

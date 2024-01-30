@@ -647,6 +647,9 @@ $(function() {
 		cc_tt = $('.ttct-sp').height();
 		$('.ttct-sp').height(500);
 	}
+	else {
+		$('.more-less').remove();
+	}
 	$('.more-less').on('click', function() {
 		if (stt_ml == 0 ) {
 			$('.ttct-sp').height(cc_tt);
