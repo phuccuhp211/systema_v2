@@ -66,7 +66,7 @@
                             <?php foreach ($header['phanloai'] as $value => $item) { ?>
                                 <div class="thirt-menu">
                                     <li class="li-mnmn"><hr>
-                                        <a href="<?php echo urlmd.'/sanpham/phanloai='.$item['id'].'/' ?>" class="a-mnc2">
+                                        <a href="<?php echo urlmd.'/sanpham/phanloai/'.$item['id'].'/' ?>" class="a-mnc2">
                                             <?php echo $item['name'] ?> 
                                         </a>
                                     </li>
@@ -76,7 +76,7 @@
                                                 <?php foreach ($header['danhmuc'] as $value3 => $item3) {
                                                     if ($item['id'] == $item3['loai']) { ?>
                                                         <li class="li-mnmn">
-                                                            <a href="<?php echo urlmd.'/sanpham/danhmuc='.$item3['id'].'/' ?>" class="a-mnc3">
+                                                            <a href="<?php echo urlmd.'/sanpham/danhmuc/'.$item3['id'].'/' ?>" class="a-mnc3">
                                                                 <?php echo $item3['name'] ?>
                                                             </a><hr>
                                                         </li>

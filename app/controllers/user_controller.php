@@ -18,6 +18,7 @@ class user_controller extends Base{
 	private $header;
 
     function __construct() {
+    	parent::__construct('client');
         $this->umodel = new UserM();
         $this->header = $this->header();
     }
@@ -134,13 +135,22 @@ class user_controller extends Base{
 
 	public function index() {
 		$this->umodel->upview_index();
+		$bocuc = $this->umodel->layout();
+		$arr_bocuc = [];
+
+		for ($i = 0; $i < count($bocuc) ; $i++) {
+			$sanpham = $this->umodel->splay($bocuc[$i]['id_type'],$bocuc[$i]['id_cata'],$bocuc[$i]['ref'],$bocuc[$i]['ord']);
+			array_push($arr_bocuc, [
+				'tieude' => $bocuc[$i],
+				'sanpham' => $sanpham
+			]);
+		}
+
 		$data = [
 			'header' => $this->header,
+			'banner' => $this->umodel->gbanner(),
 			'cbpc' => $this->umodel->cbpc(),
-            'fullsp' => $this->umodel->fullsp1(),
-            'newsp' => $this->umodel->spnew(),
-            'hotsp' => $this->umodel->sphot(),
-            'banner' => $this->umodel->gbanner()
+			'bocuc' => $arr_bocuc
         ];
 		$this->loadview('index',$data);
 	}
@@ -582,7 +592,7 @@ class user_controller extends Base{
 			if (isset($bientam)) $lpt = $this->phantrang('sanpham/'.$loai_data,$bientam,$phantrang[0]['pt']);
 			else $lpt = $this->phantrang('sanpham/'.$loai_data,$data,$phantrang[0]['pt']);
 
-			if (isset($_POST['xacthuc1'])) echo $this->showsp2($fullsp);
+			if (isset($_POST['xacthuc1'])) echo $this->showsp($fullsp);
 			else $this->loadview('sanpham', ['header' => $this->header, 'fullsp' => $fullsp, 'lpt' => $lpt, 'bl' => $bl]);
 		}
 		else {
@@ -598,7 +608,7 @@ class user_controller extends Base{
 			else $fullsp = $this->umodel->getsp($type,$data,$page,$loai);
 
 			$lpt = $this->phantrang($type,$data,$phantrang[0]['pt'],$loai);
-			$response = array('sanpham' => $this->showsp2($fullsp), 'phantrang' => $lpt);
+			$response = array('sanpham' => $this->showsp($fullsp), 'phantrang' => $lpt);
 			echo json_encode($response);
 		}
 	}
@@ -666,7 +676,6 @@ class user_controller extends Base{
             $data['sps'] = $sps;
         }
 
-			
 		$this->loadview('chitietsanpham',$data);
 	}
 

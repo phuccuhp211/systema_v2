@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include 'include/lib.php' ?>
+    <?php include '../include/lib.php' ?>
     <title>Tranh Chủ</title>
     <link rel="stylesheet" href="<?php echo plrc ?>css/index.css">
     <script style="text/javascript" src="<?php echo plrc ?>jquery/index.js"></script>
 </head>
 <body>
-    <?php include 'include/header.php' ?>
-    <?php include 'include/modal.php' ?>
+    <?php include '../include/header.php' ?>
+    <?php include '../include/modal.php' ?>
 
     <div class="banner">
         <div class="container">
@@ -68,23 +68,43 @@
         </div>
     </div>
     <div class="container pad_1" id="list-sanpham">
-        <h2 class="tieude">Hàng Mới Về</h2>
-        <div class="row">
-            <?php if (isset($newsp)) {
-                echo $this->showsp($newsp); } ?>
-        </div> 
-        <hr>             
-        <h2 class="tieude">Sản Phẩm HOT</h2>
-        <div class="row">
-            <?php if (isset($hotsp)) {
-                echo $this->showsp($hotsp); } ?>
-        </div>
-        <hr>           
-        <h2 class="tieude">Tất Cả Sản Phẩm</h2>
-        <div class="row">
-            <?php if (isset($fullsp)) {
-                echo $this->showsp($fullsp); } ?>
-        </div>           
+        <?php foreach ($bocuc as $value => $item) { ?>
+            <div class="ss-sp">
+                <?php 
+                    if ($item['tieude']['ebd_img']== "") echo "<h2 class=\"tieude\">".$item['tieude']['name']."</h2>";
+                    if ($item['tieude']['ebd_img']!= "") echo "<h2 class=\"tieude td-trans\">".$item['tieude']['name']."</h2>";
+
+                    if ($item['tieude']['poster'] != "") echo "<div class=\"ss-poster\"><img src=\"".$item['tieude']['poster']."\" alt=\"\"></div>";
+
+                    if ($item['tieude']['ebd_img']== "") {
+                        echo "
+                            <div class=\"row\">
+                                <div>
+                                    <div class=\"ebd_img\">
+                                        <button class=\"click-pn click-prev\"><i class=\"fa-solid fa-arrow-left\"></i></button>
+                                        ".$this->showsp2($item['sanpham'],'col-20pt')."
+                                        <button class=\"click-pn click-next\"><i class=\"fa-solid fa-arrow-right\"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        ";
+                    }
+                    else {
+                        echo "
+                            <div class=\"row\">
+                                <div>
+                                    <div class=\"ebd_img\" style=\"background: url(".$item['tieude']['ebd_img'].") bottom; background-size:cover;\">
+                                        <button class=\"click-pn click-prev\"><i class=\"fa-solid fa-arrow-left\"></i></button>
+                                        ".$this->showsp2($item['sanpham'],'col-3','ss-1')."
+                                        <button class=\"click-pn click-next\"><i class=\"fa-solid fa-arrow-right\"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        ";
+                    }
+                ?>
+            </div>
+        <?php } ?>         
     </div>
 
     <?php include 'include/footer.php' ?>

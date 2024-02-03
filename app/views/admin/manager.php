@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php include 'include/lib.php' ?>
+	<?php include '../include/lib.php'; ?>
 	<link rel="stylesheet" href="<?php echo plrc ?>css/admin.css">
 	<script style="text/javascript" src="<?php echo plrc ?>jquery/admin.js"></script>
 	<script style="text/javascript" src="<?php echo plrc ?>lib/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
@@ -9,50 +9,57 @@
 	<title>Trang Quản Trị</title>
 </head>
 <body style="padding: 0 !important;">
-	<div class="container menu">
-		<div class="row">
-			<div class="col-4"><a class="btn w-100 btn-info" href="<?php echo urlmd ?>/manager/">Trang Quản Trị</a></div>
-			<div class="col-4"><a class="btn w-100 btn-warning" href="<?php echo urlmd ?>/">Quay Về Website</a></div>
-			<div class="col-4"><a class="btn w-100 btn-danger text-white" href="<?php echo urlmd ?>/dangxuat/">Đăng Xuất</a></div>
-		</div>
-		<div class="row" style="margin: 15px 0;">
-			<div class="col-4"><a class="btn w-100 btn-primary text-white" href="<?php echo urlmd ?>/manager/qlsp/">Quản Lý Sản Phẩm</a></div>
-			<div class="col-4"><a class="btn w-100 btn-success text-white" href="<?php echo urlmd ?>/manager/qldm/">Quản Lý Danh Mục</a></div>
-			<div class="col-4"><a class="btn w-100 btn-secondary text-white" href="<?php echo urlmd ?>/manager/qlus/">Quản Lý User</a></div>
-		</div>
-		<div class="row">
-			<div class="col-4"><a class="btn w-100 btn-secondary text-white" href="<?php echo urlmd ?>/manager/qlbl/">Quản Lý Bình Luận</a></div>
-			<div class="col-4"><a class="btn w-100 btn-dark text-white" href="<?php echo urlmd ?>/manager/hddh/">Hóa Đơn Đặt Hàng</a></div>
-			<div class="col-4"><a class="btn w-100 btn-dark text-white" href="<?php echo urlmd ?>/manager/magg/">Mã Giảm Giá</a></div>
-		</div>
+	<div class="menu">
+		<a class="text-start btn w-100 btn-info" href="<?php echo urlmd ?>/manager/">Trang Chủ</a>
+		<hr>
+		<a class="text-start btn w-100 btn-success" href="<?php echo urlmd ?>/manager/tdbc/">Sections Home</a>
+		<a class="text-start btn w-100 btn-success" href="<?php echo urlmd ?>/manager/slbn/">Slide Banner</a>
+		<hr>
+		<a class="text-start btn w-100 btn-secondary text-white" href="<?php echo urlmd ?>/manager/qlsp/">Quản Lý Sản Phẩm</a>
+		<a class="text-start btn w-100 btn-secondary text-white" href="<?php echo urlmd ?>/manager/qldm/">Quản Lý Danh Mục</a>
+		<a class="text-start btn w-100 btn-secondary text-white" href="<?php echo urlmd ?>/manager/qlus/">Quản Lý User</a>
+		<a class="text-start btn w-100 btn-secondary text-white" href="<?php echo urlmd ?>/manager/qlbl/">Quản Lý Bình Luận</a>
+		<hr>
+		<a class="text-start btn w-100 btn-dark text-white" href="<?php echo urlmd ?>/manager/hddh/">Hóa Đơn Đặt Hàng</a>
+		<a class="text-start btn w-100 btn-dark text-white" href="<?php echo urlmd ?>/manager/magg/">Mã Giảm Giá</a>
+		<hr>
+		<a class="text-start btn w-100 btn-danger text-white my-0" href="<?php echo urlmd ?>/dangxuat/">Đăng Xuất</a>
 	</div>
 
-	<div class="container" style="margin: 30px auto;">
-		<div class="row" style="padding: 30px 15px 0; background: #2c3e50; border-radius: 15px;">
+	<div class="container">
+		<div class="row">
+			<?php if ($_SESSION['mng'] == 'qlsp') { ?>
+				<div class="thongke">
+					<?php foreach ($tksp as $value => $item) { ?>
+						<div hidden class="dsdm-ten" data-soluong="<?php echo $item['soluong'] ?>" ><?php echo $item['name'] ?></div>
+					<?php } ?>
+					<div id="bieudo"></div>
+				</div>
+			<?php } ?>	
 			<?php if ($_SESSION['mng'] == "quanly") { ?>
-				<div class="col-6">
+				<div class="col-6" style="margin: 10vh 0 0">
 					<div class="ql-box">
 						<h3 class="text-center">Tổng thu nhập</h3>
 						<div class="box-icon">
 							<i class="fa-solid fa-cash-register" style="background: #9933CC;"></i>
 						</div>
 						<div class="ql-mess">
-							<h3 style="color: red; text-align: center;"><?php echo number_format($thunhap[0]['thunhap'],0,",",".") ?> VNĐ</h3>
-							<h5 style="color: gray; text-align: center;">Từ các hóa đơn đã được thanh toán</h5><hr>
-							<p>Thu nhập dự tính nếu hoàn tất mọi HD : <span style="color:red;"><?php echo number_format($thunhap[0]['dutinh'],0,",",".")?> VNĐ</span></p>
-							<p>Giá trị của các hóa đơn chưa thanh toán : <span style="color:red;"><?php echo number_format($thunhap[0]['dutinh']-$thunhap[0]['thunhap'],0,",",".")?> VNĐ</span></p>
+							<h3 style="color: #ff6363; text-align: center;"><?php echo number_format($thunhap[0]['thunhap'],0,",",".") ?> VNĐ</h3>
+							<h5 style="color: white; text-align: center;">Từ các hóa đơn đã được thanh toán</h5><hr>
+							<p>Thu nhập dự tính nếu hoàn tất mọi HD : <span style="color:#ff6363;"><?php echo number_format($thunhap[0]['dutinh'],0,",",".")?> VNĐ</span></p>
+							<p>Giá trị của các hóa đơn chưa thanh toán : <span style="color:#ff6363;"><?php echo number_format($thunhap[0]['dutinh']-$thunhap[0]['thunhap'],0,",",".")?> VNĐ</span></p>
 						</div>
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-6" style="margin: 10vh 0 0">
 					<div class="ql-box">
 						<h3 class="text-center">Lượng đơn hàng</h3>
 						<div class="box-icon">
 							<i class="fa-solid fa-file-invoice" style="background: #0d47a1;"></i>
 						</div>
 						<div class="ql-mess">
-							<h3 style="color: red; text-align: center;"><?php echo $donhang[0]['tonghd'] ?></h3>
-							<h5 style="color: gray; text-align: center;">Là tổng số các hóa đơn hiện có</h5><hr>
+							<h3 style="color: #ff6363; text-align: center;"><?php echo $donhang[0]['tonghd'] ?></h3>
+							<h5 style="color: white; text-align: center;">Là tổng số các hóa đơn hiện có</h5><hr>
 							<p>Đã hoàn thành : <?php echo $donhang[0]['hdht'] ?></p>
 							<p>Chưa hoàn thành : <?php echo $donhang[0]['tonghd']-$donhang[0]['hdht'] ?></p>
 						</div>
@@ -65,8 +72,8 @@
 							<i class="fa-regular fa-user" style="background: #00695c;"></i>
 						</div>
 						<div class="ql-mess">
-							<h3 style="color: red; text-align: center;"><?php echo $member[0]['ddk'] + $member[0]['cdk'] ?></h3>
-							<h5 style="color: gray; text-align: center;">Là tổng số khách hàng đã truy cập và mua tại Web.</h5><hr>
+							<h3 style="color: #ff6363; text-align: center;"><?php echo $member[0]['ddk'] + $member[0]['cdk'] ?></h3>
+							<h5 style="color: white; text-align: center;">Là tổng số khách hàng đã truy cập và mua tại Web.</h5><hr>
 							<p>Đã đăng ký : <?php echo $member[0]['ddk'] ?></p>
 							<p>Chưa đăng ký : <?php echo $member[0]['cdk'] ?></p>
 						</div>
@@ -79,8 +86,8 @@
 							<i class="fa-solid fa-globe" style="background: #0099cc;"></i>
 						</div>
 						<div class="ql-mess">
-							<h3 style="color: red; text-align: center;"><?php echo number_format($access[0]['trangchu']+$access[0]['trangcon'],0,",",".") ?></h3>
-							<h5 style="color: gray; text-align: center;">Lượt truy cập Web</h5><hr>
+							<h3 style="color: #ff6363; text-align: center;"><?php echo number_format($access[0]['trangchu']+$access[0]['trangcon'],0,",",".") ?></h3>
+							<h5 style="color: white; text-align: center;">Lượt truy cập Web</h5><hr>
 							<p>Trang chủ : <?php echo $access[0]['trangchu'] ?></p>
 							<p>Trang con : <?php echo $access[0]['trangcon'] ?></p>
 						</div>
@@ -113,6 +120,44 @@
 						<?php } ?>
 					</div>
 					<table class="show-data">
+						<?php if ($_SESSION['mng'] == 'tdbc') { ?>
+							<tr>
+								<th style="width: 50px;">ID</th>
+								<th style="width: auto; padding: 0;">Tên Sections</th>
+								<th style="width: 150px;">Poster</th>
+								<th style="width: 150px;">Ảnh Nền</th>
+								<th style="width: 100px;">PL - CAT</th>
+								<th style="width: 100px;">TC - SX</th>
+								<th style="width: 100px;">Vị Trí</th>
+								<th style="width: 100px;">Thao Tác</th>
+							</tr>
+							<tr>
+								<td colspan="8" class="td-addsp"><button class="btn btn-primary btn-add them">Thêm Section +</button></td>
+							</tr>
+							<?php foreach ($tdbc as $value => $item) { ?>
+								<tr class="bocuc">
+									<td rowspan="2" class="text-center p-0"><?php echo $item['id'] ?></td>
+									<td rowspan="2" class="text-center" id="tenbc"><?php echo $item['name'] ?></td>
+									<td rowspan="2" class="text-center" id="posbc">
+										<?php echo $item['poster'] != null ? "<img src=\"".$item['poster']."\">" : "Chưa Thiết Lập" ?>
+									</td>
+									<td rowspan="2" class="text-center" id="bgrbc">
+										<?php echo $item['ebd_img'] != null ? "<img src=\"".$item['ebd_img']."\">" : "Chưa Thiết Lập" ?>
+									</td>
+									<td class="text-center" id="plbc"><?php echo $item['id_type'] ?></td>
+									<td class="text-center" id="refbc"><?php echo $item['ref'] ?></td>
+									<td rowspan="2" class="text-center" id="idobc"><?php echo $item['ido'] ?></td>
+									<td rowspan="2" class="text-center">
+										<button class="btn btn-primary suaxoa sua suabc" data-idbc="<?php echo $item['id'] ?>"><i class="fa-solid fa-gear"></i></button>
+										<button class="btn btn-danger suaxoa xoa xoabc" data-idbc="<?php echo $item['id'] ?>"><i class="fa-solid fa-trash"></i></button>
+									</td>
+								</tr>
+								<tr>
+									<td class="text-center" id="catbc"><?php echo $item['id_cata'] ?></td>
+									<td class="text-center" id="ordbc"><?php echo $item['ord'] ?></td>
+								</tr>
+							<?php } ?>
+						<?php } ?>
 						<?php if ($_SESSION['mng'] == 'qlsp') { ?>
 							<tr>
 								<th style="width: 50px;">ID</th>
@@ -325,14 +370,6 @@
 						<?php } ?>
 					</table>
 				</div>
-				<?php if ($_SESSION['mng'] == 'qlsp') { ?>
-					<div class="thongke">
-						<?php foreach ($tksp as $value => $item) { ?>
-							<div hidden class="dsdm-ten" data-soluong="<?php echo $item['soluong'] ?>" ><?php echo $item['name'] ?></div>
-						<?php } ?>
-						<div id="bieudo"></div>
-					</div>
-				<?php } ?>	
 			<?php } ?>
 		</div>
 	</div>

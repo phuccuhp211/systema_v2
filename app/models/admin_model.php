@@ -6,6 +6,10 @@ use App\Models\basemodel as BaseM;
 class admin_model extends BaseM {
 	public function adlogin() { return $this->getdata('SELECT * FROM user WHERE role = 0'); }
 
+    public function secs() { return $this->getdata('SELECT * FROM sections ORDER BY id DESC'); }
+
+    public function gbnn() { return $this->getdata('SELECT * FROM banner ORDER BY id DESC'); }
+
     public function fullsp() { return $this->getdata('SELECT * FROM product ORDER BY id DESC'); }
 
     public function fulldm() { return $this->getdata('SELECT * FROM catalog'); }
@@ -77,6 +81,10 @@ class admin_model extends BaseM {
 		}
 	}
 	/*-----------------------------------------*/
+	public function addlay($name,$img1,$img2,$type,$cata,$sovt,$refe,$sxtt) { $this->iuddata("INSERT INTO sections VALUES('','$name','$img1','$img2','$type','$cata','$sovt','$refe','$sxtt')"); }
+	public function fixlay($id,$name,$img1,$img2,$type,$cata,$sovt,$refe,$sxtt) { $this->iuddata($sql = "UPDATE sections SET name = '$name', poster = '$img1', ebd_img = '$img2', id_type = '$type', id_cata = '$cata', ido = '$sovt', ref = '$refe', ord = '$sxtt' WHERE id = $id"); }
+	public function dellay($id) { $this->iuddata("DELETE FROM sections WHERE id = $id");}
+	/*-----------------------------------------*/
 	public function thunhap() { return $this->getdata("SELECT SUM(thanhtien) as dutinh, tb.thunhap FROM hoadon INNER JOIN (SELECT SUM(thanhtien) as thunhap FROM hoadon WHERE trangthai = \"Hoàn Thành\") as tb"); }
 	public function donhang() { return $this->getdata("SELECT COUNT(id) as tonghd, tb.hdht FROM hoadon INNER JOIN (SELECT COUNT(id) as hdht FROM hoadon WHERE trangthai = \"Hoàn Thành\")as tb"); }
 	public function member() { return $this->getdata("SELECT COUNT(us.user) as ddk, cdk FROM user us, (SELECT COUNT(name) as cdk FROM (SELECT name FROM hoadon WHERE name NOT IN (SELECT user FROM user) GROUP BY name) as tb) as tb WHERE us.role = 1"); }
@@ -85,9 +93,7 @@ class admin_model extends BaseM {
 	public function checksp($name) { return $this->getdata("SELECT * FROM product WHERE name = \"$name\""); }
 	public function delpro($id) { $this->iuddata("DELETE FROM product WHERE id = $id"); }
 	public function tksp() { return $this->getdata("SELECT dm.name, COUNT(pd.id) as soluong FROM catalog dm LEFT JOIN product pd ON dm.id = pd.id_cata GROUP BY dm.name"); }
-	public function addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$infoct) {
-		$this->iuddata("INSERT INTO product VALUES('','$name','$duongdan','$info','$infoct','$pdtype','$catalog','$brand','$price','$sale','$salef','$salet','','','')");
-	}
+	public function addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$infoct) { $this->iuddata("INSERT INTO product VALUES('','$name','$duongdan','$info','$infoct','$pdtype','$catalog','$brand','$price','$sale','$salef','$salet','','','')"); }
 	public function fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$infoct) {
 		$sql = "UPDATE product SET 
 			name = '$name', 
@@ -116,19 +122,13 @@ class admin_model extends BaseM {
 	public function delpl($id) { $this->iuddata("DELETE FROM phanloai WHERE id = $id");}
 	/*-----------------------------------------*/
 	public function checkus($name) { return $this->getdata("SELECT * FROM user WHERE user = \"$name\"");}
-	public function addus($name,$pass,$ho,$ten,$phone,$email,$diachi,$role) { 
-		$this->iuddata("INSERT INTO user VALUES('','$name','$pass','$ho','$ten','$phone','$email','$diachi','$role','','')");
-	}
-	public function fixus($id,$name,$pass,$ho,$ten,$phone,$email,$diachi,$role) {
-		$this->iuddata($sql = "UPDATE user SET user = '$name', pass = '$pass', ho = '$ho', ten = '$ten', sdt = '$phone', email = '$email', diachi = '$diachi', role = '$role'WHERE id = $id");
-	}
+	public function addus($name,$pass,$ho,$ten,$phone,$email,$diachi,$role) { $this->iuddata("INSERT INTO user VALUES('','$name','$pass','$ho','$ten','$phone','$email','$diachi','$role','','','')"); }
+	public function fixus($id,$name,$pass,$ho,$ten,$phone,$email,$diachi,$role) { $this->iuddata($sql = "UPDATE user SET user = '$name', pass = '$pass', ho = '$ho', ten = '$ten', sdt = '$phone', email = '$email', diachi = '$diachi', role = '$role'WHERE id = $id"); }
 	public function delus($id) { $this->iuddata("DELETE FROM user WHERE id = $id");}
 	/*-----------------------------------------*/
 	public function checkmgg($name) { return $this->getdata("SELECT * FROM voucher WHERE name = '$name'");}
 	public function addmgg($name,$max,$remaining,$fd,$ft,$percent) {$this->iuddata("INSERT INTO voucher VALUES('','$name','$max','$remaining','$fd','$ft','$percent')");}
-	public function fixmgg($id,$name,$fd,$td,$percent) { 
-		$this->iuddata("UPDATE voucher SET name = '$name', f_date = '$fd', t_date = '$td', percent = '$percent' WHERE id = $id");
-	}
+	public function fixmgg($id,$name,$fd,$td,$percent) { $this->iuddata("UPDATE voucher SET name = '$name', f_date = '$fd', t_date = '$td', percent = '$percent' WHERE id = $id"); }
 	public function delmgg($id) { $this->iuddata("DELETE FROM voucher WHERE id = $id"); }
 	/*-----------------------------------------*/
 	public function dsbl() {

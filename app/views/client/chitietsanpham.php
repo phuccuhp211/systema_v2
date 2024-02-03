@@ -130,7 +130,7 @@
             <h2 class="tieude">SẢN PHẨM LIÊN QUAN</h2>
             <div class="row" id="list-sanpham">
                 <?php if (isset($splq)) {
-                echo $this->showsp($splq); } ?>
+                echo $this->showsp($splq,'col-20pt'); } ?>
             </div>              
         </div>
     </div>

@@ -49,10 +49,16 @@
 }
 
 .menu {
+    width: 15vw;
     background: #2c3e50;
-    border-radius: 0 0 15px 15px;
+    border-radius: 0 15px 15px 0;
+    position: fixed;
     padding:  15px;
     font-size: 18px;
+    top: 50%;
+    transform: translate(0, -50%);
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .menu a {
@@ -212,9 +218,6 @@ table {
 }
 
 .box-table {
-    height: 700px;
-    overflow-y: scroll;
-    overflow-x: hidden;
     background: #dfdfdf;
     border-bottom: 10px solid #dfdfdf;
     border-top: 10px solid #dfdfdf;
@@ -233,7 +236,7 @@ table {
 }
 
 .ql-box {
-    background: white;
+    background: #2c3e50;
     border-radius: 15px;
     margin: 0 0 30px;
     padding: 0 0 15px;
@@ -249,6 +252,7 @@ table {
 .ql-mess p {
     margin: 5px 0 0;
     padding: 0 15px;
+    color: white;
 }
 
 .ql-mess h3, .ql-mess h5 {
@@ -268,7 +272,7 @@ table {
     justify-content: space-evenly;
     border: 1px solid #dc3545;
     padding: 15px;
-    border-radius: 15px;
+    border-radius: 0 0 15px 15px;
     background: white;
 }
 
@@ -306,4 +310,18 @@ table {
     right: 15px;
     box-shadow: 0 0px 20px 2px #927ec4;
     border-radius: 15px;
+}
+
+.menu hr {
+    height: 1px;
+    width: 100%;
+    color: white;
+}
+
+.menu > * {
+    margin: 0 0 15px;
+}
+
+.menu .btn {
+    display: block;
 }

@@ -215,3 +215,59 @@ body {
 .bg-poster:hover .anh-poster {
     scale: 1.15;
 }
+
+.ebd_img {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    padding: 15px 10px 10px;
+}
+
+.ebd_img > * {
+    max-width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+}
+
+.ss-sp {
+    overflow: hidden;
+    border-radius: 15px;
+    margin: 0 0 50px;
+}
+
+.td-trans {
+    background: #ed1e2b;
+    color: white;
+    margin: 0;
+    padding: 10px 25px;
+}
+
+.click-pn {
+    position: absolute;
+    transform: translate(0, -50%);
+    top: 50%;
+    border: 1px solid #6246a8;
+    display: block;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: gray;
+    transition: 0.1s !important;
+}
+
+.click-pn:hover {
+    color: red;
+}
+
+.click-next {
+    right: 5px;
+}
+
+.click-prev {
+    left: 5px;
+}
+
+.ss-poster img {
+    width: 100%;
+}

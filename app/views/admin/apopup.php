@@ -1,8 +1,173 @@
+	<?php if ($_SESSION['mng'] == "tdbc") { ?>
+		<div class="bg-add hide-bg-add">
+			<div class="af-mng">
+				<form action="<?php echo urlmd ?>/lay/add/" method="POST" enctype="multipart/form-data">
+					<div class="row">
+						<div class="col-6">
+							<div class="field-add">
+								<label>Tên Section :</label>
+								<input type="text" name="name">
+							</div>
+							<div class="db-field-add">
+		                        <div class="field-add">
+		                            <label>Phân Loại :</label>
+		                            <select name="phanloai">
+		                            	<option value="0">Không Chọn</option>
+		                            	<?php foreach ($phanloai as $value => $item) {
+		                            		echo "<option value=\"".$item['id']."\">".$item['name']."</option>";
+		                            	} ?>
+		                            </select>
+		                        </div>
+		                        <div class="field-add">
+		                            <label>Danh Mục :</label>
+		                            <select name="danhmuc">
+		                            	<option value="0">Không Chọn</option>
+		                            	<?php foreach ($danhmuc as $value => $item) {
+		                            		echo "<option value=\"".$item['id']."\">".$item['name']."</option>";
+		                            	} ?>
+		                            </select>
+		                        </div>        
+		                    </div>
+		                    <div class="db-field-add">
+		                        <div class="field-add">
+		                            <label>Mục Tham Chiếu :</label>
+		                            <select name="ref">
+		                            	<option value="id">ID</option>
+		                            	<option value="name">Tên</option>
+		                            	<option value="price">Giá</option>
+		                            	<option value="price_sale">Khuyến Mãi</option>
+		                            	<option value="viewed">Lượt Xem</option>
+		                            	<option value="saled">S.Lượng Đã Bán</option>
+		                            </select>
+		                        </div>
+		                        <div class="field-add">
+		                            <label>Sắp Xếp Theo :</label>
+		                            <select name="ord">
+		                            	<option value="1">A-Z 0-9</option>
+		                            	<option value="2">Z-A 9-0</option>
+		                            	<option value="3">Ngẫu Nhiên</option>
+		                            </select>
+		                        </div>        
+		                    </div>
+						</div>
+						<div class="col-6">
+							<div class="field-add">
+	                            <label>Poster :</label>
+	                            <input type="file" name="poster">
+	                        </div>
+	                        <div class="field-add">
+	                            <label>Ảnh Nền :</label>
+	                            <input type="file" name="backgr">
+	                        </div>  
+	                        <div class="field-add">
+		                        <label>Vị Trí :</label>
+		                        <input type="number" name="position">
+		                    </div>    
+						</div>
+					</div>
+					<div class="field-add">
+						<button class="btn btn-success" type="submit">Thêm Section</button>
+					</div>
+				</form>
+				<div class="field-add" style="margin:0;">
+					<button class="btn btn-danger quaylai">Quay Lại</button>
+				</div>
+			</div>
+		</div>
+		<div class="bg-fix hide-bg-fix">
+			<div class="af-mng">
+				<form action="" method="POST" enctype="multipart/form-data" id="form_fix_bc">
+					<div class="row">
+						<div class="col-6">
+							<div class="field-add">
+								<label>Tên Section :</label>
+								<input type="text" name="name" id="fix_name_bc">
+							</div>
+							<div class="db-field-add">
+		                        <div class="field-add">
+		                            <label>Phân Loại :</label>
+		                            <select name="phanloai" id="fix_pl_bc">
+		                            	<option value="0">Không Chọn</option>
+		                            	<?php foreach ($phanloai as $value => $item) {
+		                            		echo "<option value=\"".$item['id']."\">".$item['name']."</option>";
+		                            	} ?>
+		                            </select>
+		                        </div>
+		                        <div class="field-add">
+		                            <label>Danh Mục :</label>
+		                            <select name="danhmuc" id="fix_dm_bc">
+		                            	<option value="0">Không Chọn</option>
+		                            	<?php foreach ($danhmuc as $value => $item) {
+		                            		echo "<option value=\"".$item['id']."\">".$item['name']."</option>";
+		                            	} ?>
+		                            </select>
+		                        </div>        
+		                    </div>
+		                    <div class="db-field-add">
+		                        <div class="field-add">
+		                            <label>Mục Tham Chiếu :</label>
+		                            <select name="ref" id="fix_ref_bc">
+		                            	<option value="id">ID</option>
+		                            	<option value="name">Tên</option>
+		                            	<option value="price">Giá</option>
+		                            	<option value="price_sale">Khuyến Mãi</option>
+		                            	<option value="viewed">Lượt Xem</option>
+		                            	<option value="saled">S.Lượng Đã Bán</option>
+		                            </select>
+		                        </div>
+		                        <div class="field-add">
+		                            <label>Sắp Xếp Theo :</label>
+		                            <select name="ord" id="fix_ord_bc">
+		                            	<option value="1">A-Z 0-9</option>
+		                            	<option value="2">Z-A 9-0</option>
+		                            	<option value="3">Ngẫu Nhiên</option>
+		                            </select>
+		                        </div>        
+		                    </div>
+						</div>
+						<div class="col-6">
+							<div class="field-add">
+	                            <label>Poster :</label>
+	                            <input type="file" name="poster">
+	                            <input type="text" name="old_img1" id="fix_pos_bc" hidden>
+	                        </div>
+	                        <div class="field-add">
+	                            <label>Ảnh Nền :</label>
+	                            <input type="file" name="backgr">
+	                            <input type="text" name="old_img2" id="fix_bgr_bc" hidden>
+	                        </div>  
+	                        <div class="field-add">
+		                        <label>Vị Trí :</label>
+		                        <input type="number" name="position" id="fix_num_bc">
+		                    </div>    
+						</div>
+					</div>
+					<div class="field-add">
+						<button class="btn btn-success" type="submit">Sửa Section</button>
+					</div>
+				</form>
+				<div class="field-add" style="margin:0;">
+					<button class="btn btn-danger quaylai">Quay Lại</button>
+				</div>
+			</div>
+		</div>
+		<div class="bg-del hide-bg-del">
+			<div class="del-mng">
+				<div class="field-add">
+					<h4 class="text-center">Bạn có chắc muốn xóa Section ?</h4 class="text-center">
+				</div>
+				<div class="field-add">
+					<a href="" class="btn btn-success" id="acp-del" type="submit">Xóa</a>
+				</div>
+				<button class="btn btn-danger quaylai" type="submit">Quay Lại</button>
+			</div>
+		</div>
+	<?php } ?>
 	<?php if ($_SESSION['mng'] == "qlsp") { ?>
 		<div class="bg-add hide-bg-add">
 			<div class="af-mng">
 				<h3 class="text-center">Thêm Sản Phẩm</h3>
-				<form action="<?php echo urlmd ?>/addpro/" method="POST" enctype="multipart/form-data">
+				<form action="<?php echo urlmd ?>/pro/add/" method="POST" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-6">
 							<div class="field-add">
@@ -193,7 +358,7 @@
 			<div class="af-mng">
 				<div class="row">
 					<div class="col-6">
-						<form action="<?php echo urlmd ?>/addcat/" method="POST" enctype="multipart/form-data">
+						<form action="<?php echo urlmd ?>/cat/add/" method="POST" enctype="multipart/form-data">
 							<h3 class="text-center">Thêm Danh Mục</h3>
 							<div class="db-field-add">
 								<div class="field-add">
@@ -219,7 +384,7 @@
 						</form>
 					</div>
 					<div class="col-6">
-						<form action="<?php echo urlmd ?>/addpl/" method="POST" enctype="multipart/form-data">
+						<form action="<?php echo urlmd ?>/top/add/" method="POST" enctype="multipart/form-data">
 							<h3 class="text-center">Thêm Phân Loại</h3>
 							<div class="field-add">
 								<label>Tên Phân Loại :</label>
@@ -299,7 +464,7 @@
 	<?php if ($_SESSION['mng'] == "qlus") { ?>
 		<div class="bg-add hide-bg-add">
 			<div class="af-mng">
-				<form action="<?php echo urlmd ?>/addus/" method="POST" enctype="multipart/form-data">
+				<form action="<?php echo urlmd ?>/unc/add/" method="POST" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-6">
 							<div class="field-add">
@@ -427,7 +592,7 @@
 	<?php if ($_SESSION['mng'] == "magg") { ?>
 		<div class="bg-add hide-bg-add">
 			<div class="af-mng">
-				<form action="<?php echo urlmd ?>/addgg/" method="POST" enctype="multipart/form-data">
+				<form action="<?php echo urlmd ?>/dis/add/" method="POST" enctype="multipart/form-data">
 					<div class="field-add">
 						<label>Nhập tên mã :</label>
 						<input type="text" name="name">

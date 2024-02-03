@@ -8,6 +8,7 @@ class admin_controller extends Base {
 	private $amodel;
 
     function __construct() {
+    	parent::__construct('admin');
         $this->amodel = new AdminM();
     }
 
@@ -60,8 +61,23 @@ class admin_controller extends Base {
     		unset($_SESSION['errlog']);
 	    	if ($request != "") {
 	    		if ($request == "qldm") {
-	    			$data = [ 'danhmuc' => $this->amodel->fulldm(), 'phanloai' => $this->amodel->pldm() ];
+	    			$data = [ 
+	    				'danhmuc' => $this->amodel->fulldm(), 
+	    				'phanloai' => $this->amodel->pldm()
+	    			];
 	    			$_SESSION['mng'] = "qldm";
+	    		}
+	    		else if ($request == "tdbc") {
+	    			$data = [ 
+	    				'tdbc' => $this->amodel->secs(),
+	    				'danhmuc' => $this->amodel->fulldm(), 
+	    				'phanloai' => $this->amodel->pldm()
+	    			];
+	    			$_SESSION['mng'] = "tdbc";
+	    		}
+	    		else if ($request == "tdbc") {
+	    			$data = [  'slbn' => $this->amodel->gbnn() ];
+	    			$_SESSION['mng'] = "slbn";
 	    		}
 	    		else if ($request == "qlus") {
 	    			$data = [ 'user' => $this->amodel->fullus() ];
@@ -256,88 +272,130 @@ class admin_controller extends Base {
 		}
 	}
 	/*-----------------------------------------*/
-	public function addpro() {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-		$name = $_POST['name'];
-		$price = $_POST['price'];
-		$sale = $_POST['sale'];
-		$salef = $_POST['salef'];
-		$salet = $_POST['salet'];
-		$pdtype = $_POST['pdtype'];
-		$catalog = $_POST['catalog'];
-		$brand = $_POST['brand'];
-		$info = $_POST['info'];
-		$infoct = $_POST['detail'];
-		$checksp = $this->amodel->checksp($name);
+	public function lay_mng($rq = "", $id = 0) {
+		if ($rq == "add") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$type = $_POST['phanloai'];
+			$cata = $_POST['danhmuc'];
+			$refe = $_POST['ref'];
+			$sxtt = $_POST['ord'];
+			$sovt = $_POST['position'];
 
-		if ($name == "") $_SESSION['error_log'] .= "Không để trống tên sản phẩm !<br>";
-		if (isset($checksp[0])) $_SESSION['error_log'] .= "sản phẩm đã tồn tại !<br>";
-		if ($price == "") $_SESSION['error_log'] .= "Không để trống giá sản phẩm !<br>";
-		if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
-		if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
+			$img1 =	 $img2 = "";
+			$url_img1 =	 $url_img2 = "";
 
-		if ($pdtype == 3) {
-			if ($infoct == "") $_SESSION['errlog'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
-			else  {
-				preg_match('/(.*?)<p>end_info_pc<\/p>(.*?)/s', $infoct, $matches);
-				$cbpc = json_encode([
-					'doan1' => htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
-					'doan2' => htmlspecialchars($matches[1])
-				]);
+			if (isset($_FILES["poster"]) && $_FILES["poster"]["error"] === UPLOAD_ERR_OK) {
+				$img1 = urlmd . "/public/data/" . basename($_FILES["poster"]["name"]);
+				$url_img1 = "././public/data/" . basename($_FILES["poster"]["name"]);
+				$dinhdang = strtolower(pathinfo($img1,PATHINFO_EXTENSION));
+				if (file_exists($img1)) $_SESSION['error_log'] .= "Poster đã tồn tại<br>";
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
 			}
+			if (isset($_FILES["backgr"]) && $_FILES["backgr"]["error"] === UPLOAD_ERR_OK) {
+				$img2 = urlmd . "/public/data/" . basename($_FILES["backgr"]["name"]);
+				$url_img2 = "././public/data/" . basename($_FILES["backgr"]["name"]);
+				$dinhdang = strtolower(pathinfo($img2,PATHINFO_EXTENSION));
+				if (file_exists($img2)) $_SESSION['error_log'] .= "Ảnh Nền đã tồn tại<br>";
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+			}
+
+			if (!isset($_SESSION['error_log'])) {
+				if ($img1 != "") move_uploaded_file($_FILES["poster"]["tmp_name"], $url_img1);
+				if ($img2 != "") move_uploaded_file($_FILES["backgr"]["tmp_name"], $url_img2);
+				$this->amodel->addlay($name,$img1,$img2,$type,$cata,$sovt,$refe,$sxtt);
+			}
+			header('Location: ' .urlmd. '/manager/tdbc/');
+		    exit();
 		}
+		else if ($rq == "fix") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$type = $_POST['phanloai'];
+			$cata = $_POST['danhmuc'];
+			$refe = $_POST['ref'];
+			$sxtt = $_POST['ord'];
+			$sovt = $_POST['position'];
 
-		$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
-		$duongdan_2nd = "././public/data/" . basename($_FILES["img"]["name"]);
-		$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
+			$img1 = $img2 = "";
+			$url_img1 = $url_img2 = "";
 
-		if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
-		if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
+			if (isset($_FILES["poster"]) && $_FILES["poster"]["error"] === UPLOAD_ERR_OK) {
+				$img1 = urlmd . "/public/data/" . basename($_FILES["poster"]["name"]);
+				$url_img1 = "././public/data/" . basename($_FILES["poster"]["name"]);
+				$dinhdang = strtolower(pathinfo($img1,PATHINFO_EXTENSION));
+				if (file_exists($img1)) $_SESSION['error_log'] .= "Poster đã tồn tại<br>";
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+			}
+			if (isset($_FILES["backgr"]) && $_FILES["backgr"]["error"] === UPLOAD_ERR_OK) {
+				$img2 = urlmd . "/public/data/" . basename($_FILES["backgr"]["name"]);
+				$url_img2 = "././public/data/" . basename($_FILES["backgr"]["name"]);
+				$dinhdang = strtolower(pathinfo($img2,PATHINFO_EXTENSION));
+				if (file_exists($img2)) $_SESSION['error_log'] .= "Ảnh Nền đã tồn tại<br>";
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+			}
 
-		if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg" &&  $dinhdang != "webp") {
-			$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+			if (!isset($_SESSION['error_log'])) {
+				if (isset($_FILES['poster']) && $_FILES['poster']['name'] != '' ) move_uploaded_file($_FILES["poster"]["tmp_name"], $url_img1);
+				else $img1 = $_POST['old_img1'];
+				if (isset($_FILES['backgr']) && $_FILES['backgr']['name'] != '' ) move_uploaded_file($_FILES["backgr"]["tmp_name"], $url_img2);
+				else $img2 = $_POST['old_img2'];
+				$this->amodel->fixlay($id,$name,$img1,$img2,$type,$cata,$sovt,$refe,$sxtt);
+			}
+			header('Location: ' .urlmd. '/manager/tdbc/');
+		    exit();
 		}
-
-		if (!isset($_SESSION['error_log'])) {
-			move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-			if ($pdtype == !3) $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
-			else $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+		else if ($rq == "del") {
+			$this->amodel->dellay($id);
+			header('Location: ' .urlmd. '/manager/tdbc/');
+		    exit();
 		}
-		header('Location: ' .urlmd. '/manager/qlsp/');
-	    exit();
 	}
-	public function fixpro($id) {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-		$name = $_POST['name'];
-		$price = $_POST['price'];
-		$sale = $_POST['sale'];
-		$salef = $_POST['salef'];
-		$salet = $_POST['salet'];
-		$pdtype = $_POST['pdtype'];
-		$catalog = $_POST['catalog'];
-		$brand = $_POST['brand'];
-		$info = $_POST['info'];
-		$infoct = $_POST['detail'];
+	/*-----------------------------------------*/
+	public function pro_mng($rq = "", $id = 0) {
+		if ($rq == "add") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$price = $_POST['price'];
+			$sale = $_POST['sale'];
+			$salef = $_POST['salef'];
+			$salet = $_POST['salet'];
+			$pdtype = $_POST['pdtype'];
+			$catalog = $_POST['catalog'];
+			$brand = $_POST['brand'];
+			$info = $_POST['info'];
+			$infoct = $_POST['detail'];
+			$checksp = $this->amodel->checksp($name);
 
-		if ($name == "") $_SESSION['error_log'] .= "Không để trống tên sản phẩm !<br>";
-		if ($price == "") $_SESSION['error_log'] .= "Không để trống giá sản phẩm !<br>";
-		if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
-		if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên sản phẩm !<br>";
+			if (isset($checksp[0])) $_SESSION['error_log'] .= "sản phẩm đã tồn tại !<br>";
+			if ($price == "") $_SESSION['error_log'] .= "Không để trống giá sản phẩm !<br>";
+			if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
+			if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
 
-		if ($pdtype == 3) {
+			if ($pdtype == 3) {
 				if ($infoct == "") $_SESSION['errlog'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
 				else  {
 					preg_match('/(.*?)<p>end_info_pc<\/p>(.*?)/s', $infoct, $matches);
-					$matches[0] = str_replace(["\n", "\r"], "",$matches[0]);
-					$matches[1] = str_replace(["\n", "\r"], "",$matches[1]);
 					$cbpc = json_encode([
-						htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
-						htmlspecialchars($matches[1])
+						'doan1' => htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
+						'doan2' => htmlspecialchars($matches[1])
 					]);
 				}
 			}
 
-		if (isset($_FILES['img']) && $_FILES['img']['name'] != '') {
 			$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
 			$duongdan_2nd = "././public/data/" . basename($_FILES["img"]["name"]);
 			$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
@@ -351,227 +409,286 @@ class admin_controller extends Base {
 
 			if (!isset($_SESSION['error_log'])) {
 				move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-				if ($pdtype == !3) $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
-				else $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+				if ($pdtype == !3) $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+				else $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
 			}
 			header('Location: ' .urlmd. '/manager/qlsp/');
 		    exit();
 		}
+		else if ($rq == "fix") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$price = $_POST['price'];
+			$sale = $_POST['sale'];
+			$salef = $_POST['salef'];
+			$salet = $_POST['salet'];
+			$pdtype = $_POST['pdtype'];
+			$catalog = $_POST['catalog'];
+			$brand = $_POST['brand'];
+			$info = $_POST['info'];
+			$infoct = $_POST['detail'];
 
-		else {
-			$img_cu = $_POST['old_img'];
-			if (!isset($_SESSION['error_log'])) {
-				if ($pdtype == !3) $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
-				else $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên sản phẩm !<br>";
+			if ($price == "") $_SESSION['error_log'] .= "Không để trống giá sản phẩm !<br>";
+			if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
+			if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
+
+			if ($pdtype == 3) {
+					if ($infoct == "") $_SESSION['errlog'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
+					else  {
+						preg_match('/(.*?)<p>end_info_pc<\/p>(.*?)/s', $infoct, $matches);
+						$matches[0] = str_replace(["\n", "\r"], "",$matches[0]);
+						$matches[1] = str_replace(["\n", "\r"], "",$matches[1]);
+						$cbpc = json_encode([
+							htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
+							htmlspecialchars($matches[1])
+						]);
+					}
+				}
+
+			if (isset($_FILES['img']) && $_FILES['img']['name'] != '') {
+				$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
+				$duongdan_2nd = "././public/data/" . basename($_FILES["img"]["name"]);
+				$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
+
+				if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
+				if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
+
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg" &&  $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+
+				if (!isset($_SESSION['error_log'])) {
+					move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
+					if ($pdtype == !3) $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+					else $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+				}
+				header('Location: ' .urlmd. '/manager/qlsp/');
+			    exit();
 			}
-			header('Location: ' .urlmd. '/manager/qlsp/');
+
+			else {
+				$img_cu = $_POST['old_img'];
+				if (!isset($_SESSION['error_log'])) {
+					if ($pdtype == !3) $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
+					else $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+				}
+				header('Location: ' .urlmd. '/manager/qlsp/');
+			    exit();
+			}
+		}
+		else if ($rq == "del") {
+			$this->amodel->delpro($id);
+			header('Location: ' .urlmd. '/manager/');
 		    exit();
 		}
 	}
-	public function delpro($id) {
-		$this->amodel->delpro($id);
-		header('Location: ' .urlmd. '/manager/');
-	    exit();
-	}
 	/*-----------------------------------------*/
-	public function addcat() {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-		$name = $_POST['name'];
-		$phanloai = $_POST['phanloai'];
-		$checkdm = $this->amodel->checkdm($name);
+	public function cat_mng($rq = "", $id = 0) {
+		if ($rq == "add") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$phanloai = $_POST['phanloai'];
+			$checkdm = $this->amodel->checkdm($name);
 
-		if ($name == "") $_SESSION['error_log'] .= "Không để trống tên danh mục<br>";
-		if (isset($checkdm[0])) $_SESSION['error_log'] .= "Danh mục đã tồn tại<br>";
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên danh mục<br>";
+			if (isset($checkdm[0])) $_SESSION['error_log'] .= "Danh mục đã tồn tại<br>";
 
-		if (isset($_FILES["product_image"]) && $_FILES["product_image"]["error"] === UPLOAD_ERR_OK) {
-			$duongdan = urlmd . "/views/data/" . basename($_FILES["img"]["name"]);
-			$duongdan_2nd = "./views/data/" . basename($_FILES["img"]["name"]);
-			$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
+			if (isset($_FILES["img"]) && $_FILES["img"]["error"] === UPLOAD_ERR_OK) {
+				$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
+				$duongdan_2nd = "./public/data/" . basename($_FILES["img"]["name"]);
+				$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
 
-			if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
-			if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
+				if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
+				if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
 
-			if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
-			&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
-				$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+
+				if (!isset($_SESSION['error_log'])) {
+					move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
+					$this->amodel->addcat($name,$phanloai,$duongdan);
+				}
 			}
-
-			if (!isset($_SESSION['error_log'])) {
-				move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-				$this->amodel->addcat($name,$phanloai,$duongdan);
-			}
-		}
-		if (!isset($_SESSION['error_log'])) $this->amodel->addcat($name,$phanloai);
-			
-		header('Location: ' .urlmd. '/manager/qldm/');
-	    exit();
-	}
-	public function fixcat($id) {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-		$name = $_POST['name'];
-		$phanloai = $_POST['phanloai'];
-		$img = $_POST['img'];
-
-		if ($name == "") $_SESSION['error_log'] .= "Không để trống tên danh mục<br>";
-		if (isset($_FILES['img']) && $_FILES['img']['name'] != '') {
-			$duongdan = urlmd . "/views/data/" . basename($_FILES["img"]["name"]);
-			$duongdan_2nd = "./views/data/" . basename($_FILES["img"]["name"]);
-			$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
-
-			if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
-			if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
-
-			if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
-			&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
-				$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
-			}
-
-			if (!isset($_SESSION['error_log'])) {
-				move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-				$this->amodel->fixcat($id,$name,$phanloai,$duongdan);
-			}
+			if (!isset($_SESSION['error_log'])) $this->amodel->addcat($name,$phanloai);
+				
 			header('Location: ' .urlmd. '/manager/qldm/');
 		    exit();
 		}
-		else {
-			$img_cu = $_POST['old_img'];
-			if (!isset($_SESSION['error_log'])) {
-				move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-				$this->amodel->fixcat($id,$name,$phanloai,$img_cu);
+		else if ($rq == "fix") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$phanloai = $_POST['phanloai'];
+
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên danh mục<br>";
+			if (isset($_FILES['img']) && $_FILES['img']['name'] != '') {
+				$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
+				$duongdan_2nd = "./public/data/" . basename($_FILES["img"]["name"]);
+				$dinhdang = strtolower(pathinfo($duongdan,PATHINFO_EXTENSION));
+
+				if (file_exists($duongdan)) $_SESSION['error_log'] .= "File đã tồn tại<br>";
+				if ($_FILES["img"]["size"] > 4096000) $_SESSION['error_log'] .= "Chỉ chấp nhận file dưới 4mb<br>";
+
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+
+				if (!isset($_SESSION['error_log'])) {
+					move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
+					$this->amodel->fixcat($id,$name,$phanloai,$duongdan);
+				}
+				header('Location: ' .urlmd. '/manager/qldm/');
+			    exit();
 			}
+			else {
+				$img_cu = $_POST['old_img'];
+				if (!isset($_SESSION['error_log'])) {
+					move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
+					$this->amodel->fixcat($id,$name,$phanloai,$img_cu);
+				}
+				header('Location: ' .urlmd. '/manager/qldm/');
+			    exit();
+			}
+		}
+		else if ($rq == "del") {
+			$this->amodel->delcat($id);
 			header('Location: ' .urlmd. '/manager/qldm/');
 		    exit();
 		}
 	}
-	public function delcat($id) {
-		$this->amodel->delcat($id);
-		header('Location: ' .urlmd. '/manager/qldm/');
-	    exit();
+	/*-----------------------------------------*/
+	public function top_mng($rq = "", $id = 0) {
+		if ($rq == "add") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$checkpl = $this->amodel->checkpl($name);
+
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên phân loại<br>";
+			if (isset($checkpl[0])) $_SESSION['error_log'] .= "\"Phân loại\" này đã tồn tại<br>";
+
+			if (!isset($_SESSION['error_log'])) $this->amodel->addpl($name);
+				
+			header('Location: ' .urlmd. '/manager/qldm/');
+		    exit();
+		}
+		else if ($rq == "fix") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$name = $_POST['name'];
+			$checkpl = $this->amodel->checkpl($name);
+
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên phân loại<br>";
+			if (isset($checkpl[0])) $_SESSION['error_log'] .= "\"Phân loại\" này đã tồn tại<br>";
+
+			if (!isset($_SESSION['error_log'])) $this->amodel->fixpl($id,$name);
+				
+			header('Location: ' .urlmd. '/manager/qldm/');
+		    exit();
+		}
+		else if ($rq == "del") {
+			$this->amodel->delpl($id);
+			header('Location: ' .urlmd. '/manager/qldm/');
+		    exit();
+		}
 	}
 	/*-----------------------------------------*/
-	public function addpl() {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-		$name = $_POST['name'];
-		$checkpl = $this->amodel->checkpl($name);
+	public function unc_mng($rq = "", $id = 0) {
+		if ($rq == "add") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
 
-		if ($name == "") $_SESSION['error_log'] .= "Không để trống tên phân loại<br>";
-		if (isset($checkpl[0])) $_SESSION['error_log'] .= "\"Phân loại\" này đã tồn tại<br>";
+			$name = $_POST['name'];
+			$ho = $_POST['ho'];
+			$ten = $_POST['ten'];
+			$pass = $_POST['pass'];
+			$phone = $_POST['phone'];
+			$email = $_POST['email'];
+			$diachi = $_POST['diachi'];
+			$role = $_POST['role'];
+			$checkus = $this->amodel->checkus($name);
 
-		if (!isset($_SESSION['error_log'])) $this->amodel->addpl($name);
+			if ($ho==""||$ten==""||$email==""||$phone==""||$diachi=="") $_SESSION['error_log'] = "Vui lòng điền đầy đủ thông tin";
+			else if ($name == "") $_SESSION['error_log'] .= "Không để trống tên người dùng<br>";
+			else if ($pass == "") $_SESSION['error_log'] .= "Vui lòng nhập khẩu<br>";
+			else if (isset($checkus[0])) $_SESSION['error_log'] .= "Người dùng đã tồn tại<br>";
+
+			if (!isset($_SESSION['error_log'])) $this->amodel->addus($name,md5($pass),$ho,$ten,$phone,$email,$diachi,$role);
+			header('Location: ' .urlmd. '/manager/qlus/');
+		    exit();
+		}
+		else if ($rq == "fix") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+
+			$name = $_POST['name'];
+			$ho = $_POST['ho'];
+			$ten = $_POST['ten'];
+			$pass = $_POST['pass'];
+			$phone = $_POST['phone'];
+			$email = $_POST['email'];
+			$diachi = $_POST['diachi'];
+			$role = $_POST['role'];
+			$checkus = $this->amodel->checkus($name);
+
+			if ($ho==""||$ten==""||$email==""||$phone==""||$diachi=="") $_SESSION['dndk_err'] = "Vui lòng điền đầy đủ thông tin";
+			else if ($name == "") $_SESSION['error_log'] .= "Không để trống tên người dùng<br>";
+			else if ($pass == "") $_SESSION['error_log'] .= "Vui lòng nhập khẩu<br>";
+			else if (isset($checkus[0])) $_SESSION['error_log'] .= "Người dùng đã tồn tại<br>";
+
+			if (!isset($_SESSION['error_log'])) $this->amodel->fixus($id,$name,md5($pass),$ho,$ten,$phone,$email,$diachi,$role);
+			header('Location: ' .urlmd. '/manager/qlus/');
+		    exit();
+		}
+		else if ($rq == "del") {
+			$this->amodel->delus($id);
+			header('Location: ' .urlmd. '/manager/qlus/');
+		    exit();
+		}
+	}
+	/*-----------------------------------------*/
+	public function dis_mng($rq = "", $id = 0) {
+		if ($rq == "add") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+
+			$name = $_POST['name'];
+			$soluong = $_POST['soluong'];
+			$fdate = $_POST['fd'];
+			$tdate = $_POST['td'];
+			$discount = $_POST['discount'];
 			
-		header('Location: ' .urlmd. '/manager/qldm/');
-	    exit();
-	}
-	public function fixpl($id) {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-		$name = $_POST['name'];
-		$checkpl = $this->amodel->checkpl($name);
+			$checkus = $this->amodel->checkmgg($name);
 
-		if ($name == "") $_SESSION['error_log'] .= "Không để trống tên phân loại<br>";
-		if (isset($checkpl[0])) $_SESSION['error_log'] .= "\"Phân loại\" này đã tồn tại<br>";
+			if ($name==""||$soluong==""||$fdate==""||$tdate==""||$discount=="") $_SESSION['error_log'] = "Vui lòng điền đầy đủ thông tin";
+			else if (date('m-d-Y', strtotime($fdate)) >= date('m-d-Y', strtotime($tdate))) $_SESSION['error_log'] = "Thời hạn tối thiểu 1 ngày";
+			else if (isset($checkus[0])) $_SESSION['error_log'] = "Mã đã tồn tại";
 
-		if (!isset($_SESSION['error_log'])) $this->amodel->fixpl($id,$name);
-			
-		header('Location: ' .urlmd. '/manager/qldm/');
-	    exit();
-	}
-	public function delpl($id) {
-		$this->amodel->delpl($id);
-		header('Location: ' .urlmd. '/manager/qldm/');
-	    exit();
-	}
-	/*-----------------------------------------*/
-	public function addus() {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			if (!isset($_SESSION['error_log'])) $this->amodel->addmgg($name,$soluong,$soluong,$fdate,$tdate,$discount);
+			header('Location: ' .urlmd. '/manager/magg/');
+		    exit();
+		}
+		else if ($rq == "fix") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
 
-		$name = $_POST['name'];
-		$ho = $_POST['ho'];
-		$ten = $_POST['ten'];
-		$pass = $_POST['pass'];
-		$phone = $_POST['phone'];
-		$email = $_POST['email'];
-		$diachi = $_POST['diachi'];
-		$role = $_POST['role'];
-		$checkus = $this->amodel->checkus($name);
+			$name = $_POST['name'];
+			$fdate = $_POST['fd'];
+			$tdate = $_POST['td'];
+			$discount = $_POST['discount'];
 
-		if ($ho==""||$ten==""||$email==""||$phone==""||$diachi=="") $_SESSION['error_log'] = "Vui lòng điền đầy đủ thông tin";
-		else if ($name == "") $_SESSION['error_log'] .= "Không để trống tên người dùng<br>";
-		else if ($pass == "") $_SESSION['error_log'] .= "Vui lòng nhập khẩu<br>";
-		else if (isset($checkus[0])) $_SESSION['error_log'] .= "Người dùng đã tồn tại<br>";
+			$checkus = $this->amodel->checkmgg($name);
 
-		if (!isset($_SESSION['error_log'])) $this->amodel->addus($name,md5($pass),$ho,$ten,$phone,$email,$diachi,$role);
-		header('Location: ' .urlmd. '/manager/qlus/');
-	    exit();
-	}
-	public function fixus($id) {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			if ($name==""||$fdate==""||$tdate==""||$discount=="") $_SESSION['error_log'] = "Vui lòng điền đầy đủ thông tin";
+			else if (date('m-d-Y', strtotime($fdate)) >= date('m-d-Y', strtotime($tdate))) $_SESSION['error_log'] = "Thời hạn tối thiểu 1 ngày";
+			else if (isset($checkus[1])) $_SESSION['error_log'] = "Mã đã tồn tại";
 
-		$name = $_POST['name'];
-		$ho = $_POST['ho'];
-		$ten = $_POST['ten'];
-		$pass = $_POST['pass'];
-		$phone = $_POST['phone'];
-		$email = $_POST['email'];
-		$diachi = $_POST['diachi'];
-		$role = $_POST['role'];
-		$checkus = $this->amodel->checkus($name);
-
-		if ($ho==""||$ten==""||$email==""||$phone==""||$diachi=="") $_SESSION['dndk_err'] = "Vui lòng điền đầy đủ thông tin";
-		else if ($name == "") $_SESSION['error_log'] .= "Không để trống tên người dùng<br>";
-		else if ($pass == "") $_SESSION['error_log'] .= "Vui lòng nhập khẩu<br>";
-		else if (isset($checkus[0])) $_SESSION['error_log'] .= "Người dùng đã tồn tại<br>";
-
-		if (!isset($_SESSION['error_log'])) $this->amodel->fixus($id,$name,md5($pass),$ho,$ten,$phone,$email,$diachi,$role);
-		header('Location: ' .urlmd. '/manager/qlus/');
-	    exit();
-	}
-	public function delus($id) {
-		$this->amodel->delus($id);
-		header('Location: ' .urlmd. '/manager/qlus/');
-	    exit();
-	}
-	/*-----------------------------------------*/
-	public function addgg() {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-
-		$name = $_POST['name'];
-		$soluong = $_POST['soluong'];
-		$fdate = $_POST['fd'];
-		$tdate = $_POST['td'];
-		$discount = $_POST['discount'];
-		
-		$checkus = $this->amodel->checkmgg($name);
-
-		if ($name==""||$soluong==""||$fdate==""||$tdate==""||$discount=="") $_SESSION['error_log'] = "Vui lòng điền đầy đủ thông tin";
-		else if (date('m-d-Y', strtotime($fdate)) >= date('m-d-Y', strtotime($tdate))) $_SESSION['error_log'] = "Thời hạn tối thiểu 1 ngày";
-		else if (isset($checkus[0])) $_SESSION['error_log'] = "Mã đã tồn tại";
-
-		if (!isset($_SESSION['error_log'])) $this->amodel->addmgg($name,$soluong,$soluong,$fdate,$tdate,$discount);
-		header('Location: ' .urlmd. '/manager/magg/');
-	    exit();
-	}
-	public function fixgg($id) {
-		if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
-
-		$name = $_POST['name'];
-		$fdate = $_POST['fd'];
-		$tdate = $_POST['td'];
-		$discount = $_POST['discount'];
-
-		$checkus = $this->amodel->checkmgg($name);
-
-		if ($name==""||$fdate==""||$tdate==""||$discount=="") $_SESSION['error_log'] = "Vui lòng điền đầy đủ thông tin";
-		else if (date('m-d-Y', strtotime($fdate)) >= date('m-d-Y', strtotime($tdate))) $_SESSION['error_log'] = "Thời hạn tối thiểu 1 ngày";
-		else if (isset($checkus[1])) $_SESSION['error_log'] = "Mã đã tồn tại";
-
-		if (!isset($_SESSION['error_log'])) $this->amodel->fixmgg($id,$name,$fdate,$tdate,$discount);
-		header('Location: ' .urlmd. '/manager/magg/');
-	    exit();
-	}
-	public function delgg($id) {
-		$this->amodel->delmgg($id);
-		header('Location: ' .urlmd. '/manager/magg/');
-	    exit();
+			if (!isset($_SESSION['error_log'])) $this->amodel->fixmgg($id,$name,$fdate,$tdate,$discount);
+			header('Location: ' .urlmd. '/manager/magg/');
+		    exit();
+		}
+		else if ($rq == "del") {
+			$this->amodel->delmgg($id);
+			header('Location: ' .urlmd. '/manager/magg/');
+		    exit();
+		}
 	}
 	/*-----------------------------------------*/
 	public function delbl($id) {

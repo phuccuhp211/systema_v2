@@ -5,6 +5,7 @@ use App\Models\basemodel as BaseM;
 
 class user_model extends BaseM {
 	public function gbanner() {return $this->getdata("SELECT * FROM banner");}
+	public function layout() {return $this->getdata("SELECT * FROM sections WHERE ido > 0 ORDER BY id ASC");}
 	public function upview_index() {$this->iuddata("UPDATE accessed SET trangchu = trangchu + 1");}
 	public function upview_nonin() {$this->iuddata("UPDATE accessed SET trangcon = trangcon + 1");}
 	public function fullsp1() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT 10");}
@@ -72,8 +73,9 @@ class user_model extends BaseM {
 		else if ($type == "sanpham/danhmuc") $sql = "SELECT * FROM product WHERE hidden = 0 AND  id_cata = $data $order $slsp";
 		else if ($type == "sanpham/timkiem") $sql = "SELECT * FROM product WHERE hidden = 0 AND  name like \"%$data%\" $order $slsp";
 		else if ($type == "sanpham/phanloai") {
-			if ($data != 6) $sql = "SELECT * FROM product WHERE id_type = $data $order $slsp";
-			else $sql = "SELECT * FROM product WHERE price_sale != 0 $order $slsp";
+			if ($data == 6) $sql = "SELECT * FROM product WHERE price_sale != 0 $order $slsp";
+			if ($data == 7) $sql = "SELECT * FROM product ORDER BY saled DESC";
+			else $sql = "SELECT * FROM product WHERE id_type = $data $order $slsp";
 		}
 
 		return $this->getdata($sql);
@@ -93,12 +95,21 @@ class user_model extends BaseM {
 		$this->iuddata("UPDATE product SET viewed = viewed + 1 WHERE id = $id");
 		return $this->getdata("SELECT * FROM product WHERE id = $id AND hidden = 0");
 	}
+	public function splay($type=null,$cata=null,$ref,$ord) {
+		if ($ord == 1) $sx = "ORDER BY $ref ASC LIMIT 20";
+		else if ($ord == 2) $sx = "ORDER BY $ref DESC LIMIT 20";
+		else if ($ord == 3) $sx = "ORDER BY $ref RAND() LIMIT 20";
+		if ($type && !$cata) $sql = "SELECT * FROM product WHERE id_type = $type $sx";
+		if (!$type && $cata || $type && $cata) $sql = "SELECT * FROM product WHERE id_cata = $cata $sx";
+		else $sql = "SELECT * FROM product $sx";
+		return $this->getdata($sql);
+	}
 
 	public function dscmt($id) {
 		return $this->getdata("SELECT * FROM comments INNER JOIN user WHERE comments.id_user = user.id AND id_pd = $id ORDER BY date DESC");
 	}
 	public function regis($name,$pass,$ho,$ten,$sdt,$email,$diachi) {
-		$this->iuddata("INSERT INTO user VALUES ('','$name','$pass','$ho','$ten','$sdt','$email','$diachi','1','','1')");
+		$this->iuddata("INSERT INTO user VALUES ('','$name','$pass','$ho','$ten','$sdt','$email','$diachi','1','','1','')");
 	}
 	public function updatetk($id,$ho,$ten,$sdt,$email,$diachi){
 		$this->iuddata("UPDATE user SET ho = '$ho', ten = '$ten', sdt = '$sdt', email = '$email', diachi = '$diachi' WHERE id = $id");

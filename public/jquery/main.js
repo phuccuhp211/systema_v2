@@ -276,7 +276,7 @@ $(function() {
 		var dulieu = $(this).attr("data");
 		var phanloai = $(this).attr("data-phanloai");
 
-		var duongdan_fix = duongdan+url_sub+`/${data_type}${dulieu ? `=${dulieu}` : ''}/`;
+		var duongdan_fix = duongdan+url_sub+`/${data_type}${dulieu ? `/${dulieu}` : ''}/`;
 		var data_trave = {
 			xacthuc2: randomParam,
 	        type: data_type,
@@ -310,7 +310,7 @@ $(function() {
 		var page = $(this).attr('page');
 		var phanloai = $(this).attr('type');
 
-		var duongdan_fix = duongdan+url_sub+`/${data_type}${data ? `=${data}` : ''}/page=${page}/`;
+		var duongdan_fix = duongdan+url_sub+`/${data_type}${data ? `/${data}` : ''}/${page}/`;
 
 		var requestData = { type: data_type };
 		
@@ -326,6 +326,7 @@ $(function() {
 	    }
 
 	    console.log(data_type+" "+(data ? data : "data_null")+" "+page+" "+(phanloai ? phanloai : "loai_null"));
+	    console.log(duongdan_fix);
 
 		$.ajax({
 	        type: "POST",
