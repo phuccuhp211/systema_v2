@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php include 'include/lib.php' ?>
+	<?php include './app/views/include/lib.php' ?>
 	<title>Quên Mật Khẩu</title>
 	<link rel="stylesheet" href="<?php echo plrc ?>css/quenmk.css">
 	<script style="text/javascript" src="<?php echo plrc ?>jquery/quenmk.js"></script>
 </head>
 <body>
-	<?php include 'include/header.php' ?>
-    <?php include 'include/modal.php' ?>
+	<?php include './app/views/include/header.php' ?>
+    <?php include './app/views/include/modal.php' ?>
 
     <div class="thongbao-thanhtoan hide-tbtt">
         <div class="box-noidung">
@@ -36,6 +36,6 @@
         </div>
     </div>
 
-    <?php include 'include/footer.php' ?>
+    <?php include './app/views/include/footer.php' ?>
 </body>
 </html>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php include 'include/lib.php' ?>
+	<?php include './app/views/include/lib.php' ?>
 	<title><?php echo $chitiet[0]['name'] ?></title>
 	<link rel="stylesheet" href="<?php echo plrc ?>css/chitietsanpham.css">
 	<script style="text/javascript" src="<?php echo plrc ?>jquery/chitietsanpham.js"></script>
 </head>
 <body> 
-	<?php include 'include/header.php' ?>
-    <?php include 'include/modal.php' ?>
+	<?php include './app/views/include/header.php' ?>
+    <?php include './app/views/include/modal.php' ?>
 
     <!-- san pham -->
     <div class="sp-tt" id="sp-tt">
@@ -135,6 +135,6 @@
         </div>
     </div>
 
-    <?php include 'include/footer.php' ?>
+    <?php include './app/views/include/footer.php' ?>
 </body>
 </html>

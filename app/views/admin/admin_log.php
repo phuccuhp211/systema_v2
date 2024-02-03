@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php include 'include/lib.php' ?>
+	<?php include './app/views/include/lib.php' ?>
 	<title>ĐĂNG NHẬP QUẢN TRỊ</title>
 	<link rel="stylesheet" href="<?php echo plrc ?>css/admin.css">
 	<script style="text/javascript" src="<?php echo plrc ?>jquery/admin.js"></script>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php include 'include/lib.php' ?>
+	<?php include './app/views/include/lib.php' ?>
 	<title>Giỏ Hàng</title>
 	<link rel="stylesheet" href="<?php echo plrc ?>css/giohang.css">
 	<script style="text/javascript" src="<?php echo plrc ?>jquery/giohang.js"></script>
 </head>
 <body>
-	<?php include 'include/header.php' ?>
-    <?php include 'include/modal.php' ?>
+	<?php include './app/views/include/header.php' ?>
+    <?php include './app/views/include/modal.php' ?>
 
     <div class="container" style="margin: 30px auto; min-height: 327px;">
         <div class="row">
@@ -57,6 +57,6 @@
         <div class="row" style="margin: 15px 0 0;"><div class="col-4 offset-4"><button class="w-100 btn btn-danger delallcart">Xóa Giỏ Hàng</button></div></div>
     </div>
     
-    <?php include 'include/footer.php' ?>
+    <?php include './app/views/include/footer.php' ?>
 </body>
 </html>

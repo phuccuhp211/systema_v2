@@ -75,7 +75,7 @@ class admin_controller extends Base {
 	    			];
 	    			$_SESSION['mng'] = "tdbc";
 	    		}
-	    		else if ($request == "tdbc") {
+	    		else if ($request == "slbn") {
 	    			$data = [  'slbn' => $this->amodel->gbnn() ];
 	    			$_SESSION['mng'] = "slbn";
 	    		}
