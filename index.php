@@ -53,7 +53,8 @@
         bdt.'/sanpham/([a-zA-Z0-9]+)(?:/([a-zA-Z0-9]+))?(?:/([0-9]+))?/?$' => 'user_controller@getsp',
         bdt.'/ktbh/' => 'user_controller@ktbh',
         bdt.'/applymgg/' => 'user_controller@applymgg',
-        bdt.'/rating/' => 'user_controller@rating'
+        bdt.'/rating/' => 'user_controller@rating',
+        bdt.'/payment/([a-zA-Z]+)/(?:([a-zA-Z0-9]+))?(?:\?(.*))?$' => 'user_controller@pmrs'
     ];
 
     $currentPath = $_SERVER['REQUEST_URI'];

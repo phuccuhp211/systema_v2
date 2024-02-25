@@ -52,7 +52,7 @@
                         <?php echo $bl ?>
                     </div>
                     <div class="row" id="list-sanpham">
-                        <?php if (isset($fullsp)) { echo $this->showsp($fullsp,'col-3'); } ?>
+                        <?php echo $this->showsp($fullsp,'col-3') ?>
                     </div>
                     <div class="row">
                         <div style="display:flex; justify-content: center; margin: 30px 0 0;" id="list-pt">

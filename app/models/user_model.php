@@ -23,6 +23,7 @@ class user_model extends BaseM {
 	public function getuser($name) {return $this->getdata("SELECT * FROM user where user = '$name'");}
 	public function spcart($id) {return $this->getdata("SELECT * FROM product WHERE id = $id AND hidden = 0");}
 	public function doimatkhau($id,$pass){$this->iuddata("UPDATE user SET pass = '$pass'WHERE id = $id");}
+	public function update_cart($id,$cart) { $this->iuddata("UPDATE user SET storage = '$cart' WHERE id = $id");}
 
 	public function fullsp($page) {
 		$vitri = ($page*12)-12;
@@ -56,14 +57,15 @@ class user_model extends BaseM {
 		if (isset($idus)) return $this->getdata("SELECT * FROM turnrt WHERE idus = $idus AND idsp = $idsp");
 		else return $this->getdata("SELECT * FROM rating WHERE idsp = $idsp");
 	}
-	public function getsp($type=null,$data=null,$page,$sapxep) {
+	public function getsp($type=null,$data=null,$page,$sapxep, $limit = 0) {
 		$vitri = ($page*12)-12;
 		$order= "";
-		$slsp = "LIMIT $vitri,12";
+		($limit != 0) ? $slsp = "LIMIT $limit" : $slsp = "LIMIT $vitri,12";
+		
 
 		if(isset($sapxep)) {
-			if ($sapxep == 1) $order = "ORDER BY id ASC";
-			else if ($sapxep == 2) $order = "ORDER BY id DESC";
+			if ($sapxep == 1) $order = "ORDER BY id DESC";
+			else if ($sapxep == 2) $order = "ORDER BY id ASC";
 			else if ($sapxep == 3) $order = "ORDER BY price ASC";
 			else if ($sapxep == 4) $order = "ORDER BY price DESC";
 		}

@@ -102,6 +102,7 @@ $(function() {
 			data: { idsp: idsp },
 			success: function(response) {
 				console.log('thanh cong');
+				updateCart();
 			},
 			error: function() {
 				console.log("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
@@ -120,6 +121,7 @@ $(function() {
 			data: { idsp: idsp, slsp: sl },
 			success: function(response) {
 				console.log('thanh cong');
+				updateCart();
 			},
 			error: function() {
 				console.log("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
@@ -139,6 +141,7 @@ $(function() {
 			url: duongdan_fix1,
 			data: { slsp: sl },
 			success: function(response) {
+				updateCart();
 				window.location.href = duongdan_fix2;
 			},
 			error: function() {
@@ -342,6 +345,76 @@ $(function() {
 	        }
 	    });
 	})
+	$('.index-cat').on('click', function() {
+		var randomParam = Math.random().toString(36).substring(7);
+		var data_type = $(this).attr("data-type");
+		var dulieu = $(this).attr("data");
+
+		var duongdan_fix = duongdan+url_sub+`/${data_type}${dulieu ? `/${dulieu}` : ''}/`;
+
+		var data_trave = {
+			xacthuc2: randomParam,
+	        type: data_type,
+	        data: dulieu,
+	        showsp: "col-20pt",
+	        limit: 10
+		}
+
+		$('.index-fil').attr("data", dulieu);
+		$('.index-fil').attr("data-type", "sanpham/danhmuc");
+		$('.stss-va').attr("href",`${duongdan}/${data_type}/${dulieu}/`);
+
+		console.log(data_type+" "+(dulieu ? dulieu : "dl_null"));
+
+		$.ajax({
+	        type: "POST",
+	        url: duongdan_fix,
+	        dataType: 'json',
+	        data: data_trave,
+	        success: function(data) {
+	            $('.stss-list').html(data.sanpham);
+	            console.log(data);
+	            reset_cc();
+	        },
+	        error: function() {
+	            console.log("Có lỗi xảy ra.");
+	        }
+	    });
+	})
+	$('.index-fil').on('click', function() {
+		var randomParam = Math.random().toString(36).substring(7);
+		var data_type = $(this).attr("data-type");
+		var dulieu = $(this).attr("data");
+		var phanloai = $(this).attr("data-phanloai");
+
+		var duongdan_fix = duongdan+url_sub+`/${data_type}${dulieu ? `/${dulieu}` : ''}/`;
+		var data_trave = {
+			xacthuc2: randomParam,
+	        type: data_type,
+	        loai: phanloai,
+	        showsp: "col-20pt",
+	        limit: 10
+		}
+
+		if (dulieu) data_trave.data = dulieu;
+
+		console.log(data_type+" "+(dulieu ? dulieu : "dl_null")+" "+phanloai);
+
+		$.ajax({
+	        type: "POST",
+	        url: duongdan_fix,
+	        dataType: 'json',
+	        data: data_trave,
+	        success: function(data) {
+	            $('.stss-list').html(data.sanpham);
+	            console.log(data);
+	            reset_cc();
+	        },
+	        error: function() {
+	            console.log("Có lỗi xảy ra.");
+	        }
+	    });
+	})
 	/* ---------------------------- */
 
 
@@ -503,6 +576,8 @@ $(function() {
 
 
 	/* Chịu trách nhiệm Thanh Toán */
+	$('.giatien').val(parseInt(($('#tongtien').text()).replace(/\./g,"")));
+	console.log($('.giatien').val());
 	$('.thanhtoansp').on('click', function() {
 		if ($('#tenkh').val() == "" ||
 			$('#emailkh').val() == "" ||
@@ -514,71 +589,76 @@ $(function() {
 			alert("Số điện thoại không hợp lệ");
 		}
 		else if ($('#tenkh').val() != "" && $('#emailkh').val() != "" && $('#sdtkh').val() != "" && $('#dckh').val() != "" && $('#sdtkh').val().length == 10) {
-			var tenkh = $('#tenkh').val();
-			var emailkh = $('#emailkh').val();
-			var sdtkh = $('#sdtkh').val();
-			var dckh = $('#dckh').val();
-			var randomParam = Math.random().toString(36).substring(7);
-
-			var duongdan_fix1 = duongdan+url_sub+"/sendmail/";
-			var duongdan_fix2 = duongdan+url_sub+"/hoadon/";
-			var duongdan_fix3 = duongdan+url_sub+"/hoantat/";
-
-			var d = new Date();
-			var gio1 = String((d.getHours()));
-			var phut1 = String((d.getMinutes()));
-			var giay1 = String((d.getSeconds()));
-
-			if (gio1.length == 1) var gio2 = "0"+gio1;
-			else gio2 = gio1;
-			if (phut1.length == 1) var phut2 = "0"+phut1;
-			else phut2 = phut1;
-			if (giay1.length == 1) var giay2 = "0"+giay1;
-			else giay2 = giay1;
-
-			var mxn = String((sdtkh.substring(4, 10)))+gio2+phut2+giay2;
-			var time = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-
-			var data_trave = {
-				tenkh: tenkh,
-		        emailkh: emailkh,
-		        sdtkh: sdtkh,
-		        dckh: dckh,
-		        mxn: mxn,
-		        date:time,
-		        randomParam: randomParam
+			if ($('input[name="bankCode"]:checked').val() != "COD") {
+				$('#frmCreateOrder').submit();
 			}
+			else {
+				var tenkh = $('#tenkh').val();
+				var emailkh = $('#emailkh').val();
+				var sdtkh = $('#sdtkh').val();
+				var dckh = $('#dckh').val();
+				var randomParam = Math.random().toString(36).substring(7);
 
-			if ($('#stt-gg').attr("trangthai") == "true") {
-				data_trave.newtt = Number(($('#tongtien').text()).replace(/\./g, ""));
-				data_trave.magg = $('#magiamgia').val();
-			}
+				var duongdan_fix1 = duongdan+url_sub+"/sendmail/";
+				var duongdan_fix2 = duongdan+url_sub+"/hoadon/";
+				var duongdan_fix3 = duongdan+url_sub+"/hoantat/";
 
-			$('.thongbao-thanhtoan').removeClass('hide-tbtt');
+				var d = new Date();
+				var gio1 = String((d.getHours()));
+				var phut1 = String((d.getMinutes()));
+				var giay1 = String((d.getSeconds()));
 
-			$.ajax({
-				type: "POST",
-				method: "POST",
-				url: duongdan_fix1,
-				data: data_trave,
-				success: function(response) {
-					$.ajax({
-						type: "POST",
-						method: "POST",
-						url: duongdan_fix2,
-						data: data_trave,
-						success: function(response) {
-							window.location.href = duongdan_fix3;
-						},
-						error: function() {
-							console.log("Có lỗi xảy ra.");
-						}
-					});
-				},
-				error: function() {
-					console.log("Có lỗi xảy ra.");
+				if (gio1.length == 1) var gio2 = "0"+gio1;
+				else gio2 = gio1;
+				if (phut1.length == 1) var phut2 = "0"+phut1;
+				else phut2 = phut1;
+				if (giay1.length == 1) var giay2 = "0"+giay1;
+				else giay2 = giay1;
+
+				var mxn = String((sdtkh.substring(4, 10)))+gio2+phut2+giay2;
+				var time = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+
+				var data_trave = {
+					tenkh: tenkh,
+			        emailkh: emailkh,
+			        sdtkh: sdtkh,
+			        dckh: dckh,
+			        mxn: mxn,
+			        date:time,
+			        randomParam: randomParam
 				}
-			});
+
+				if ($('#stt-gg').attr("trangthai") == "true") {
+					data_trave.newtt = Number(($('#tongtien').text()).replace(/\./g, ""));
+					data_trave.magg = $('#magiamgia').val();
+				}
+
+				$('.thongbao-thanhtoan').removeClass('hide-tbtt');
+
+				$.ajax({
+					type: "POST",
+					method: "POST",
+					url: duongdan_fix1,
+					data: data_trave,
+					success: function(response) {
+						$.ajax({
+							type: "POST",
+							method: "POST",
+							url: duongdan_fix2,
+							data: data_trave,
+							success: function(response) {
+								window.location.href = duongdan_fix3;
+							},
+							error: function() {
+								console.log("Có lỗi xảy ra.");
+							}
+						});
+					},
+					error: function() {
+						console.log("Có lỗi xảy ra.");
+					}
+				});
+			}
 		}
 	})
 	$('#reset-session').on('click', function() {
@@ -665,6 +745,58 @@ $(function() {
 		}
 	})
 
+	$('.search-result').width($('.menu-khungtk').width());
+	$('.search-box').on('keyup', function() {
+		var dulieu = $(this).val();
+
+		if (dulieu.length > 0) {
+			var randomParam = Math.random().toString(36).substring(7);
+			var data_type = $(this).attr("data-type");
+			var duongdan_fix = duongdan+url_sub+"/sanpham/timkiem/";
+
+			var format_prc = new Intl.NumberFormat('vi-VN', {
+			  style: 'currency',
+			  currency: 'VND'
+			});
+
+			var data_trave = {
+				xacthuc2: randomParam,
+				type: data_type,
+				tksp: dulieu,
+				showsp: "col-20pt",
+		        limit: 5
+			};
+
+			$.ajax({
+				type: "POST",
+				url: duongdan_fix,
+				dataType: "JSON",
+				data: data_trave,
+				success: function(data) {
+					var dssp = "";
+					$.each(data.sanpham, function(index, val) {
+						dssp += `
+							<a href="${duongdan+url_sub+'/chitiet/'+val.id+'/'}" class="srs">
+								<div class="srs-img">
+	                                <img src="${val.img}" alt="">
+	                            </div>
+	                            <div class="srs-in4">
+	                                <p class="p-srs srs-name">${val.name}</p>
+	                                <p class="p-srs srs-price">${ val.price_sale > 0 ? format_prc.format(val.price_sale) : format_prc.format(val.price)}</p>
+	                            </div>
+                            </a><hr>
+						`;
+					});
+					$('.search-result').html(dssp);
+				},
+				error: function() {
+
+				}
+
+			})
+		}
+		else $('.search-result').html('');	
+	})
 	
 
 	$('.popup').on('click', function() {

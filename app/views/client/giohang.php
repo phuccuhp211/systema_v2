@@ -10,7 +10,7 @@
 	<?php include './app/views/include/header.php' ?>
     <?php include './app/views/include/modal.php' ?>
 
-    <div class="container" style="margin: 30px auto; min-height: 327px;">
+    <div class="container" style="margin: 30px auto; min-height: 50vh;">
         <div class="row">
             <table id="listcart">
                 <tr id="theader" name="theader">

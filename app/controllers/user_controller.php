@@ -125,7 +125,6 @@ class user_controller extends Base{
 
 	public function errorl() {
 		$data = [
-            'fullsp' => $this->umodel->fullsp1(),
             'newsp' => $this->umodel->spnew(),
             'hotsp' => $this->umodel->sphot(),
             'header' => $this->header,
@@ -150,7 +149,8 @@ class user_controller extends Base{
 			'header' => $this->header,
 			'banner' => $this->umodel->gbanner(),
 			'cbpc' => $this->umodel->cbpc(),
-			'bocuc' => $arr_bocuc
+			'bocuc' => $arr_bocuc,
+			'sanpham' => $this->umodel->fullsp1()
         ];
 		$this->loadview('index',$data);
 	}
@@ -322,10 +322,6 @@ class user_controller extends Base{
 			array_push($_SESSION['giohang'], $sanpham[0]);
 			$_SESSION['totalp'] += $sanpham[0]['thanhtien'];
 		}
-
-		echo "<pre>";
-		var_dump($_SESSION['giohang']);
-		echo "</pre>";
 	}
 
 	public function delcart() {
@@ -337,6 +333,10 @@ class user_controller extends Base{
 	public function delallcart() {
 		$_SESSION['giohang'] = [];
 		$_SESSION['totalp'] = 0;
+		if(isset($_SESSION['udone'])) {
+			$nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
+			$this->umodel->update_cart($nguoidung[0]['id'],'');
+		}
 		$this->loadview('giohang', ['header' => $this->header]);
 	}
 
@@ -390,6 +390,10 @@ class user_controller extends Base{
 		if (isset($_POST['totalp'])) {
 			$_SESSION['totalp'] = (int)$_POST['totalp'];
 			echo $_SESSION['totalp'];
+		}
+		if(isset($_SESSION['udone'])) {
+			$nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
+			$this->umodel->update_cart($nguoidung[0]['id'],json_encode($_SESSION['giohang']));
 		}
 		echo "<pre>";
 		var_dump($_SESSION['giohang']);
@@ -557,13 +561,16 @@ class user_controller extends Base{
 	public function getsp($loai_data=null,$data=null,$page=1) {
 		$this->umodel->upview_nonin();
 		$base_url = urlmd;
+		$dulieu = [ 
+			'header' => $this->header
+		];
 		
 		if($loai_data == "tatca") {
 			$bl = $this->boloc('sanpham/tatca');
 			$phantrang = $this->umodel->phantrang();
 		}
 		else if($loai_data == "danhmuc") {
-			$tendanhmuc = $this->umodel->fulldm($data);
+			$dulieu['tendanhmuc'] = $this->umodel->fulldm($data);
 			$bl = $this->boloc('sanpham/danhmuc',$data);
 			$phantrang = $this->umodel->phantrang($data);
 		}
@@ -571,12 +578,13 @@ class user_controller extends Base{
 			if (isset($_POST['tksp'])) $chuoitk = $_POST['tksp'];
 			else if (isset($data)) $chuoitk = str_replace("_", " ", $data);
 
+			$dulieu['chuoitk'] = $chuoitk;
 			$bientam = str_replace(" ", "_", $chuoitk);
 			$bl = $this->boloc('sanpham/timkiem',$bientam);
 			$phantrang = $this->umodel->phantrang(null,$chuoitk);
 		}
 		else if($loai_data == "phanloai"){
-			$tenphanloai = $this->umodel->fullpl($data);
+			$dulieu['tenphanloai'] = $this->umodel->fullpl($data);
 			$phantrang = $this->umodel->phantrang(null,null,$data);
 			$bl = $this->boloc('sanpham/phanloai',$data);
 		}
@@ -592,23 +600,33 @@ class user_controller extends Base{
 			if (isset($bientam)) $lpt = $this->phantrang('sanpham/'.$loai_data,$bientam,$phantrang[0]['pt']);
 			else $lpt = $this->phantrang('sanpham/'.$loai_data,$data,$phantrang[0]['pt']);
 
+			$dulieu['fullsp'] = $fullsp;
+			$dulieu['lpt'] = $lpt;
+			$dulieu['bl'] = $bl;
+
 			if (isset($_POST['xacthuc1'])) echo $this->showsp($fullsp);
-			else $this->loadview('sanpham', ['header' => $this->header, 'fullsp' => $fullsp, 'lpt' => $lpt, 'bl' => $bl]);
+			else $this->loadview('sanpham', $dulieu);
 		}
 		else {
 			$type = $_POST['type'];
-			$loai = $_POST['loai'];
+
+			if(isset($_POST['loai'])) $loai = $_POST['loai'];
+			else $loai = null;
+
 			if (isset($_POST['data'])) $data = $_POST['data'];
 			else $data = null;
 
 			if ($loai_data == "tatca") {
 				$data=$page;
-				$fullsp = $this->umodel->getsp($type,null,$data,$loai);
+				$fullsp = $this->umodel->getsp($type,null,$data,$loai,(isset($_POST['limit'])) ? $_POST['limit'] : 0);
 			}
-			else $fullsp = $this->umodel->getsp($type,$data,$page,$loai);
+			else if (isset($chuoitk)) $fullsp = $this->umodel->getsp($type,$chuoitk,$page,null,(isset($_POST['limit'])) ? $_POST['limit'] : 0);
+			else $fullsp = $this->umodel->getsp($type,$data,$page,$loai,(isset($_POST['limit'])) ? $_POST['limit'] : 0);
 
 			$lpt = $this->phantrang($type,$data,$phantrang[0]['pt'],$loai);
-			$response = array('sanpham' => $this->showsp($fullsp), 'phantrang' => $lpt);
+			if ($loai_data == "timkiem") $response = array('sanpham' => $fullsp);
+			else $response = array('sanpham' => $this->showsp($fullsp,(isset($_POST['showsp'])) ? $_POST['showsp'] : null), 'phantrang' => $lpt);
+			
 			echo json_encode($response);
 		}
 	}
@@ -791,7 +809,7 @@ class user_controller extends Base{
 		$mail = new PHPMailer(true);
 		$mail->SMTPDebug = SMTP::DEBUG_SERVER;                    
 	    $mail->isSMTP();                                          
-	    $mail->Host       = 'smtp.gmail.com';                     
+	    $mail->Host       = 'smtp.gmail.com';           
 	    $mail->SMTPAuth   = true;                                   
 	    $mail->Username   = 'phuccuhp211@gmail.com';                
 	    $mail->Password   = 'gmwghhndjyfdmbzm';        
@@ -806,9 +824,17 @@ class user_controller extends Base{
 	    $mail->send();
 	}
 
+	public function pmrs($server) {
+		$this->loadview('payment', ['header' => $this->header, 'server' => $server]);
+	}
+
 	public function reset() {
 		unset($_SESSION['giohang']);
 		unset($_SESSION['totalp']);
+		if(isset($_SESSION['udone'])) {
+			$nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
+			$this->umodel->update_cart($nguoidung[0]['id'],'');
+		}
 	}
 
 	public function login() {
@@ -839,6 +865,8 @@ class user_controller extends Base{
 						}
 						else {
 							unset($_SESSION['dndk_err']);
+							if($item['storage'] != '') $_SESSION['giohang'] = json_decode($item['storage'],true);
+							else if (isset($_SESSION['giohang'])) $this->umodel->update_cart($item['id'],json_encode($_SESSION['giohang']));
 							$_SESSION['udone'] = "SUCESS";
 						} 
 						break;

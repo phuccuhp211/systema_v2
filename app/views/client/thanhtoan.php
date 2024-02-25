@@ -66,10 +66,23 @@
                 <div class="col-12 khungto-khttdh">
                     <div class="td-khttdh">hình thức thanh toán</div>
                     <div class="khung-khttdh">
-                        <p><input type="radio" name="checkbox" class="nut-cb-giohang"> Tiền thanh toán mặt hàng khi nhận hàng (tiền mặt / thẻ ATM, Visa ,Master Card).</p>
-                        <p><input type="radio" name="checkbox" class="nut-cb-giohang"> Thanh toán qua chuyển khoản ngân hàng.</p>
-                        <p><input type="radio" name="checkbox" class="nut-cb-giohang" checked> Thanh toán khi nhận hàng(COD).</p>
-                        <p>+ Miễn phí giao hành trong phạm vi 10 Km (chỉ áp dụng với đơn hàng trên 500.000 đ).</p>
+                        <form action="<?php echo urlmd ?>/app/api/vnpay_php/vnpay_create_payment.php" id="frmCreateOrder" method="post">
+                            <input class="giatien" data-val="true" id="amount" name="amount" type="number" hidden/>
+                            <input type="radio" id="language" Checked="True" name="language" value="vn" hidden>
+                            <p>
+                                <input type="radio" id="bankCode" name="bankCode" value="INTCARD" class="nut-cb-giohang"> 
+                            Thanh toán qua thẻ quốc tế.
+                            </p>
+                            <p>
+                                <input type="radio" id="bankCode" name="bankCode" value="VNBANK" class="nut-cb-giohang"> 
+                            Thanh toán qua thẻ ATM/Tài khoản nội địa.
+                            </p>
+                            <p>
+                                <input type="radio" id="bankCode" name="bankCode" class="nut-cb-giohang" value="COD" checked> 
+                            Thanh toán khi nhận hàng(COD).
+                            </p>
+                            <p>+ Miễn phí giao hành trong phạm vi 10 Km (chỉ áp dụng với đơn hàng trên 500.000 đ).</p>
+                        </form>
                     </div>     
                 </div>
             </div>

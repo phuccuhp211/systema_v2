@@ -25,7 +25,7 @@
                                 <img src=\"{$banner[$i]['img']}\" alt=\"Image $i\" class=\"w-100\">
                                 <div class=\"carousel-caption\">
                                     ".(($banner[$i]['title'] != "") ? "<h3>$banner[$i]['title']</h3>" : "")."
-                                    ".(($banner[$i]['text'] != "") ? "<p>$banner[$i]['text']</p>" : "")."
+                                    ".(($banner[$i]['docs'] != "") ? "<p>$banner[$i]['docs']</p>" : "")."
                                 </div>
                             </div>
                         ";
@@ -104,7 +104,26 @@
                     }
                 ?>
             </div>
-        <?php } ?>         
+        <?php } ?>      
+        <div class="static-ss">
+            <div class="stss-tt" style="display: flex;">
+                <?php foreach ($header['danhmuc'] as $value => $item) { ?>
+                    <button class="stss-fttt index-cat" data-type="sanpham/danhmuc" data="<?php echo $item['id'] ?>"><?php echo $item['name'] ?></button>
+                <?php } ?>
+            </div>
+            <div class="stss-ft" style="display: flex;">
+                <button class="stss-fttt index-fil" data-type="sanpham/tatca" data="" data-phanloai="1">Mới Nhất</button>
+                <button class="stss-fttt index-fil" data-type="sanpham/tatca" data="" data-phanloai="2">Cũ Nhất</button>
+                <button class="stss-fttt index-fil" data-type="sanpham/tatca" data="" data-phanloai="3">Giá Từ Thấp -> Cao</button>
+                <button class="stss-fttt index-fil" data-type="sanpham/tatca" data="" data-phanloai="4">Giá Từ Cao -> Thấp</button>
+            </div>
+            <div class="stss-sp" style="margin: 0;">
+                <div class="row stss-list">
+                    <?php echo $this->showsp($sanpham,'col-20pt') ?>
+                </div>
+                <a href="<?php echo urlmd.'/sanpham/tatca' ?>" class="view-all stss-va">Xem Tất Cả</a></div>
+            </div>
+        </div>   
     </div>
 
     <?php include './app/views/include/footer.php' ?>

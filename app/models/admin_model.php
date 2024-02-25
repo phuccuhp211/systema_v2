@@ -85,6 +85,10 @@ class admin_model extends BaseM {
 	public function fixlay($id,$name,$img1,$img2,$type,$cata,$sovt,$refe,$sxtt) { $this->iuddata($sql = "UPDATE sections SET name = '$name', poster = '$img1', ebd_img = '$img2', id_type = '$type', id_cata = '$cata', ido = '$sovt', ref = '$refe', ord = '$sxtt' WHERE id = $id"); }
 	public function dellay($id) { $this->iuddata("DELETE FROM sections WHERE id = $id");}
 	/*-----------------------------------------*/
+	public function addbnn($img,$title,$text) { $this->iuddata("INSERT INTO banner VALUES('','$img','$title','$text')"); }
+	public function fixbnn($id,$img,$title,$text) { $this->iuddata($sql = "UPDATE banner SET img = '$img', title = '$title', docs = '$text' WHERE id = $id"); }
+	public function delbnn($id) { $this->iuddata("DELETE FROM banner WHERE id = $id");}
+	/*-----------------------------------------*/
 	public function thunhap() { return $this->getdata("SELECT SUM(thanhtien) as dutinh, tb.thunhap FROM hoadon INNER JOIN (SELECT SUM(thanhtien) as thunhap FROM hoadon WHERE trangthai = \"Hoàn Thành\") as tb"); }
 	public function donhang() { return $this->getdata("SELECT COUNT(id) as tonghd, tb.hdht FROM hoadon INNER JOIN (SELECT COUNT(id) as hdht FROM hoadon WHERE trangthai = \"Hoàn Thành\")as tb"); }
 	public function member() { return $this->getdata("SELECT COUNT(us.user) as ddk, cdk FROM user us, (SELECT COUNT(name) as cdk FROM (SELECT name FROM hoadon WHERE name NOT IN (SELECT user FROM user) GROUP BY name) as tb) as tb WHERE us.role = 1"); }

@@ -53,6 +53,8 @@ $(function() {
 	})
 /*-------------------- BACK --------------------*/
 
+	var id_bn_fix = 0;
+	var id_bn_del = 0;
 	var id_bc_fix = 0;
 	var id_bc_del = 0;
 	var id_sp_fix = 0;
@@ -67,6 +69,26 @@ $(function() {
 	var id_gg_fix = 0;
 	var id_gg_del = 0;
 
+	$(document).on('click', '.suabn', function() {
+		id_bn_fix = $(this).data('idbn');
+		var duongdan_fix = duongdan+url_sub+"/bnn/fix/"+id_bn_fix+"/";
+		var ae_td = $(this).parent().siblings("td:has(img)");
+		var old_title = $(this).parent().siblings("#titbn").text();
+		var old_text = $(this).parent().siblings("#txtbn").text();
+		var old_img = ae_td.find("img").attr("src");
+
+		$('#fix_tt_bn').val(old_title);
+		$('#fix_tx_bn').val(old_text);
+		$('#fix_img_bn').val(old_img);
+
+
+		$('#form_fix_bn').attr("action", duongdan_fix);
+	})
+	$(document).on('click', '.xoabn', function() {
+		id_bn_del = $(this).data('idbn');
+		var duongdan_del = duongdan+url_sub+"/bnn/del/"+id_bn_del+"/";
+		$('#acp-del').attr("href", duongdan_del);
+	})
 	$(document).on('click', '.suabc', function() {
 		id_bc_fix = $(this).data('idbc');
 		var duongdan_fix = duongdan+url_sub+"/lay/fix/"+id_bc_fix+"/";

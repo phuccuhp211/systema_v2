@@ -8,11 +8,13 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 col-search">
                         <form action="<?php echo urlmd; ?>/sanpham/timkiem/" method="POST" enctype="multipart/form-data" class="form-inline menu-khungtk">
-                            <input class="form-control" name="tksp" type="text" placeholder="Tìm Kiếm...">
+                            <input class="form-control search-box" name="tksp" type="text" placeholder="Tìm Kiếm..." data-type="sanpham/timkiem">
                             <button type="submit" class="btn btn-success menu-nuttk"><i class="fa fa-search"></i></button>
-                        </form> 
+                        </form>
+                        <div class="search-result">
+                        </div>
                     </div>
                     <div class="col-3">
                         <ul class="navbar-nav menu-ghdndk">

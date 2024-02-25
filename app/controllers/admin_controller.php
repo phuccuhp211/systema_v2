@@ -272,6 +272,67 @@ class admin_controller extends Base {
 		}
 	}
 	/*-----------------------------------------*/
+	public function bnn_mng($rq = "", $id = 0) {
+		if ($rq == "add") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$title = $_POST['ttbn'];
+			$text = $_POST['txbn'];
+
+			$img = $url_img = "";
+
+			if (isset($_FILES["img"]) && $_FILES["img"]["error"] === UPLOAD_ERR_OK) {
+				$img = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
+				$url_img = "././public/data/" . basename($_FILES["img"]["name"]);
+				$dinhdang = strtolower(pathinfo($img,PATHINFO_EXTENSION));
+				if (file_exists($img)) $_SESSION['error_log'] .= "Poster đã tồn tại<br>";
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+			}
+			else $_SESSION['error_log'] = "Vui Lòng Chọn Banner";
+
+			if (!isset($_SESSION['error_log'])) {
+				if ($img != "") move_uploaded_file($_FILES["img"]["tmp_name"], $url_img);
+				$this->amodel->addbnn($img,$title,$text);
+			}
+			
+			header('Location: ' .urlmd. '/manager/slbn/');
+		    exit();
+		}
+		else if ($rq == "fix") {
+			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
+			$title = $_POST['ttbn'];
+			$text = $_POST['txbn'];
+
+			$img = $url_img = "";
+
+			if (isset($_FILES["img"]) && $_FILES["img"]["error"] === UPLOAD_ERR_OK) {
+				$img = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
+				$url_img = "././public/data/" . basename($_FILES["img"]["name"]);
+				$dinhdang = strtolower(pathinfo($img,PATHINFO_EXTENSION));
+				if (file_exists($img)) $_SESSION['error_log'] .= "Poster đã tồn tại<br>";
+				if($dinhdang != "jpg" && $dinhdang != "png" && $dinhdang != "jpeg"
+				&& $dinhdang != "gif" && $dinhdang != "pdf" && $dinhdang != "webp") {
+					$_SESSION['error_log'] .= "Chỉ chấp nhận file jpg, png, jpeg, gif, pdf<br>";
+				}
+			}
+
+			if (!isset($_SESSION['error_log'])) {
+				if ($img != "") move_uploaded_file($_FILES["img"]["tmp_name"], $url_img);
+				else $img = $_POST['old_img'];
+				$this->amodel->fixbnn($id,$img,$title,$text);
+			}
+			header('Location: ' .urlmd. '/manager/slbn/');
+		    exit();
+		}
+		else if ($rq == "del") {
+			$this->amodel->delbnn($id);
+			header('Location: ' .urlmd. '/manager/slbn/');
+		    exit();
+		}
+	}
+	/*-----------------------------------------*/
 	public function lay_mng($rq = "", $id = 0) {
 		if ($rq == "add") {
 			if(isset($_SESSION['error_log'])) unset($_SESSION['error_log']);
@@ -284,6 +345,9 @@ class admin_controller extends Base {
 
 			$img1 =	 $img2 = "";
 			$url_img1 =	 $url_img2 = "";
+
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên Layout";
+			if ($sovt == "") $_SESSION['error_log'] .= "Không để trống vị trí";
 
 			if (isset($_FILES["poster"]) && $_FILES["poster"]["error"] === UPLOAD_ERR_OK) {
 				$img1 = urlmd . "/public/data/" . basename($_FILES["poster"]["name"]);
@@ -325,6 +389,9 @@ class admin_controller extends Base {
 
 			$img1 = $img2 = "";
 			$url_img1 = $url_img2 = "";
+
+			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên Layout";
+			if ($sovt == "") $_SESSION['error_log'] .= "Không để trống vị trí";
 
 			if (isset($_FILES["poster"]) && $_FILES["poster"]["error"] === UPLOAD_ERR_OK) {
 				$img1 = urlmd . "/public/data/" . basename($_FILES["poster"]["name"]);

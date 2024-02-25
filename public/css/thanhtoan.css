@@ -170,9 +170,6 @@
 }
 
 .khungchu input[type="text"] {
-    position: absolute;
-    top: 0px;
-    right: 0px;
     width: 70%;
     border: none;
     border-radius: 5px;
@@ -182,25 +179,33 @@
 
 .khungchu {
     position: relative;
+    margin: 0 0 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.khungchu:last-child {
+    margin: 0;
 }
 .td-khttdh {
     font-size: 20px;
     text-align: center;
-    padding: 3% 0;
+    padding: 1vh 0;
     background: #745caf;
     color: white;
     font-weight: 600;
     text-transform: capitalize;
 }
 
-.td-giohang {
-    padding: 1.2%;
-}
 .khung-khttdh {
     background: #c7c8ca;
     padding: 5% 5%;
     position: relative;
     border-radius: 0 0 10px 10px;
+}
+
+.khung-khttdh p {
+    margin: 0;
 }
 .hinhsp-giohang {
     width: 100%;

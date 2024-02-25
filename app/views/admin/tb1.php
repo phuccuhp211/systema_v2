@@ -45,17 +45,17 @@
 			<th style="width: 150px;">Thao Tác</th>
 		</tr>
 		<tr>
-			<td colspan="8" class="td-addsp"><button class="btn btn-primary btn-add them">Thêm Section +</button></td>
+			<td colspan="8" class="td-addsp"><button class="btn btn-primary btn-add them">Thêm Banner +</button></td>
 		</tr>
 		<?php foreach ($slbn as $value => $item) { ?>
 			<tr class="sldbn">
 				<td class="text-center p-0"><?php echo $item['id'] ?></td>
 				<td class="text-center"><img src="<?php echo $item['img'] ?>" alt=""></td>
 				<td class="text-center" id="titbn"><?php echo $item['title'] ?></td>
+				<td class="text-center" id="txtbn" hidden><?php echo $item['docs'] ?></td>
 				<td class="text-center">
-					<button class="btn btn-success suaxoa view_bn"><i class="fa-solid fa-eye"></i></button>
-					<button class="btn btn-primary suaxoa sua suabn" data-idbc="<?php echo $item['id'] ?>"><i class="fa-solid fa-gear"></i></button>
-					<button class="btn btn-danger suaxoa xoa xoabn" data-idbc="<?php echo $item['id'] ?>"><i class="fa-solid fa-trash"></i></button>
+					<button class="btn btn-primary suaxoa sua suabn" data-idbn="<?php echo $item['id'] ?>"><i class="fa-solid fa-gear"></i></button>
+					<button class="btn btn-danger suaxoa xoa xoabn" data-idbn="<?php echo $item['id'] ?>"><i class="fa-solid fa-trash"></i></button>
 				</td>
 			</tr>
 		<?php } ?>

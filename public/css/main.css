@@ -1,5 +1,98 @@
 *{padding: 0;margin: 0;font-family: Segoe UI, sans-serif; transition: all ease 0.3s;}
 
+.col-search {
+    position: relative;
+}
+
+.search-result hr {
+    margin: 0;
+}
+
+.srs-in4 {
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.srs-img {
+    width: 5vh;
+    height: 5vh;
+    padding: 0.5vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+}
+
+.srs-img img {
+    width: 100%;
+}
+
+.search-result {
+    background: white;
+    position: absolute;
+    z-index: 1;
+    border-radius: 10px;
+    margin: 1% 0 0 0;
+    overflow: hidden;
+}
+
+.srs {
+    display: flex;
+    text-decoration: none;
+    padding: 1%;
+}
+
+.srs:hover {
+    box-shadow: inset 60vh 0px #dfdfdf;
+}
+
+.srs:hover .srs-name {
+    color: #6246a8;
+}
+
+.p-srs {
+    margin: 0;
+}
+
+.srs-name {
+    color: black;
+    font-weight: 600;
+}
+
+.srs-price {
+    color: red;
+    font-size: 14px;
+}
+
+.static-ss {
+    background: #f8f8f8;
+}
+
+.static-ss > * {
+    margin: -1px 0;
+    border: 1px solid #745caf;
+}
+
+.static-ss > * {
+    padding: 10px;
+}
+
+.stss-tt button, .stss-ft button {
+    padding: 2px 16px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    border: 1px solid gray;
+    white-space: nowrap;
+    margin: 0 10px 0 0px;
+}
+
+.stss-tt button:hover, .stss-ft button:hover {
+    background: #cbcbcb;
+}
+
 .khungsp2 {
     border: 1px solid #b5a6da;
     border-radius: 0;
@@ -200,16 +293,16 @@ ol.carousel-indicators li::marker {
 }
 
 .ft-chinh {
-    background: #c7c8ca;
-    padding: 2% 0;
+    padding: 20px 0;
+    border-top: 2px solid #6246a8;
 }
 
 .tdft_to {
-    margin: 5% 0;
+    margin: 0 0 1%;
     cursor: context-menu;
     font-weight: 700;
     font-style: italic;
-    font-size: 30px;
+    font-size: 24px;
     color: #212529;
 }
 
@@ -220,8 +313,8 @@ ol.carousel-indicators li::marker {
 .ft-chinh .footer-list .nav-link {
     color: black;
     margin: 0;
-    padding: 3% 0;
-    font-size: 18px;
+    padding: 2% 0;
+    font-size: 14px;
 }
 
 .ft-chinh.ft-chinh-v2  .footer-list .nav-link {
@@ -308,7 +401,7 @@ button.nutsp:hover {
     text-align: left;
     padding: 0 15px;
 }
-.giasp {color: red;font-size: 18px;text-align: center;display: flex;justify-content: space-around;}
+.giasp {color: red;font-size: 14px;text-align: center;display: flex;justify-content: space-around;}
 
 .giasp span {
     text-decoration: line-through;
@@ -325,7 +418,7 @@ button.nutsp:hover {
 }
 
 .khungsp2 .tensp {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .dndk, .dndk2, .dndk-err, .dmk {
@@ -415,6 +508,7 @@ button.nutsp:hover {
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 /* Track */
@@ -523,4 +617,19 @@ button.nutsp:hover {
 .vnssp {
     font-size: 14px;
     background: #c2c2c2;
+}
+
+.view-all {
+    text-decoration: none;
+    background: #745caf;
+    color: white;
+    padding: 5px 35px;
+    border-radius: 50px;
+    margin: 15px auto 0;
+    display: block;
+    width: fit-content;
+}
+
+.view-all:hover {
+    background: #6246a8;
 }
