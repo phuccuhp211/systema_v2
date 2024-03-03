@@ -22,6 +22,9 @@
                                 <a href="<?php echo urlmd; ?>/giohang/" class="nav-link menu-chinh-li giohang">
                                     <i class="fa fa-shopping-cart"></i> Giỏ Hàng
                                 </a>
+                                <div class="popup-cart off-pocart" data-user="<?php if (isset($_SESSION['udone'])) echo "yes";?>">
+                                    <span>Có Sản Phẩm Trong Giỏ Hàng</span>
+                                </div>
                             </li>
                             <?php if (!isset($_SESSION['udone'])) { ?>
                                 <li class="nav-item">

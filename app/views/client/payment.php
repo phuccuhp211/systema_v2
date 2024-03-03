@@ -37,7 +37,7 @@
 
     <div class="main-cont pmrs">
     	<?php if ($server == "vnpay") { ?>
-    		<div class="dheader">
+    		<div class="dheader pmsv" pmsv="<?php echo $server ?>">
 	            <h3 class="text-center m-0" style="color: #6246a8;">Cổng Thanh Toán VNPay</h3>
 	        </div>
 	        <div class="dbody">

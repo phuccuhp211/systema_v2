@@ -116,7 +116,13 @@ class user_model extends BaseM {
 	public function updatetk($id,$ho,$ten,$sdt,$email,$diachi){
 		$this->iuddata("UPDATE user SET ho = '$ho', ten = '$ten', sdt = '$sdt', email = '$email', diachi = '$diachi' WHERE id = $id");
 	}
-	public function hoadon($ten,$email,$sdt,$dc,$dssp,$thanhtien,$date,$mxn,$mgg,$thanhtien2) {
-		$this->iuddata("INSERT INTO hoadon VALUES('','$ten','$sdt','$email','$dc','$dssp','$thanhtien','Chờ Xác Nhận','$date','','$mxn','$mgg','$thanhtien2')");
+	public function hoadon($ten,$email,$sdt,$dc,$dssp,$thanhtien,$date,$mxn,$mgg,$thanhtien2,$pmmt=null) {
+		if (!$pmmt) $this->iuddata("INSERT INTO hoadon VALUES('','$ten','$sdt','$email','$dc','$dssp','$thanhtien','Chờ Xác Nhận','$date','','$mxn','$mgg','$thanhtien2')");
+		else {
+			$hoadon = $this->getdata("SELECT * FROM hoadon WHERE SHD = $mxn");
+			if (!isset($hoadon[0])) {
+				$this->iuddata("INSERT INTO hoadon VALUES('','$ten','$sdt','$email','$dc','$dssp','$thanhtien','Chờ Xác Nhận','$date','','$mxn','$mgg','$thanhtien2','$pmmt')");
+			}
+		} 
 	}
 } ?>

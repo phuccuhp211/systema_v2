@@ -97,11 +97,12 @@
                                     ?>
                                         <table class="mb-5">
                                             <tr>
-                                                <th style="width: 17.5%;">Mã Hóa Đơn</th>
-                                                <th style="width: 17.5%;">Ngày Lập Hóa Đơn</th>
-                                                <th style="width: 17.5%;">Ngày Xác Nhận</th>
-                                                <th style="width: 32.5%;">Tổng Tiền</th>
+                                                <th style="width: 15%;">Mã Hóa Đơn</th>
+                                                <th style="width: 15%;">Ngày Lập Hóa Đơn</th>
+                                                <th style="width: 15%;">Ngày Xác Nhận</th>
+                                                <th style="width: 25%;">Tổng Tiền</th>
                                                 <th style="width: 15%;">Trạng Thái</th>
+                                                <th style="width: 15%;">PTTT</th>
                                             </tr>
                                             <tr>
                                                 <td class="text-center"><?php echo $item['SHD']; ?></td>
@@ -112,19 +113,20 @@
                                                     else echo number_format($item['thanhtien']+20000,0,",",".");
                                                 ?></td>
                                                 <td class="text-center"><?php echo $item['trangthai']; ?></td>
+                                                <td class="text-center"><?php echo $item['pttt']; ?></td>
                                             </tr>
                                             <tr class="h-list-sp">
-                                                <td colspan="5">Danh Sách Sản Phẩm</td>
+                                                <td colspan="6">Danh Sách Sản Phẩm</td>
                                             </tr>
                                             <tr class="h-list-sp">
-                                                <td colspan="2">Tên Sản Phẩm</td>
+                                                <td colspan="3">Tên Sản Phẩm</td>
                                                 <td>Đơn Giá</td>
                                                 <td>Số Lượng</td>
                                                 <td>Thành Tiền</td>
                                             </tr>
                                             <?php foreach ($dssp as $value2 => $item2) { ?>
                                                 <tr class="list-sp">
-                                                    <td colspan="2"><?php echo $item2['name'] ?></td>
+                                                    <td colspan="3"><?php echo $item2['name'] ?></td>
                                                     <td>
                                                         <?php 
                                                             if ($item2['price_sale'] != 0) echo number_format($item2['price_sale'],0,'','.');

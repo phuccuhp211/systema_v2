@@ -713,119 +713,187 @@ class user_controller extends Base{
 	public function hoantat() { $this->loadview('hoantat', ['header' => $this->header]); }
 
 	public function hoadon() {
-		$tenkh = $_POST['tenkh'];
-		$emailkh = $_POST['emailkh'];
-		$sdtkh = $_POST['sdtkh'];
-		$dckh = $_POST['dckh'];
-		$dssp = json_encode($_SESSION['giohang']);
-		$thanhtien = $_SESSION['totalp'];
-		$mxn = $_POST['mxn'];
-		$date = date("Y-m-d",time());
-		$thanhtien2 = "";
-		$magg = "";
+		if (!isset($_SESSION['user_temp']['pmmt'])) {
+			$tenkh = $_POST['tenkh'];
+			$emailkh = $_POST['emailkh'];
+			$sdtkh = $_POST['sdtkh'];
+			$dckh = $_POST['dckh'];
+			$dssp = json_encode($_SESSION['giohang']);
+			$thanhtien = $_SESSION['totalp'];
+			$mxn = $_POST['mxn'];
+			$date = date("Y-m-d",time());
+			$thanhtien2 = "";
+			$magg = "";
 
-		if (isset($_POST['newtt'])) {
-			$thanhtien2 = $_POST['newtt'];
-			$magg = $_POST['magg'];
+			if (isset($_POST['newtt'])) {
+				$thanhtien2 = $_POST['newtt'];
+				$magg = $_POST['magg'];
+			}
+			$this->umodel->hoadon($tenkh, $emailkh, $sdtkh, $dckh, $dssp, $thanhtien, $date, $mxn,$magg,$thanhtien2);
 		}
-		$this->umodel->hoadon($tenkh, $emailkh, $sdtkh, $dckh, $dssp, $thanhtien, $date, $mxn,$magg,$thanhtien2);
+		else {
+			$tenkh = $_SESSION['user_temp']['tenkh'];
+			$emailkh = $_SESSION['user_temp']['emailkh'];
+			$sdtkh = $_SESSION['user_temp']['sdtkh'];
+			$dckh = $_SESSION['user_temp']['dckh'];
+			$dssp = $_SESSION['user_temp']['dssp'];
+			$thanhtien = $_SESSION['user_temp']['thanhtien'];
+			$mxn = $_SESSION['user_temp']['mxn'];
+			$date = $_SESSION['user_temp']['date'];
+			$thanhtien2 = $_SESSION['user_temp']['thanhtien2'];
+			$magg = $_SESSION['user_temp']['magg'];
+			$this->umodel->hoadon($tenkh, $emailkh, $sdtkh, $dckh, $dssp, $thanhtien, $date, $mxn,$magg,$thanhtien2,$_SESSION['user_temp']['pmmt']);
+		}
 	}
 
 	public function sendmail() {
-		$tenkh = $_POST['tenkh'];
-		$emailkh = $_POST['emailkh'];
-		$sdtkh = $_POST['sdtkh'];
-		$dckh = $_POST['dckh'];
-		$mxn = $_POST['mxn'];
-		$date = date("d - m - Y",time());
-
-		if (isset($_POST['newtt'])) {
-			$giagiam = $_SESSION['totalp'] - $_POST['newtt'] + 20000;
-			$thanhtien = $_POST['newtt'];
-			$tongket = "
-					<tr style=\"color: white; background: #927ec4;\">
-						<td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Tạm Tính :</td>
-					    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($_SESSION['totalp'], 0, '', '.') ."</td>
-					</tr>
-					<tr style=\"color: white; background: #927ec4;\">
-						<td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Giảm :</td>
-					    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($giagiam, 0, '', '.') ."</td>
-				    </tr>
-				    <tr style=\"color: white; background: #927ec4;\">
-					    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Tổng Cộng :</td>
-					    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($thanhtien+20000, 0, '', '.') ."</td>
-					</tr>
-					";
-			$this->umodel->divineMGG($_POST['magg']);
+		if (!isset($_SESSION['user_temp']['pmmt'])) {
+			$tenkh = $_POST['tenkh'];
+			$emailkh = $_POST['emailkh'];
+			$sdtkh = $_POST['sdtkh'];
+			$dckh = $_POST['dckh'];
+			$mxn = $_POST['mxn'];
+			$date = date("d - m - Y",time());
 		}
 		else {
-			$thanhtien = $_SESSION['totalp'];
-			$tongket = "
-					<tr style=\"color: white; background: #927ec4;\">
-					    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Tổng Cộng :</td>
-					    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($thanhtien+20000, 0, '', '.') ."</td>
-					</tr>
-					";
+			$tenkh = $_SESSION['user_temp']['tenkh'];
+			$emailkh = $_SESSION['user_temp']['emailkh'];
+			$sdtkh = $_SESSION['user_temp']['sdtkh'];
+			$dckh = $_SESSION['user_temp']['dckh'];
+			$mxn = $_SESSION['user_temp']['mxn'];
+			$date = $_SESSION['user_temp']['date'];
 		}
 
-		$noidung = "
-		<div style=\"width: 700px; margin: 0 auto; border: solid 1px #ccc;\">
+		$checkhd = $this->umodel->kthd($mxn);
+		if(!isset($checkhd[0])) {
+			if (isset($_POST['newtt']) || isset($_SESSION['user_temp']['thanhtien2']) && $_SESSION['user_temp']['thanhtien2'] > 0) {
+				$giagoc = intval($_SESSION['totalp'] ? $_SESSION['totalp'] : $_SESSION['user_temp']['thanhtien']);
+				$giamoi = intval(isset($_POST['newtt']) ? $_POST['newtt'] : $_SESSION['user_temp']['thanhtien2']);
+				$giagiam = $giagoc - $giamoi + 20000;
+				$thanhtien = intval(isset($_POST['newtt']) ? $_POST['newtt'] : $_SESSION['user_temp']['thanhtien2']);
 
-			<h1 style=\"text-align: center; color: #745caf; margin: 20px 0;\">Hóa Đơn Điện Tử</h1>
-			<h3 style=\"margin: 30px 0 0 50px;\">Mã Hóa Đơn :	<strong>$mxn</strong></h3>
-			<h3 style=\"margin: 0 0 0 50px;\">Ngày Tạo HD :	<strong>$date</strong></h3>
-			<h3 style=\"margin: 0 0 0 50px;\">Kính gửi : <strong>$tenkh</strong></h3>
-			<h3 style=\"margin: 0 0 0 50px;\">Địa Chỉ :  <strong>$dckh</strong></h3>
-			<h4 style=\"text-align: center; margin: 20px 0;\"><strong>CHÚNG TÔI GỬI ĐẾN QUÝ KHÁCH HÀNG HÓA ĐƠN MUA HÀNG</strong></h4>
+				$tongket = "
+						<tr style=\"color: white; background: #927ec4;\">
+							<td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Tạm Tính :</td>
+						    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($giagoc, 0, '', '.') ."</td>
+						</tr>
+						<tr style=\"color: white; background: #927ec4;\">
+							<td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Giảm :</td>
+						    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($giagiam, 0, '', '.') ."</td>
+					    </tr>
+					    <tr style=\"color: white; background: #927ec4;\">
+						    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Tổng Cộng :</td>
+						    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($thanhtien+20000, 0, '', '.') ."</td>
+						</tr>
+						";
+				$this->umodel->divineMGG(isset($_POST['magg']) ? $_POST['magg'] : $_SESSION['user_temp']['magg']);
+			}
+			else {
+				$thanhtien = $_SESSION['totalp'] ? $_SESSION['totalp'] : $_SESSION['user_temp']['thanhtien'];
+				$tongket = "
+						<tr style=\"color: white; background: #927ec4;\">
+						    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Tổng Cộng :</td>
+						    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\">". number_format($thanhtien+20000, 0, '', '.') ."</td>
+						</tr>
+						";
+			}
 
-		    <table style=\"width: 600px; border-collapse: collapse; margin: 0 auto;\">
-		        <tr style=\"color: white; background: #927ec4;\">
-		            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">STT</th>
-		            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Tên Sản Phẩm</th>
-		            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Số lượng</th>
-		            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Thành tiền</th>
-		        </tr>";
-				foreach ($_SESSION['giohang'] as $value => $item) {
-				    $noidung .= "<tr>
-				        <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 50px; text-align: center;\">". $value+1 ."</td>
-				        <td style=\"padding: 3px 5px; font-size: 15px; border: 1px solid black; width: 400px\">". $item['name'] ."</td>
-				        <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 100px; text-align: center;\">". $item['soluong'] ."</td>
-				        <td style=\"padding: 3px 10px; font-size: 15px; border: 1px solid black; width: 150px; text-align: right;\">". number_format($item['thanhtien'], 0, '', '.') ."</td>
-				    </tr>";
-				}
-				$noidung .= 
-				"<tr>
-				    <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 50px; text-align: center;\">". (count($_SESSION['giohang'])+1) ."</td>
-				    <td style=\"padding: 3px 5px; font-size: 15px; border: 1px solid black; width: 400px\">Phí vận chuyển</td>
-				    <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 100px; text-align: center;\">X</td>
-				    <td style=\"padding: 3px 10px; font-size: 15px; border: 1px solid black; width: 150px; text-align: right;\">20.000</td>
-				</tr>
-				".$tongket."
-			</table>
+			$noidung = "
+			<div style=\"width: 700px; margin: 0 auto; border: solid 1px #ccc;\">
 
-			<h4 style=\"margin: 50px 0;\">Chân thành cám ơn quý khách hàng đã tin tưởng dùng lựa chọn tại cửa hàng của chúng tôi. Chúng tôi sẽ chuẩn bị đơn hàng nhanh nhất có thể cho quý khách hàng.</h4>
-		</div>";
+				<h1 style=\"text-align: center; color: #745caf; margin: 20px 0;\">Hóa Đơn Điện Tử</h1>
+				<h3 style=\"margin: 30px 0 0 50px;\">Mã Hóa Đơn :	<strong>$mxn</strong></h3>
+				<h3 style=\"margin: 0 0 0 50px;\">Ngày Tạo HD :	<strong>$date</strong></h3>
+				<h3 style=\"margin: 0 0 0 50px;\">Kính gửi : <strong>$tenkh</strong></h3>
+				<h3 style=\"margin: 0 0 0 50px;\">Địa Chỉ :  <strong>$dckh</strong></h3>
+				<h4 style=\"text-align: center; margin: 20px 0;\"><strong>CHÚNG TÔI GỬI ĐẾN QUÝ KHÁCH HÀNG HÓA ĐƠN MUA HÀNG</strong></h4>
 
-		$mail = new PHPMailer(true);
-		$mail->SMTPDebug = SMTP::DEBUG_SERVER;                    
-	    $mail->isSMTP();                                          
-	    $mail->Host       = 'smtp.gmail.com';           
-	    $mail->SMTPAuth   = true;                                   
-	    $mail->Username   = 'phuccuhp211@gmail.com';                
-	    $mail->Password   = 'gmwghhndjyfdmbzm';        
-	    $mail->SMTPSecure = 'ssl';                       
-	    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            
-	    $mail->Port       = 465;
-	    $mail->setFrom('phuccuhp211@gmail.com', 'SYSTEMA');   
-	    $mail->addAddress($emailkh);
-	    $mail->isHTML(true);                                  
-	    $mail->Subject = "Hoa Don Dien Tu";
-	    $mail->Body    = $noidung;
-	    $mail->send();
+			    <table style=\"width: 600px; border-collapse: collapse; margin: 0 auto;\">
+			        <tr style=\"color: white; background: #927ec4;\">
+			            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">STT</th>
+			            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Tên Sản Phẩm</th>
+			            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Số lượng</th>
+			            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Thành tiền</th>
+			        </tr>";
+					foreach ($_SESSION['giohang'] ? $_SESSION['giohang'] : json_decode($_SESSION['user_temp']['dssp'],true) as $value => $item) {
+					    $noidung .= "<tr>
+					        <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 50px; text-align: center;\">". $value+1 ."</td>
+					        <td style=\"padding: 3px 5px; font-size: 15px; border: 1px solid black; width: 400px\">". $item['name'] ."</td>
+					        <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 100px; text-align: center;\">". $item['soluong'] ."</td>
+					        <td style=\"padding: 3px 10px; font-size: 15px; border: 1px solid black; width: 150px; text-align: right;\">". number_format($item['thanhtien'], 0, '', '.') ."</td>
+					    </tr>";
+					}
+					$noidung .= 
+					"<tr>
+					    <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 50px; text-align: center;\">". (count($_SESSION['giohang'])+1) ."</td>
+					    <td style=\"padding: 3px 5px; font-size: 15px; border: 1px solid black; width: 400px\">Phí vận chuyển</td>
+					    <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 100px; text-align: center;\">X</td>
+					    <td style=\"padding: 3px 10px; font-size: 15px; border: 1px solid black; width: 150px; text-align: right;\">20.000</td>
+					</tr>
+					".$tongket."
+				</table>
+
+				<h4 style=\"margin: 50px 0;\">Chân thành cám ơn quý khách hàng đã tin tưởng dùng lựa chọn tại cửa hàng của chúng tôi. Chúng tôi sẽ chuẩn bị đơn hàng nhanh nhất có thể cho quý khách hàng.</h4>
+			</div>";
+
+			$mail = new PHPMailer(true);
+			$mail->SMTPDebug = SMTP::DEBUG_SERVER;                    
+		    $mail->isSMTP();                                          
+		    $mail->Host       = 'smtp.gmail.com';           
+		    $mail->SMTPAuth   = true;                                   
+		    $mail->Username   = 'phuccuhp211@gmail.com';                
+		    $mail->Password   = 'gmwghhndjyfdmbzm';        
+		    $mail->SMTPSecure = 'ssl';                       
+		    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            
+		    $mail->Port       = 465;
+		    $mail->setFrom('phuccuhp211@gmail.com', 'SYSTEMA');   
+		    $mail->addAddress($emailkh);
+		    $mail->isHTML(true);                                  
+		    $mail->Subject = "Hoa Don Dien Tu";
+		    $mail->Body    = $noidung;
+		    $mail->send();
+
+		    unset($_SESSION['user_temp']);
+		    $this->reset();
+		}
+			
+
+			
 	}
 
-	public function pmrs($server) {
-		$this->loadview('payment', ['header' => $this->header, 'server' => $server]);
+	public function pmrs($server,$step) {
+		if($server == "vnpay") {
+			if ($step == "s1") {
+				if (!isset($_POST['tenkh'])) header("Location: ".urlmd);
+				else {
+					if (isset($_POST['newtt'])) {
+						$thanhtien2 = $_POST['newtt'];
+						$magg = $_POST['magg'];
+					}
+					else { $thanhtien2 = ""; $magg = ""; }
+					$_SESSION['user_temp'] = [
+						'tenkh' => $_POST['tenkh'],
+						'emailkh' => $_POST['emailkh'],
+						'sdtkh' => $_POST['sdtkh'],
+						'dckh' => $_POST['dckh'],
+						'dssp' => json_encode($_SESSION['giohang']),
+						'thanhtien' => $_SESSION['totalp'],
+						'mxn' => $_POST['mxn'],
+						'date' => date("Y-m-d",time()),
+						'thanhtien2' => $thanhtien2,
+						'magg' => $magg,
+						'pmmt' => $_POST['pmmt']
+					];
+				}
+			}
+			else if ($step == "s2") {
+				if (isset($_GET['vnp_SecureHash'])) $this->loadview('payment', ['header' => $this->header, 'server' => $server]);
+				else header("Location: ".urlmd);
+			}
+			else if ($step == "s3") {
+
+			}
+		}
 	}
 
 	public function reset() {
