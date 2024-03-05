@@ -6,7 +6,6 @@
 	<script src="<?php echo plrc.'lib/' ?>js/jquery-3.6.3.js"></script>
 	<script style="text/javascript" src="<?php echo plrc.'lib/' ?>js/popper.min.js"></script>
 	<script style="text/javascript" src="<?php echo plrc.'lib/' ?>js/bootstrap532.min.js"></script>
-	<!-- <script style="text/javascript" src="<?php echo plrc.'lib/' ?>js/bootstrap532.bundle.min.js"></script> -->
 
 	<link href="<?php echo plrc.'lib/' ?>css/fontawesome.css" rel="stylesheet">
 	<link href="<?php echo plrc.'lib/' ?>css/brands.css" rel="stylesheet">
