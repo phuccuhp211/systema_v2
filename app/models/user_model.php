@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\basemodel as BaseM;
 
 class user_model extends BaseM {
+	public function manual() {return $this->getdata("SELECT * FROM hoadon");}
 	public function gbanner() {return $this->getdata("SELECT * FROM banner");}
 	public function layout() {return $this->getdata("SELECT * FROM sections WHERE ido > 0 ORDER BY id ASC");}
 	public function upview_index() {$this->iuddata("UPDATE accessed SET trangchu = trangchu + 1");}

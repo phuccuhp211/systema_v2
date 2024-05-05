@@ -153,6 +153,10 @@ class user_controller extends Base{
 			'sanpham' => $this->umodel->fullsp1()
         ];
 		$this->loadview('index',$data);
+		/*$json = $this->umodel->manual();
+		echo "<br>";
+		echo json_encode($json);
+		echo "</br>";*/
 	}
 
 	public function config() {

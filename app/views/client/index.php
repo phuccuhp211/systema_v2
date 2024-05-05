@@ -25,7 +25,7 @@
                                 <img src=\"{$banner[$i]['img']}\" alt=\"Image $i\" class=\"w-100\">
                                 <div class=\"carousel-caption\">
                                     ".(($banner[$i]['title'] != "") ? "<h3>$banner[$i]['title']</h3>" : "")."
-                                    ".(($banner[$i]['docs'] != "") ? "<p>$banner[$i]['docs']</p>" : "")."
+                                    ".(($banner[$i]['text'] != "") ? "<p>$banner[$i]['text']</p>" : "")."
                                 </div>
                             </div>
                         ";
