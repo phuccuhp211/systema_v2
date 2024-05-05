@@ -7,7 +7,7 @@
 	class dbconfig {
 	    private $servername = "localhost";
 	    private $username = "root";
-	    private $password = "889484";
+	    private $password = "Predator21X";
 	    private $database = "systema_v2";
 	    protected $ketnoi;
 

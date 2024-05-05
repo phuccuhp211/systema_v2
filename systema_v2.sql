@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:4940
--- Generation Time: Jan 22, 2024 at 08:27 PM
+-- Generation Time: May 06, 2024 at 12:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE `accessed` (
 --
 
 INSERT INTO `accessed` (`trangchu`, `trangcon`, `tt`) VALUES
-(1194, 1845, 193885500000);
+(1198, 1853, 193885500000);
 
 -- --------------------------------------------------------
 
@@ -304,7 +304,7 @@ INSERT INTO `product` (`id`, `name`, `img`, `detail`, `mdetail`, `id_type`, `id_
 (8, 'CORE I9 10900', 'http://localhost/public/data/i9.jpg', 'Đây là CPU Intel', '', 4, 1, 5, 14000000, 13500000, '0000-00-00', '0000-00-00', 0, 0, 0),
 (9, 'AMD RX 6900XT', 'http://localhost/public/data/6900.jpg', 'Đây là GPU AMD', '', 4, 2, 1, 25000000, 0, NULL, NULL, 2, 0, 0),
 (10, 'AMD RX 7900XTX', 'http://localhost/public/data/7900.jpg', 'Đây là GPU AMD', '', 4, 2, 1, 30000000, 0, NULL, NULL, 1, 0, 0),
-(11, 'Nvidia RTX 3909TI', 'http://localhost/public/data/3090.jpg', 'Đây là GPU Nvidia', '', 4, 2, 2, 34000000, 0, NULL, NULL, 0, 0, 0),
+(11, 'Nvidia RTX 3909TI', 'http://localhost/public/data/3090.jpg', 'Đây là GPU Nvidia', '', 4, 2, 2, 34000000, 0, NULL, NULL, 1, 0, 0),
 (12, 'Nvidia RTX 4090', 'http://localhost/public/data/4090.jpg', 'Đây là GPU Nvidia', '', 4, 2, 2, 45000000, 0, NULL, NULL, 1, 0, 0),
 (13, 'ASUS Z690 XE', 'http://localhost/public/data/z690.jpg', 'Đây là Mainboard', '', 4, 3, 3, 50000000, 0, NULL, NULL, 1, 0, 0),
 (14, 'MSI X670E MEG', 'http://localhost/public/data/x670.jpg', 'Đây là Mainboard', '', 4, 3, 6, 40000000, 0, NULL, NULL, 0, 0, 1),
@@ -346,6 +346,24 @@ CREATE TABLE `rating` (
 INSERT INTO `rating` (`id`, `idsp`, `stars`, `turn`) VALUES
 (1, 1, 9, 2),
 (2, 31, 8, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sections`
+--
+
+CREATE TABLE `sections` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `poster` text NOT NULL,
+  `ebd_img` text NOT NULL,
+  `id_type` int(11) NOT NULL,
+  `id_cata` int(11) NOT NULL,
+  `ido` int(11) NOT NULL,
+  `ref` varchar(20) NOT NULL,
+  `ord` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -501,6 +519,12 @@ ALTER TABLE `rating`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `sections`
+--
+ALTER TABLE `sections`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `turnrt`
 --
 ALTER TABLE `turnrt`
@@ -569,6 +593,12 @@ ALTER TABLE `product`
 --
 ALTER TABLE `rating`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `sections`
+--
+ALTER TABLE `sections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `turnrt`
