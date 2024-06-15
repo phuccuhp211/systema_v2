@@ -207,7 +207,7 @@ body {
 }
 
 
-.bg-poster {width: 12vw;height: 12vw;background: #bfb1e3ad;border-radius: 10px;display: flex;align-items: center;}
+.bg-poster {width: 12vw;height: 12vw;background: #bfb1e3ad;border-radius: 10px;display: flex;align-items: center;overflow: hidden;}
 
 .bg-poster:hover .anh-poster {
     scale: 1.15;

@@ -15,7 +15,7 @@
     		<div class="col-6 offset-3">
 	    		<div class="outer-box">
 			    	<h3>Trang Không Tồn Tại Hoặc Đã Bị Xóa</h3>
-			    	<a href="<?php echo urlmd ?>">Quay Lại Trang Chủ</a>
+			    	<a href="<?php echo genurl() ?>">Quay Lại Trang Chủ</a>
 			    </div>
 	    	</div>
     	</div>

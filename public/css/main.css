@@ -1,5 +1,10 @@
 *{padding: 0;margin: 0;font-family: Segoe UI, sans-serif; transition: all ease 0.3s;}
 
+.carousel-item {
+    height: 50vh;
+    background: black;
+}
+
 .popup-cart {
     background: white;
     position: absolute;
@@ -107,6 +112,10 @@
 
 .static-ss > * {
     padding: 10px;
+}
+
+.stss-tt {
+    overflow-x: scroll;
 }
 
 .stss-tt button, .stss-ft button {

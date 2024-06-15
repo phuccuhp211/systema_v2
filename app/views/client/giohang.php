@@ -26,11 +26,11 @@
                     foreach ($_SESSION['giohang'] as $value => $item) { ?>
                         <tr class="sanpham" name="sanpham" id="sanpham">
                             <td style="width : 50px;" class="text-center" id="keysp"><?php echo $value ?></td>
-                            <td style="width : 150px;" class="text-center"><img src="<?php echo $item['img'] ?>" alt=""></td>
+                            <td style="width : 150px;" class="text-center"><img src="<?php echo genimg($item['img']) ?>" alt=""></td>
                             <td style="width : auto;"><?php echo $item['name'] ?></td>
                             <td style="width : 150px;" name="giasp" id="giasp">
-                                <?php if ($item['price_sale'] != 0) echo number_format($item['price_sale'],0,'','.');
-                                else echo number_format($item['price'],0,'','.'); ?>
+                                <?php if ($item['price_sale'] != 0) echo gennum($item['price_sale']);
+                                else echo gennum($item['price']); ?>
                             </td>
                             <td style="width : 80px;" class="text-center"><input type="number" min="1" value="<?php echo $item['soluong']; ?>" name="slsp"></td>
                             <td style="width : 150px;" id="thanhtien"></td>
@@ -52,7 +52,7 @@
             </table>
         </div>
         <?php if (isset($_SESSION['giohang']) && count($_SESSION['giohang']) != 0) { ?>
-            <div class="row" id="sanpham" style="margin: 15px 0 0;"><div class="col-4 offset-4"><a href="<?php echo urlmd ?>/thanhtoan/" class="w-100 btn btn-success">Bắt Đầu Thanh Toán</a></div></div>
+            <div class="row" id="sanpham" style="margin: 15px 0 0;"><div class="col-4 offset-4"><a href="<?php echo genurl('thanhtoan') ?>" class="w-100 btn btn-success">Bắt Đầu Thanh Toán</a></div></div>
         <?php } ?>
         <div class="row" style="margin: 15px 0 0;"><div class="col-4 offset-4"><button class="w-100 btn btn-danger delallcart">Xóa Giỏ Hàng</button></div></div>
     </div>

@@ -24,7 +24,7 @@
                         echo $_SESSION['qmkvl'];
                         unset($_SESSION['qmkvl']);
                     } ?>
-                    <form action="<?php echo urlmd ?>/quenmk/" method="POST" enctype="multipart/form-data">
+                    <form action="<?php echo genurl('quenmk') ?>" method="POST" enctype="multipart/form-data">
                         <h3>Lấy lại mật khẩu</h3>
                         <label for="tendn">Tên đăng nhập :</label>
                         <input type="text" name="tendn">

@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-12 text-center">
                         <?php if ($header['nguoidung'][0]['avt'] != "") { ?><img class="user-avt" src="<?php echo $header['nguoidung'][0]['avt'] ?>" alt=""><?php } else { ?>
-                        <img class="user-avt" src="<?php echo plrc.'data/avatar.png' ?>" alt=""> <?php } ?>
+                        <img class="user-avt" src="<?php echo genimg('avatar.png') ?>" alt=""> <?php } ?>
                     </div>
                 </div>
                 <div class="row">
@@ -93,7 +93,7 @@
                                 else {
                                     foreach ($list_hd as $value => $item) { 
                                         $dssp = json_decode($item['dssp'],true);
-                                        $tc = number_format($item['thanhtien'],0,'','.');
+                                        $tc = gennum($item['thanhtien']);
                                     ?>
                                         <table class="mb-5">
                                             <tr>
@@ -109,8 +109,8 @@
                                                 <td class="text-center"><?php echo $item['created']; ?></td>
                                                 <td class="text-center"><?php echo $item['submited']; ?></td>
                                                 <td class="text-center" style="color: red;"><?php 
-                                                    if ($item['thanhtien2'] != 0 ) echo "<span style=\"text-decoration: line-through; margin: 0 15px; color: gray;\">".number_format($item['thanhtien']+20000,0,",",".")."</span>".number_format($item['thanhtien2'],0,",",".");
-                                                    else echo number_format($item['thanhtien']+20000,0,",",".");
+                                                    if ($item['thanhtien2'] != 0 ) echo "<span style=\"text-decoration: line-through; margin: 0 15px; color: gray;\">".gennum($item['thanhtien'])."</span>".gennum($item['thanhtien2']);
+                                                    else echo gennum($item['thanhtien']);
                                                 ?></td>
                                                 <td class="text-center"><?php echo $item['trangthai']; ?></td>
                                                 <td class="text-center"><?php echo $item['pttt']; ?></td>
@@ -129,12 +129,12 @@
                                                     <td colspan="3"><?php echo $item2['name'] ?></td>
                                                     <td>
                                                         <?php 
-                                                            if ($item2['price_sale'] != 0) echo number_format($item2['price_sale'],0,'','.');
-                                                            else echo number_format($item2['price'],0,'','.')
+                                                            if ($item2['price_sale'] != 0) echo gennum($item2['price_sale']);
+                                                            else echo gennum($item2['price'],0,'','.')
                                                         ?>
                                                     </td>
                                                     <td><?php echo $item2['soluong'] ?></td>
-                                                    <td style="color: red;"><?php echo number_format($item2['thanhtien'],0,'','.') ?></td>
+                                                    <td style="color: red;"><?php echo gennum($item2['thanhtien']) ?></td>
                                                 </tr>
                                             <?php } ?>
                                         </table>

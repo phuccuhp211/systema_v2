@@ -10,7 +10,7 @@ class user_model extends BaseM {
 	public function upview_index() {$this->iuddata("UPDATE accessed SET trangchu = trangchu + 1");}
 	public function upview_nonin() {$this->iuddata("UPDATE accessed SET trangcon = trangcon + 1");}
 	public function fullsp1() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 LIMIT 10");}
-	public function cbpc() {return $this->getdata("SELECT * FROM product WHERE id_type = 3 ORDER BY rand() LIMIT 2");}
+	public function cbpc() {return $this->getdata("SELECT * FROM product WHERE id_type = 3 OR id_type = 1 ORDER BY rand() LIMIT 2");}
 	public function spnew() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY id DESC LIMIT 5");}
 	public function sphot() {return $this->getdata("SELECT * FROM product WHERE hidden = 0 ORDER BY viewed DESC LIMIT 5");}
 	public function gethd($name) {return $this->getdata("SELECT * FROM hoadon WHERE name = '$name' ORDER BY id DESC");}
@@ -98,14 +98,18 @@ class user_model extends BaseM {
 		$this->iuddata("UPDATE product SET viewed = viewed + 1 WHERE id = $id");
 		return $this->getdata("SELECT * FROM product WHERE id = $id AND hidden = 0");
 	}
-	public function splay($type=null,$cata=null,$ref,$ord) {
-		if ($ord == 1) $sx = "ORDER BY $ref ASC LIMIT 20";
-		else if ($ord == 2) $sx = "ORDER BY $ref DESC LIMIT 20";
-		else if ($ord == 3) $sx = "ORDER BY $ref RAND() LIMIT 20";
-		if ($type && !$cata) $sql = "SELECT * FROM product WHERE id_type = $type $sx";
-		if (!$type && $cata || $type && $cata) $sql = "SELECT * FROM product WHERE id_cata = $cata $sx";
-		else $sql = "SELECT * FROM product $sx";
-		return $this->getdata($sql);
+	public function splay($type,$cata,$ref,$ord) {
+	    switch ($ord) {
+	        case 1: $sx = "ORDER BY $ref ASC LIMIT 20"; break;
+	        case 2: $sx = "ORDER BY $ref DESC LIMIT 20"; break;
+	        case 3: $sx = "ORDER BY RAND() LIMIT 20"; break;
+	        default: $sx = ""; break;
+	    }
+	    if ($type != 0 && $cata == 0) $sql = "SELECT * FROM product WHERE id_type = $type $sx";
+	    else if ($type != 0 && $cata != 0 ) $sql = "SELECT * FROM product WHERE id_cata = $cata $sx";
+	    else $sql = "SELECT * FROM product $sx";
+
+	    return $this->getdata($sql);
 	}
 	public function dscmt($id) {
 		return $this->getdata("SELECT * FROM comments INNER JOIN user WHERE comments.id_user = user.id AND id_pd = $id ORDER BY date DESC");

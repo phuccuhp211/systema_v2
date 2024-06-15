@@ -24,17 +24,17 @@
 		    	if ($item['price_sale'] != 0) { 
 		    		$sale ="
 		    			<span>"
-		    				.number_format($item['price'],0,",",".")."
+		    				.gennum($item['price'])."
 		    			</span>"
-		    			.number_format($item['price_sale'],0,",",".");
+		    			.gennum($item['price_sale']);
 		    	}
-		    	else { $sale = number_format($item['price']);}
+		    	else { $sale = gennum($item['price']); }
 		    	$chuoisp.= "
 		    	<div class=\"$colums text-center $advl\">
 	                <div class=\"khungsp\">
 	                    <div class=\"khungxam nav-item\">
-	                        <a href=\"".urlmd."/chitiet/".$item['id']."/\" class=\"nav-link\">
-	                        	<img src=\"".$item['img']."\" class=\"anhsp nav-link\" alt=\"\">
+	                        <a href=\"".genurl('chitiet/'.$item['id'])."\" class=\"nav-link\">
+	                        	<img src=\"".genimg($item['img'])."\" class=\"anhsp nav-link\" alt=\"\">
 	                        </a>                               
 	                    </div>                                
 	                    <p class=\"tt tensp\">".$item['name']."</p>
@@ -48,6 +48,7 @@
 		    }
 		    return $chuoisp;
 		}
+
 		public function showsp2($mangsp, $col = null, $advl = '') {
 			$chuoisp = "";
 			$colums = ($col) ? $col : "col-3";
@@ -55,17 +56,17 @@
 		    	if ($item['price_sale'] != 0) { 
 		    		$sale ="
 		    			<span>"
-		    				.number_format($item['price'],0,",",".")."
+		    				.gennum($item['price'])."
 		    			</span>"
-		    			.number_format($item['price_sale'],0,",",".");
+		    			.gennum($item['price_sale']);
 		    	}
-		    	else { $sale = number_format($item['price']);}
+		    	else { $sale = gennum($item['price']);}
 		    	$chuoisp.= "
 		    	<div class=\"$colums text-center $advl\">
 	                <div class=\"khungsp2\">
 	                    <div class=\"khungxam nav-item\">
-	                        <a href=\"".urlmd."/chitiet/".$item['id']."/\" class=\"nav-link\">
-	                        	<img src=\"".$item['img']."\" class=\"anhsp nav-link\" alt=\"\">
+	                        <a href=\"".genurl('chitiet/'.$item['id'])."\" class=\"nav-link\">
+	                        	<img src=\"".genimg($item['img'])."\" class=\"anhsp nav-link\" alt=\"\">
 	                        </a>                               
 	                    </div>                                
 	                    <p class=\"tt tensp\">".$item['name']."</p>

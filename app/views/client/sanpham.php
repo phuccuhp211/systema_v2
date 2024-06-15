@@ -19,14 +19,14 @@
                         <div class="menu-khungboc">
                             <?php foreach ($header['phanloai'] as $value => $item) { ?>
                                 <div class="list-cap1">
-                                    <a href="<?php echo urlmd.'/sanpham/phanloai/'.$item['id'].'/' ?>"><?php echo ucwords($item['name']) ?></a>
+                                    <a href="<?php echo genurl("sanpham/phanloai/".$item['id']) ?>"><?php echo ucwords($item['name']) ?></a>
                                     <?php foreach ($header['danhmuc'] as $value2 => $item2) {
                                         if ($item['id'] == $item2['loai']) { ?>
                                             <button class="show-list-btn">+</button>
                                             <div class="list-cap2">
                                                 <ul>
                                                     <?php foreach ($header['danhmuc'] as $value3 => $item3) {
-                                                        if ($item['id'] == $item3['loai']) echo "<li><a href=\"".urlmd."/sanpham/danhmuc/".$item3['id']."/\">".strtoupper($item3['name'])."</a></li>";
+                                                        if ($item['id'] == $item3['loai']) echo "<li><a href=\"".genurl("sanpham/danhmuc/".$item3['id'])."\">".strtoupper($item3['name'])."</a></li>";
                                                     } ?>
                                                 </ul>
                                             </div>

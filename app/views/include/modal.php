@@ -2,7 +2,7 @@
         <div class="bg-dndk hide-bg-dndk">
             <div class="dndk">
                 <h2 class="text-center">Đăng Nhập</h2>
-                <form action="<?php echo urlmd; ?>/login/" method="POST" enctype="multipart/form-data">
+                <form action="<?php echo genurl('login') ?>" method="POST" enctype="multipart/form-data">
                     <div class="field-add">
                         <label>Tài Khoản :</label>
                         <input type="text" name="user">
@@ -11,7 +11,7 @@
                         <label>Mật Khẩu :</label>
                         <input type="password" name="pass">
                     </div>
-                    <div class="field-add"><a href="<?php echo urlmd ?>/quenmk/" class="a-quenmk">Quên mật khẩu ?</a></div>
+                    <div class="field-add"><a href="<?php echo genurl('quenmk') ?>" class="a-quenmk">Quên mật khẩu ?</a></div>
                     <div class="field-add">
                         <button class="btn btn-success" type="submit">Đăng Nhập</button>
                     </div>
@@ -27,7 +27,7 @@
         <div class="bg-dndk2 hide-bg-dndk2">
             <div class="dndk2">
                 <h2 class="text-center">Đăng Ký</h2>
-                <form action="<?php echo urlmd; ?>/regis/" method="POST" enctype="multipart/form-data">
+                <form action="<?php echo genurl('regis'); ?>" method="POST" enctype="multipart/form-data">
                     <div class="field-add">
                         <label>Tài Khoản :</label>
                         <input type="text" name="user">

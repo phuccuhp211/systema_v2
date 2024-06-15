@@ -445,21 +445,32 @@ class admin_controller extends Base {
 			$info = $_POST['info'];
 			$infoct = $_POST['detail'];
 			$checksp = $this->amodel->checksp($name);
+			if ($catalog == null) $catalog = null;
+
 
 			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên sản phẩm !<br>";
 			if (isset($checksp[0])) $_SESSION['error_log'] .= "sản phẩm đã tồn tại !<br>";
 			if ($price == "") $_SESSION['error_log'] .= "Không để trống giá sản phẩm !<br>";
-			if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
+			if ($brand == "") $_SESSION['error_log'] .= "Không để hãng sản phẩm !<br>";
+			if ($catalog == "" || $pdtype == "") $_SESSION['error_log'] .= "Vui lòng chọn đầy đủ Danh Mục và Phân Loại !<br>";
 			if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
 
-			if ($pdtype == 3) {
-				if ($infoct == "") $_SESSION['errlog'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
+			if ($pdtype == 3 || $pdtype == 1) {
+				if ($infoct == "") $_SESSION['error_log'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
 				else  {
-					preg_match('/(.*?)<p>end_info_pc<\/p>(.*?)/s', $infoct, $matches);
-					$cbpc = json_encode([
-						'doan1' => htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
-						'doan2' => htmlspecialchars($matches[1])
-					]);
+					$infoct = preg_replace('/\r\n|\r|\n/', '', $infoct);
+			        $infoct = preg_replace('/\s+/', ' ', $infoct);
+			        
+			        preg_match('/(.*?)<p>end_info_pc<\/p>(.*)/s', $infoct, $matches);
+			        
+			        if (isset($matches[1]) && isset($matches[2])) {
+			            $cbpc = json_encode([
+			                'doan1' => htmlspecialchars(trim($matches[1])),
+			                'doan2' => htmlspecialchars(trim($matches[2]))
+			            ]);
+			        } else {
+			            $_SESSION['error_log'] .= "Lỗi xử lý thông tin cấu hình và chi tiết !<br>";
+			        }
 				}
 			}
 
@@ -476,8 +487,8 @@ class admin_controller extends Base {
 
 			if (!isset($_SESSION['error_log'])) {
 				move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-				if ($pdtype == !3) $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
-				else $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+				if ($pdtype == 3 || $pdtype == 1) $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+				else $this->amodel->addpro($name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
 			}
 			header('Location: ' .urlmd. '/manager/qlsp/');
 		    exit();
@@ -494,24 +505,33 @@ class admin_controller extends Base {
 			$brand = $_POST['brand'];
 			$info = $_POST['info'];
 			$infoct = $_POST['detail'];
+			if ($catalog == null) $catalog = null;
+
 
 			if ($name == "") $_SESSION['error_log'] .= "Không để trống tên sản phẩm !<br>";
 			if ($price == "") $_SESSION['error_log'] .= "Không để trống giá sản phẩm !<br>";
-			if ($catalog == "" || $brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
+			if ($brand == "") $_SESSION['error_log'] .= "Không để trống danh mục hoặc hãng sản phẩm !<br>";
+			if ($catalog == "" || $pdtype == "") $_SESSION['error_log'] .= "Vui lòng chọn đầy đủ Danh Mục và Phân Loại !<br>";
 			if ($info == "") $_SESSION['error_log'] .= "Không để trống mô tả sản phẩm !<br>";
 
-			if ($pdtype == 3) {
-					if ($infoct == "") $_SESSION['errlog'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
-					else  {
-						preg_match('/(.*?)<p>end_info_pc<\/p>(.*?)/s', $infoct, $matches);
-						$matches[0] = str_replace(["\n", "\r"], "",$matches[0]);
-						$matches[1] = str_replace(["\n", "\r"], "",$matches[1]);
-						$cbpc = json_encode([
-							htmlspecialchars(str_replace('<p>end_info_pc</p>','',$matches[0])),
-							htmlspecialchars($matches[1])
-						]);
-					}
+			if ($pdtype == 3 || $pdtype == 1) {
+				if ($infoct == "") $_SESSION['error_log'] .= "Vui lòng nhập cấu hình và mã của máy !<br>";
+				else  {
+					$infoct = preg_replace('/\r\n|\r|\n/', '', $infoct);
+			        $infoct = preg_replace('/\s+/', ' ', $infoct);
+			        
+			        preg_match('/(.*?)<p>end_info_pc<\/p>(.*)/s', $infoct, $matches);
+			        
+			        if (isset($matches[1]) && isset($matches[2])) {
+			            $cbpc = json_encode([
+			                'doan1' => htmlspecialchars(trim($matches[1])),
+			                'doan2' => htmlspecialchars(trim($matches[2]))
+			            ]);
+			        } else {
+			            $_SESSION['error_log'] .= "Lỗi xử lý thông tin cấu hình và chi tiết !<br>";
+			        }
 				}
+			}
 
 			if (isset($_FILES['img']) && $_FILES['img']['name'] != '') {
 				$duongdan = urlmd . "/public/data/" . basename($_FILES["img"]["name"]);
@@ -527,8 +547,8 @@ class admin_controller extends Base {
 
 				if (!isset($_SESSION['error_log'])) {
 					move_uploaded_file($_FILES["img"]["tmp_name"], $duongdan_2nd);
-					if ($pdtype == !3) $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
-					else $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+					if ($pdtype == 3 || $pdtype == 1) $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+					else $this->amodel->fixpro($id,$name,$duongdan,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
 				}
 				header('Location: ' .urlmd. '/manager/qlsp/');
 			    exit();
@@ -537,12 +557,13 @@ class admin_controller extends Base {
 			else {
 				$img_cu = $_POST['old_img'];
 				if (!isset($_SESSION['error_log'])) {
-					if ($pdtype == !3) $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
-					else $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+					if ($pdtype == 3 || $pdtype == 1) $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,$cbpc);
+					else $this->amodel->fixpro($id,$name,$img_cu,$price,$sale,$salef,$salet,$pdtype,$catalog,$brand,$info,htmlspecialchars($infoct));
 				}
 				header('Location: ' .urlmd. '/manager/qlsp/');
 			    exit();
 			}
+			//var_dump($cbpc);
 		}
 		else if ($rq == "del") {
 			$this->amodel->delpro($id);

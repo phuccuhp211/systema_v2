@@ -16,7 +16,7 @@
             <div class="row phan-tt-tren">
                 <div class="col-12 col-md-6 col-lg-6">
                     <div class="khunganh-sp">
-                        <img src="<?php echo $chitiet[0]['img'] ?>" class="anh-sp" alt="">
+                        <img src="<?php echo genimg($chitiet[0]['img']) ?>" class="anh-sp" alt="">
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-6">
@@ -48,12 +48,14 @@
                     <div class="col-12 khungttct-sp">
                         <h2>THÔNG TIN CHI TIẾT</h2>
                         <div class="ttct-sp">
-                            <?php 
-                                if($chitiet[0]['id_type'] != 3) echo htmlspecialchars_decode($chitiet[0]['mdetail']);
-                                else {
+                            <?php
+                                if($chitiet[0]['id_type'] == 3 || $chitiet[0]['id_type'] == 1) {
                                     $asd = $chitiet[0]['mdetail'];
-                                    $qwe = json_decode(stripslashes($chitiet[0]['mdetail']));
-                                    echo htmlspecialchars_decode($qwe[1]);
+                                    $qwe = json_decode(stripslashes($asd),true);
+                                    echo htmlspecialchars_decode($qwe['doan2']);
+                                }
+                                else {
+                                    echo htmlspecialchars_decode($chitiet[0]['mdetail']);
                                 }
                             ?>
                             <button class="more-less">Xem thêm</button>                         

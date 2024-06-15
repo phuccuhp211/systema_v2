@@ -94,7 +94,7 @@
                     <?php if (isset($_SESSION['giohang'])) { foreach ($_SESSION['giohang'] as $value => $item) {?>
                     <div class="sp-giohang">
                         <div class="col-2 anh-giohang">
-                            <img src="<?php echo $item['img'] ?>" class="hinhsp-giohang" alt="">
+                            <img src="<?php echo genimg($item['img']) ?>" class="hinhsp-giohang" alt="">
                         </div>
                         <div class="col-7 chu-giohang">
                             <p class="p-tt-giohang tensp-nho"><?php echo $item['name'] ?></p>
@@ -102,7 +102,7 @@
                         </div>
                         <div class="col-3 gia-giohang">
                             <p class="p-sl-giohang">Số lượng : <?php echo $item['soluong'] ?></p>
-                            <p class="p-gia-giohanh"><?php echo number_format($item['thanhtien'],0,'','.') ?> đ</p>
+                            <p class="p-gia-giohanh"><?php echo gennum($item['thanhtien']) ?> đ</p>
                         </div>
                     </div><hr class="hr">
                     <?php }} ?>
@@ -117,7 +117,7 @@
                         <div class="col-12">
                             <div>
                                 <p class="p-thanhtoan">tạm tính :</p>
-                                <p class="p-gia" id="giagoc"><?php echo number_format($_SESSION['totalp'],0,'','.') ?></p>
+                                <p class="p-gia" id="giagoc"><?php echo gennum($_SESSION['totalp']) ?></p>
                             </div>
                             <div class="giamgia hide-gg">
                                 <p class="p-thanhtoan" id="stt-gg" trangtrai="">ưu đãi :</p>
@@ -129,7 +129,7 @@
                             </div>
                             <div class="div-tongcong">
                                 <p class="p-thanhtoan">tổng cộng :</p>
-                                <p class="p-gia tongcong" id="tongtien"><?php echo number_format($_SESSION['totalp']+20000,0,'','.') ?></p>
+                                <p class="p-gia tongcong" id="tongtien"><?php echo gennum($_SESSION['totalp']+20000) ?></p>
                             </div>
                             <div>
                                 <button class="btn nutsp thanhtoansp" id="thanhtoansp">Hoàn Tất Thanh Toán</button>

@@ -22,7 +22,7 @@
                     <?php for ($i = 0; $i < count($banner); $i++) { 
                         echo "
                             <div class=\"carousel-item " . (($i == 0) ? "active" : "") . "\">
-                                <img src=\"{$banner[$i]['img']}\" alt=\"Image $i\" class=\"w-100\">
+                                <img src=\"".genimg($banner[$i]['img'])."\" alt=\"Image $i\" class=\"w-100\">
                                 <div class=\"carousel-caption\">
                                     ".(($banner[$i]['title'] != "") ? "<h3>$banner[$i]['title']</h3>" : "")."
                                     ".(($banner[$i]['text'] != "") ? "<p>$banner[$i]['text']</p>" : "")."
@@ -48,18 +48,18 @@
             <div class="row">
                 <?php foreach($cbpc as $value => $item) { ?>
                     <div class=" col-lg-6 poster_item">
-                        <div class="khung-poster" style="background: url(<?php echo urlmd.'/public/data/rd'.rand(1,4).'.jpg'; ?>) bottom; background-size: cover ;">
+                        <div class="khung-poster" style="background: url(<?php echo genimg('rd'.rand(1,4).'.jpg') ?>) bottom; background-size: cover ;">
                             <div class="bg-poster">
-                                <img src="<?php echo $item['img'] ?>" class="anh-poster" alt="">
+                                <img src="<?php echo genimg($item['img']) ?>" class="anh-poster" alt="">
                             </div>
                             
                             <div class="chu-poster">
                                 <?php 
                                     $asd = $item['mdetail'];
-                                    $qwe = json_decode(stripslashes($asd));
-                                    echo htmlspecialchars_decode($qwe[0]);
+                                    $qwe = json_decode(stripslashes($asd),true);
+                                    echo htmlspecialchars_decode($qwe['doan1']);
                                 ?>
-                                <a href="<?php echo urlmd.'/sanpham/chitiet='.$item['id']."/" ?>" class="btn btn-outline-light">Xem thêm &raquo;</a>
+                                <a href="<?php echo genurl('chitiet/'.$item['id']) ?>" class="btn btn-outline-light">Xem thêm &raquo;</a>
                             </div>
                         </div>                    
                     </div>
@@ -74,7 +74,7 @@
                     if ($item['tieude']['ebd_img']== "") echo "<h2 class=\"tieude\">".$item['tieude']['name']."</h2>";
                     if ($item['tieude']['ebd_img']!= "") echo "<h2 class=\"tieude td-trans\">".$item['tieude']['name']."</h2>";
 
-                    if ($item['tieude']['poster'] != "") echo "<div class=\"ss-poster\"><img src=\"".$item['tieude']['poster']."\" alt=\"\"></div>";
+                    if ($item['tieude']['poster'] != "") echo "<div class=\"ss-poster\"><img src=\"".genimg($item['tieude']['poster'])."\" alt=\"\"></div>";
 
                     if ($item['tieude']['ebd_img']== "") {
                         echo "
@@ -93,7 +93,7 @@
                         echo "
                             <div class=\"row\">
                                 <div>
-                                    <div class=\"ebd_img\" style=\"background: url(".$item['tieude']['ebd_img'].") bottom; background-size:cover;\">
+                                    <div class=\"ebd_img\" style=\"background: url(".genimg($item['tieude']['ebd_img']).") bottom; background-size:cover;\">
                                         <button class=\"click-pn click-prev\"><i class=\"fa-solid fa-arrow-left\"></i></button>
                                         ".$this->showsp2($item['sanpham'],'col-3','ss-1')."
                                         <button class=\"click-pn click-next\"><i class=\"fa-solid fa-arrow-right\"></i></button>
@@ -121,7 +121,7 @@
                 <div class="row stss-list">
                     <?php echo $this->showsp($sanpham,'col-20pt') ?>
                 </div>
-                <a href="<?php echo urlmd.'/sanpham/tatca' ?>" class="view-all stss-va">Xem Tất Cả</a></div>
+                <a href="<?php echo genurl('sanpham/tatca') ?>" class="view-all stss-va">Xem Tất Cả</a></div>
             </div>
         </div>   
     </div>
