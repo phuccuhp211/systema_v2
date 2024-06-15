@@ -107,7 +107,6 @@ class user_model extends BaseM {
 		else $sql = "SELECT * FROM product $sx";
 		return $this->getdata($sql);
 	}
-
 	public function dscmt($id) {
 		return $this->getdata("SELECT * FROM comments INNER JOIN user WHERE comments.id_user = user.id AND id_pd = $id ORDER BY date DESC");
 	}

@@ -860,9 +860,6 @@ class user_controller extends Base{
 		    unset($_SESSION['user_temp']);
 		    $this->reset();
 		}
-			
-
-			
 	}
 
 	public function pmrs($server,$step) {

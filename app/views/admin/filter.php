@@ -1,24 +1,24 @@
-					<div class="boloc">
-						<?php if ($_SESSION['mng'] == 'qlsp') { ?>
-							<button class="btn-boloc" data="sanpham" boloc="1">Tất Cả</button>
-							<button class="btn-boloc" data="sanpham" boloc="2">Sản Phẩm Bán Chạy</button>
-							<button class="btn-boloc" data="sanpham" boloc="3">Nhiều Lượt Xem</button>
-							<button class="btn-boloc" data="sanpham" boloc="4">Đang Sale</button>
-							<button class="btn-boloc" data="sanpham" boloc="5">Đã Ẩn</button>
-						<?php } ?>
-						<?php if ($_SESSION['mng'] == 'qlus') { ?>
-							<button class="btn-boloc" data="taikhoan" boloc="1">Tất Cả</button>
-							<button class="btn-boloc" data="taikhoan" boloc="2">TK Bị khóa</button>
-							<button class="btn-boloc" data="taikhoan" boloc="3">TK Không khóa</button>
-							<button class="btn-boloc" data="taikhoan" boloc="4">TK User</button>
-							<button class="btn-boloc" data="taikhoan" boloc="5">TK Admin</button>
-						<?php } ?>
-						<?php if ($_SESSION['mng'] == 'hddh') { ?>
-							<button class="btn-boloc" data="hoadon" boloc="1">Tất Cả</button>
-							<button class="btn-boloc" data="hoadon" boloc="2">Hóa đơn mới</button>
-							<button class="btn-boloc" data="hoadon" boloc="3">Đang Chuẩn Bị</button>
-							<button class="btn-boloc" data="hoadon" boloc="4">Đang Giao</button>
-							<button class="btn-boloc" data="hoadon" boloc="5">Hoàn Thành</button>
-							<button class="btn-boloc" data="hoadon" boloc="6">Đã Hủy</button>
-						<?php } ?>
-					</div>
+<div class="boloc">
+	<?php if ($_SESSION['mng'] == 'qlsp') { ?>
+		<button class="btn-boloc" data="sanpham" boloc="1">Tất Cả</button>
+		<button class="btn-boloc" data="sanpham" boloc="2">Sản Phẩm Bán Chạy</button>
+		<button class="btn-boloc" data="sanpham" boloc="3">Nhiều Lượt Xem</button>
+		<button class="btn-boloc" data="sanpham" boloc="4">Đang Sale</button>
+		<button class="btn-boloc" data="sanpham" boloc="5">Đã Ẩn</button>
+	<?php } ?>
+	<?php if ($_SESSION['mng'] == 'qlus') { ?>
+		<button class="btn-boloc" data="taikhoan" boloc="1">Tất Cả</button>
+		<button class="btn-boloc" data="taikhoan" boloc="2">TK Bị khóa</button>
+		<button class="btn-boloc" data="taikhoan" boloc="3">TK Không khóa</button>
+		<button class="btn-boloc" data="taikhoan" boloc="4">TK User</button>
+		<button class="btn-boloc" data="taikhoan" boloc="5">TK Admin</button>
+	<?php } ?>
+	<?php if ($_SESSION['mng'] == 'hddh') { ?>
+		<button class="btn-boloc" data="hoadon" boloc="1">Tất Cả</button>
+		<button class="btn-boloc" data="hoadon" boloc="2">Hóa đơn mới</button>
+		<button class="btn-boloc" data="hoadon" boloc="3">Đang Chuẩn Bị</button>
+		<button class="btn-boloc" data="hoadon" boloc="4">Đang Giao</button>
+		<button class="btn-boloc" data="hoadon" boloc="5">Hoàn Thành</button>
+		<button class="btn-boloc" data="hoadon" boloc="6">Đã Hủy</button>
+	<?php } ?>
+</div>
