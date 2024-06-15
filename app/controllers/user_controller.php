@@ -292,117 +292,125 @@ class user_controller extends Base{
 	}
 
 	public function addcart() {
-		$id = $_POST['idsp'];
+	    $id = $_POST['idsp'];
+	    $sanpham = $this->umodel->spcart($id);
+	   
+	    unset($sanpham[0]['id_type'], $sanpham[0]['id_cata'], $sanpham[0]['id_brand'], $sanpham[0]['mdetail'], $sanpham[0]['viewed'], $sanpham[0]['hidden'], $sanpham[0]['saled']);
+	    
+	    $sanpham[0]['soluong'] = isset($_POST['slsp']) ? $_POST['slsp'] : 1;
+	    $sanpham[0]['thanhtien'] = $sanpham[0]['price_sale'] != 0 ? $sanpham[0]['price_sale'] * $sanpham[0]['soluong'] : $sanpham[0]['price'] * $sanpham[0]['soluong'];
+	    if (!isset($_SESSION['giohang'])) $_SESSION['giohang'] = ['dssp' => [], 'tong' => 0];
 
-		$sanpham = $this->umodel->spcart($id);
-		unset($sanpham[0]['mdetail']);
+	    $trunglap = false;
 
-
-		if (isset($_POST['slsp'])) $sanpham[0]['soluong'] = $_POST['slsp'];
-		else $sanpham[0]['soluong'] = 1;
-		
-		if ($sanpham[0]['price_sale'] != 0) $sanpham[0]['thanhtien'] = $sanpham[0]['price_sale'] * $sanpham[0]['soluong'];
-		else $sanpham[0]['thanhtien'] = $sanpham[0]['price'] * $sanpham[0]['soluong'];
-		
-		if (isset($_SESSION['giohang'])) {
-			if (count($_SESSION['giohang']) == 0)  array_push($_SESSION['giohang'], $sanpham[0]);
-			else {
-				$trunglap = false;
-				foreach ($_SESSION['giohang'] as $value => $item) {
-					if ($item['id'] == $id ) { 
-						$_SESSION['giohang'][$value]['soluong'] += $sanpham[0]['soluong'];
-						$trunglap = true;
-						break;
-					}
-				}
-				if (!$trunglap) array_push($_SESSION['giohang'], $sanpham[0]);
-			}
-			$_SESSION['totalp'] += $sanpham[0]['thanhtien'];
-		}
-		else {
-			$_SESSION['giohang'] = [];
-			$_SESSION['totalp'] = 0;
-			
-			array_push($_SESSION['giohang'], $sanpham[0]);
-			$_SESSION['totalp'] += $sanpham[0]['thanhtien'];
-		}
+	    foreach ($_SESSION['giohang']['dssp'] as $value => $item) {
+	        if ($item['id'] == $id) {
+	            $_SESSION['giohang']['dssp'][$value]['soluong'] += $sanpham[0]['soluong'];
+	            $_SESSION['giohang']['dssp'][$value]['thanhtien'] += $sanpham[0]['thanhtien'];
+	            $trunglap = true;
+	            break;
+	        }
+	    }
+	    if (!$trunglap) $_SESSION['giohang']['dssp'][] = $sanpham[0];
+	    $_SESSION['giohang']['tong'] += $sanpham[0]['thanhtien'];
+	    $this->total();
+	    var_dump($_SESSION['giohang']);
 	}
 
 	public function delcart() {
-		$key = $_POST['delspcart'];
-		unset($_SESSION['giohang'][$key]);
-		$this->loadview('giohang', ['header' => $this->header]);
+	    $key = $_POST['delspcart'];
+	    if (isset($_SESSION['giohang']['dssp'][$key])) {
+	        $_SESSION['giohang']['tong'] -= $_SESSION['giohang']['dssp'][$key]['thanhtien'];
+	        unset($_SESSION['giohang']['dssp'][$key]);
+	    }
+	    $this->loadview('giohang', ['header' => $this->header]);
 	}
 
 	public function delallcart() {
-		$_SESSION['giohang'] = [];
-		$_SESSION['totalp'] = 0;
-		if(isset($_SESSION['udone'])) {
-			$nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
-			$this->umodel->update_cart($nguoidung[0]['id'],'');
-		}
-		$this->loadview('giohang', ['header' => $this->header]);
+	    $_SESSION['giohang'] = ['dssp' => [], 'tong' => 0];
+	    if (isset($_SESSION['udone'])) {
+	        $nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
+	        $this->umodel->update_cart($nguoidung[0]['id'], '');
+	    }
+	    $this->loadview('giohang', ['header' => $this->header]);
 	}
 
 	public function muangay($id) {
-		$this->umodel->upview_nonin();
-		$sanpham = $this->umodel->spcart($id);
-		unset($sanpham[0]['mdetail']);
+	    $this->umodel->upview_nonin();
+	    $sanpham = $this->umodel->spcart($id);
+	    unset($sanpham[0]['id_type'], $sanpham[0]['id_cata'], $sanpham[0]['id_brand'], $sanpham[0]['mdetail'], $sanpham[0]['viewed'], $sanpham[0]['hidden'], $sanpham[0]['saled']);
 
-		if (isset($_POST['slsp'])) $sanpham[0]['soluong'] = $_POST['slsp'];
-		else $sanpham[0]['soluong'] = 1;
-		
-		if ($sanpham[0]['price_sale'] != 0) $sanpham[0]['thanhtien'] = $sanpham[0]['price_sale'] * $sanpham[0]['soluong'];
-		else $sanpham[0]['thanhtien'] = $sanpham[0]['price'] * $sanpham[0]['soluong'];
-		
-		if (!isset($_SESSION['giohang'])) {
-			$_SESSION['giohang'] = [];
-			$_SESSION['totalp'] = 0;
-			array_push($_SESSION['giohang'], $sanpham[0]);
-			$_SESSION['totalp'] += $sanpham[0]['thanhtien'];
-		}
-		else {
-			if (count($_SESSION['giohang']) == 0) {
-				array_push($_SESSION['giohang'], $sanpham[0]);
-			}  
-			else {
-				$trunglap = false;
-				foreach ($_SESSION['giohang'] as $value => $item) {
-					if ($item['id'] == $id ) { 
-						$_SESSION['giohang'][$value]['soluong'] += $sanpham[0]['soluong'];
-						$trunglap = true;
-						break;
-					}
-				}
-				if (!$trunglap) array_push($_SESSION['giohang'], $sanpham[0]);
-			}
-			$_SESSION['totalp'] += $sanpham[0]['thanhtien'];
-		}
+	    $sanpham[0]['soluong'] = isset($_POST['slsp']) ? $_POST['slsp'] : 1;
+	    $sanpham[0]['thanhtien'] = $sanpham[0]['price_sale'] != 0 ? $sanpham[0]['price_sale'] * $sanpham[0]['soluong'] : $sanpham[0]['price'] * $sanpham[0]['soluong'];
 
-		if (!isset($_POST['slsp'])) header("Location: ".urlmd."/thanhtoan/");
+	    if (!isset($_SESSION['giohang'])) {
+	        $_SESSION['giohang'] = ['dssp' => [], 'tong' => 0];
+	    }
+
+	    $trunglap = false;
+	    foreach ($_SESSION['giohang']['dssp'] as $value => $item) {
+	        if ($item['id'] == $id) {
+	            $_SESSION['giohang']['dssp'][$value]['soluong'] += $sanpham[0]['soluong'];
+	            $trunglap = true;
+	            break;
+	        }
+	    }
+
+	    if (!$trunglap) {
+	        $_SESSION['giohang']['dssp'][] = $sanpham[0];
+	    }
+
+	    $_SESSION['giohang']['tong'] += $sanpham[0]['thanhtien'];
+
+	    $this->total();
+
+	    if (!isset($_POST['slsp'])) {
+	        header("Location: " . urlmd . "/thanhtoan/");
+	    }
 	}
 
 	public function updatecart() {
-		if (isset($_POST['quantity']) && isset($_POST['keysp']) && isset($_POST['total'])) {
-			$soluong = $_POST['quantity'];
-			$keysp = $_POST['keysp'];
-			$total = $_POST['total'];
-			$_SESSION['giohang'][$keysp]['soluong'] = $soluong;
-			$_SESSION['giohang'][$keysp]['thanhtien'] = $total;
-			echo $keysp."  ".$soluong;
-		}
-		if (isset($_POST['totalp'])) {
-			$_SESSION['totalp'] = (int)$_POST['totalp'];
-			echo $_SESSION['totalp'];
-		}
-		if(isset($_SESSION['udone'])) {
-			$nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
-			$this->umodel->update_cart($nguoidung[0]['id'],json_encode($_SESSION['giohang']));
-		}
-		echo "<pre>";
-		var_dump($_SESSION['giohang']);
-		echo "</pre>";
+		$keysp = $_POST['id'];
+		$soluong = $_POST['num'];
+
+		foreach ($_SESSION['giohang']['dssp'] as $value => &$item) {
+            if ($item['id'] == $keysp) {
+                $item['soluong'] = $soluong;
+                $item = $this->cal_price($item);
+                break;
+            }
+        }
+
+        $this->total();
+
+	    if (isset($_SESSION['udone'])) {
+	        $nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
+	        $this->umodel->update_cart($nguoidung[0]['id'], json_encode($_SESSION['giohang']));
+	    }
+
+	    echo "<pre>";
+	    var_dump($_SESSION['giohang']);
+	    echo "</pre>";
 	}
+
+	public function total() {
+        $total = 0;
+        foreach ($_SESSION['giohang']['dssp'] as $value => $item) {
+            $item = $this->cal_price($item);
+            $total += $item['thanhtien'];
+        }
+        $_SESSION['giohang']['tong'] = $total;
+    }
+
+    public function cal_price($prod) {
+        $now = new DateTime();
+	    $f_date = isset($prod['from_date']) ? new DateTime($prod['from_date']) : null;
+	    $t_date = isset($prod['to_date']) ? new DateTime($prod['to_date']) : null;
+        if ($f_date == null && $t_date == null ) $prod['thanhtien'] = (($prod['price_sale'] != 0) ? $prod['soluong'] * $prod['price_sale'] : $prod['soluong'] * $prod['price']);
+        else if ($f_date > $now || $t_date < $now) $prod['thanhtien'] = $prod['soluong'] * $prod['price'];
+        else $prod['thanhtien'] = $prod['soluong'] * $prod['price_sale'];
+        return $prod;
+    }
 
 	public function ktbh() {
 		if (isset($_POST['mahd'])) {
@@ -723,7 +731,7 @@ class user_controller extends Base{
 			$sdtkh = $_POST['sdtkh'];
 			$dckh = $_POST['dckh'];
 			$dssp = json_encode($_SESSION['giohang']);
-			$thanhtien = $_SESSION['totalp'];
+			$thanhtien = $_SESSION['giohang']['tong'];
 			$mxn = $_POST['mxn'];
 			$date = date("Y-m-d",time());
 			$thanhtien2 = "";
@@ -771,7 +779,7 @@ class user_controller extends Base{
 		$checkhd = $this->umodel->kthd($mxn);
 		if(!isset($checkhd[0])) {
 			if (isset($_POST['newtt']) || isset($_SESSION['user_temp']['thanhtien2']) && $_SESSION['user_temp']['thanhtien2'] > 0) {
-				$giagoc = intval($_SESSION['totalp'] ? $_SESSION['totalp'] : $_SESSION['user_temp']['thanhtien']);
+				$giagoc = intval($_SESSION['giohang']['tong'] ? $_SESSION['giohang']['tong'] : $_SESSION['user_temp']['thanhtien']);
 				$giamoi = intval(isset($_POST['newtt']) ? $_POST['newtt'] : $_SESSION['user_temp']['thanhtien2']);
 				$giagiam = $giagoc - $giamoi + 20000;
 				$thanhtien = intval(isset($_POST['newtt']) ? $_POST['newtt'] : $_SESSION['user_temp']['thanhtien2']);
@@ -793,7 +801,7 @@ class user_controller extends Base{
 				$this->umodel->divineMGG(isset($_POST['magg']) ? $_POST['magg'] : $_SESSION['user_temp']['magg']);
 			}
 			else {
-				$thanhtien = $_SESSION['totalp'] ? $_SESSION['totalp'] : $_SESSION['user_temp']['thanhtien'];
+				$thanhtien = $_SESSION['giohang']['tong'] ? $_SESSION['giohang']['tong'] : $_SESSION['user_temp']['thanhtien'];
 				$tongket = "
 						<tr style=\"color: white; background: #927ec4;\">
 						    <td style=\"border: 1px solid black; padding:3px; font-size: 20px; text-align: center;\" colspan=\"3\">Tổng Cộng :</td>
@@ -819,7 +827,7 @@ class user_controller extends Base{
 			            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Số lượng</th>
 			            <th style=\"border: 1px solid black; text-align: center; padding: 5px 0; font-size: 18px;\">Thành tiền</th>
 			        </tr>";
-					foreach ($_SESSION['giohang'] ? $_SESSION['giohang'] : json_decode($_SESSION['user_temp']['dssp'],true) as $value => $item) {
+					foreach ($_SESSION['giohang'] ? $_SESSION['giohang']['dssp'] : json_decode($_SESSION['user_temp']['dssp'],true) as $value => $item) {
 					    $noidung .= "<tr>
 					        <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 50px; text-align: center;\">". $value+1 ."</td>
 					        <td style=\"padding: 3px 5px; font-size: 15px; border: 1px solid black; width: 400px\">". $item['name'] ."</td>
@@ -829,7 +837,7 @@ class user_controller extends Base{
 					}
 					$noidung .= 
 					"<tr>
-					    <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 50px; text-align: center;\">". (count($_SESSION['giohang'])+1) ."</td>
+					    <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 50px; text-align: center;\">". (count($_SESSION['giohang']['dssp'])+1) ."</td>
 					    <td style=\"padding: 3px 5px; font-size: 15px; border: 1px solid black; width: 400px\">Phí vận chuyển</td>
 					    <td style=\"padding: 3px; font-size: 15px; border: 1px solid black; width: 100px; text-align: center;\">X</td>
 					    <td style=\"padding: 3px 10px; font-size: 15px; border: 1px solid black; width: 150px; text-align: right;\">20.000</td>
@@ -878,7 +886,7 @@ class user_controller extends Base{
 						'sdtkh' => $_POST['sdtkh'],
 						'dckh' => $_POST['dckh'],
 						'dssp' => json_encode($_SESSION['giohang']),
-						'thanhtien' => $_SESSION['totalp'],
+						'thanhtien' => $_SESSION['giohang']['tong'],
 						'mxn' => $_POST['mxn'],
 						'date' => date("Y-m-d",time()),
 						'thanhtien2' => $thanhtien2,
@@ -899,7 +907,6 @@ class user_controller extends Base{
 
 	public function reset() {
 		unset($_SESSION['giohang']);
-		unset($_SESSION['totalp']);
 		if(isset($_SESSION['udone'])) {
 			$nguoidung = $this->umodel->getuser($_SESSION['phiennguoidung']);
 			$this->umodel->update_cart($nguoidung[0]['id'],'');
@@ -935,7 +942,7 @@ class user_controller extends Base{
 						else {
 							unset($_SESSION['dndk_err']);
 							if($item['storage'] != '') $_SESSION['giohang'] = json_decode($item['storage'],true);
-							else if (isset($_SESSION['giohang'])) $this->umodel->update_cart($item['id'],json_encode($_SESSION['giohang']));
+							else if (isset($_SESSION['giohang'])) $this->umodel->update_cart($item['id'],json_encode($_SESSION['giohang']['dssp']));
 							$_SESSION['udone'] = "SUCESS";
 						} 
 						break;

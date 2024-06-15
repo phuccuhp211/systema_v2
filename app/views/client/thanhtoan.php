@@ -91,7 +91,7 @@
                 <div class="td-khttdh td-giohang">giỏ hàng</div>
                 <div class="giohang">
 
-                    <?php if (isset($_SESSION['giohang'])) { foreach ($_SESSION['giohang'] as $value => $item) {?>
+                    <?php if (isset($_SESSION['giohang'])) { foreach ($_SESSION['giohang']['dssp'] as $value => $item) {?>
                     <div class="sp-giohang">
                         <div class="col-2 anh-giohang">
                             <img src="<?php echo genimg($item['img']) ?>" class="hinhsp-giohang" alt="">
@@ -117,7 +117,7 @@
                         <div class="col-12">
                             <div>
                                 <p class="p-thanhtoan">tạm tính :</p>
-                                <p class="p-gia" id="giagoc"><?php echo gennum($_SESSION['totalp']) ?></p>
+                                <p class="p-gia" id="giagoc"><?php echo gennum($_SESSION['giohang']['tong']) ?></p>
                             </div>
                             <div class="giamgia hide-gg">
                                 <p class="p-thanhtoan" id="stt-gg" trangtrai="">ưu đãi :</p>
@@ -129,7 +129,7 @@
                             </div>
                             <div class="div-tongcong">
                                 <p class="p-thanhtoan">tổng cộng :</p>
-                                <p class="p-gia tongcong" id="tongtien"><?php echo gennum($_SESSION['totalp']+20000) ?></p>
+                                <p class="p-gia tongcong" id="tongtien"><?php echo gennum($_SESSION['giohang']['tong']+20000) ?></p>
                             </div>
                             <div>
                                 <button class="btn nutsp thanhtoansp" id="thanhtoansp">Hoàn Tất Thanh Toán</button>

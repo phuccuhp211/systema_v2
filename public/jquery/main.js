@@ -107,7 +107,6 @@ $(function() {
 			data: { idsp: idsp },
 			success: function(response) {
 				console.log('thanh cong');
-				updateCart();
 			},
 			error: function() {
 				console.log("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
@@ -126,7 +125,6 @@ $(function() {
 			data: { idsp: idsp, slsp: sl },
 			success: function(response) {
 				console.log('thanh cong');
-				updateCart();
 			},
 			error: function() {
 				console.log("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
@@ -146,7 +144,6 @@ $(function() {
 			url: duongdan_fix1,
 			data: { slsp: sl },
 			success: function(response) {
-				updateCart();
 				window.location.href = duongdan_fix2;
 			},
 			error: function() {
@@ -156,75 +153,39 @@ $(function() {
 	})
 	slsp = document.getElementsByName('slsp');
 	full_sldssp = document.getElementsByName('sanpham');
-	$(window).on('load' ,function() {
-		slsp = document.getElementsByName('slsp');
-		full_sldssp = document.getElementsByName('sanpham');
-		var duongdan_fix = duongdan+url_sub+"/updatecart/";
-		for (var j=0; j<slsp.length; j++) {
-			var quantity = parseInt($(slsp)[j].value);
-			var price = parseInt($(slsp[j]).parent().siblings("#giasp").text().replace(/\./g, ''));
-			var total = quantity * price;
-			$(slsp[j]).parent().siblings("#thanhtien").text(total.toLocaleString('vi-VN'));
-			totalp = updateTT();
-			$.ajax({
-				type: "POST",
-				url: duongdan_fix,
-				data: { totalp: totalp },
-				success: function(response) {
-					console.log("thanh cong");
-				},
-				error: function() {
-					console.log("Có lỗi xảy ra.");
-				}
-			});
-		}
-	})
-	for (var j=0; j<slsp.length; j++) {
-		slsp[j].addEventListener('change', function() {
-			var duongdan_fix = duongdan+url_sub+"/updatecart/";
-			quantity = parseInt(this.value);
-			keysp = parseInt($(this).parent().siblings("#keysp").text());
-			price = parseInt($(this).parent().siblings("#giasp").text().replace(/\./g, ''));
-			total = quantity * price;
-			$(this).parent().siblings("#thanhtien").text(total.toLocaleString('vi-VN'));
-			totalp = updateTT();
-
-			$.ajax({
-				type: "POST",
-				url: duongdan_fix,
-				data: { quantity: quantity, keysp: keysp, total: total, totalp: totalp },
-				success: function(response) {
-					console.log("thanh cong");
-				},
-				error: function() {
-					console.log("Có lỗi xảy ra.");
-				}
-			});
-		});
-	}
-	function updateCart() {
-		var totalp = updateTT();
-		var duongdan_fix = duongdan+url_sub+"/updatecart/";
-		$.ajax({
-			type: "POST",
-			url: duongdan_fix,
-			data: { totalp: totalp },
-			success: function(response) {
-				console.log("thanh cong");
-			},
-			error: function() {
-				console.log("Có lỗi xảy ra.");
-			}
-		});
-	}
 	function updateTT() {
-		var totalPrice = 0;
-    	for (var l=0; l<full_sldssp.length; l++) {
-	        var itemPrice = parseInt($(full_sldssp[l]).find('#thanhtien').text().replace(/\./g, ''));
+		let totalPrice = 0;
+    	for (let l=0; l<full_sldssp.length; l++) {
+	        let itemPrice = parseInt($(full_sldssp[l]).find('#thanhtien').text().replace(/\./g, ''));
 	        totalPrice += itemPrice;
     	}
     	$('#ttfn').text(totalPrice.toLocaleString('vi-VN'));
     	return totalPrice;
+	}
+	for (var j=0; j<slsp.length; j++) {
+		slsp[j].addEventListener('change', function() {
+			let duongdan_fix = duongdan+url_sub+"/updatecart/";
+			let num = parseInt(this.value);
+			let id = $(this).data('idsp');
+			let price = parseInt($(this).parent().siblings("#giasp").text().replace(/\./g, ''));
+			let total = num * price;
+			$(this).parent().siblings("#thanhtien").text(total.toLocaleString('vi-VN'));
+			updateTT();
+
+			console.log(id);
+
+			$.ajax({
+				type: "POST",
+				url: duongdan_fix,
+				data: { num: num, id: id },
+				success: function(data) {
+					console.log("thanh cong");
+				},
+				error: function() {
+					console.log("Có lỗi xảy ra");
+				}
+			});
+		});
 	}
 	function ttgh() {
 		$('.ttgh').removeClass('ttgh-hide');
@@ -235,16 +196,23 @@ $(function() {
 	var xoasp = document.getElementsByName('xoasp');
   	for (var k=0; k<xoasp.length; k++) {
 	    xoasp[k].addEventListener('click', function() {
-	    	var duongdan_fix = duongdan+url_sub+"/delcart/";
+	    	let duongdan_fix = duongdan+url_sub+"/delcart/";
 	    	$(this).closest('tr').remove();
-	    	var delspcart = $(this).data('idsp');
+	    	let delspcart = $(this).data('idsp');
 	    	updateTT();
 	    	$.ajax({
 				type: "POST",
 				url: duongdan_fix,
 				data: { delspcart: delspcart },
 				success: function(response) {
-					updateCart();
+					if (xoasp.length == 0) {
+			    		let emtycart = `<tr id="emptycart"><th colspan="7">Bạn không có sản phẩm nào trong giỏ hàng</th></tr>`;
+						$('#listcart').append(emtycart);
+						$('.delallcart').remove();
+						$('[id="sanpham"]').each(function() {
+					        $(this).remove();
+					    });
+			    	}
 				},
 				error: function() {
 					console.log("Có lỗi xảy ra.");
@@ -253,12 +221,13 @@ $(function() {
 	    });
 	}
 	$('.delallcart').on('click', function() {
+		let btn = $(this);
 		$('[id="sanpham"]').each(function() {
 	        $(this).remove();
+	        btn.remove();
 	    });
-		var emtycart = `<tr id="emptycart"><th colspan="7">Bạn không có sản phẩm nào trong giỏ hàng</th></tr>`;
-		$('#listcart').append(emtycart);	
-		
+		let emtycart = `<tr id="emptycart"><th colspan="7">Bạn không có sản phẩm nào trong giỏ hàng</th></tr>`;
+		$('#listcart').append(emtycart);
 
 		var duongdan_fix = duongdan+url_sub+"/delallcart/";
 
