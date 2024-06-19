@@ -164,7 +164,8 @@
 			<th style="width: 100px;">Thao tác</th>
 		</tr>
 		<?php foreach ($hoadon as $value => $item) { 
-			$dssp = json_decode($item['dssp'],true);
+			$cart = json_decode($item['dssp'],true);
+			$dssp = $cart['dssp'];
 			if ($item['thanhtien2'] != 0) $tc = number_format($item['thanhtien2'],0,'','.')."<br><span style=\"font-size: 10px; color: red;\">".$item['mgg']."</span>";
 			else $tc = number_format($item['thanhtien'],0,'','.');
 			if (is_array($dssp)) $rp = count($dssp);

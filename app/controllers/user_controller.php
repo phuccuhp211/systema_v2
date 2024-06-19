@@ -849,7 +849,8 @@ class user_controller extends Base{
 			</div>";
 
 			$mail = new PHPMailer(true);
-			$mail->SMTPDebug = SMTP::DEBUG_SERVER;                    
+			//$mail->SMTPDebug = SMTP::DEBUG_SERVER;                    
+			$mail->SMTPDebug = 0;                    
 		    $mail->isSMTP();                                          
 		    $mail->Host       = 'smtp.gmail.com';           
 		    $mail->SMTPAuth   = true;                                   
@@ -896,7 +897,10 @@ class user_controller extends Base{
 				}
 			}
 			else if ($step == "s2") {
-				if (isset($_GET['vnp_SecureHash'])) $this->loadview('payment', ['header' => $this->header, 'server' => $server]);
+				if (isset($_GET['vnp_SecureHash'])) {
+					$this->sendmail();
+					$this->loadview('payment', ['header' => $this->header, 'server' => $server]);
+				} 
 				else header("Location: ".urlmd);
 			}
 			else if ($step == "s3") {

@@ -227,7 +227,7 @@ $(function() {
 	        btn.remove();
 	    });
 		let emtycart = `<tr id="emptycart"><th colspan="7">Bạn không có sản phẩm nào trong giỏ hàng</th></tr>`;
-		$('#listcart').append(emtycart);
+		$('#listcart').append(emtycart);	
 
 		var duongdan_fix = duongdan+url_sub+"/delallcart/";
 

@@ -45,7 +45,7 @@
 	                <label >Mã đơn hàng: </label><label><?php echo $_GET['vnp_TxnRef'] ?></label>
 	            </div>    
 	            <div class="form-group">
-	                <label >Số tiền: </label><label><?php echo gennum($_GET['vnp_Amount']) ?> VNĐ</label>
+	                <label >Số tiền: </label><label><?php echo gennum($_GET['vnp_Amount']/100) ?> VNĐ</label>
 	            </div>  
 	            <div class="form-group">
 	                <label >Nội dung thanh toán: </label><label><?php echo $_GET['vnp_OrderInfo'] ?></label>
