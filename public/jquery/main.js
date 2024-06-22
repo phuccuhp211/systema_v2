@@ -7,8 +7,8 @@ $(function() {
 	//var duongdan_fix = duongdan.replace(/(\/systema\/).*/, "$1"+"ktbh/");
 
 	$(document).ready(function () {
-	  $('#carousel-id').carousel();
-	  	if ($('.popup-cart').data("user") == "yes") {
+	  	$('#carousel-id').carousel();
+	  	if ($('.popup-cart').data("user") == "yes" && $('.popup-cart').data("cart") == "yes") {
 			$('.popup-cart').removeClass('off-pocart');
 			setTimeout(function() {
 				$('.popup-cart').addClass('off-pocart');
